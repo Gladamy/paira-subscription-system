@@ -68,6 +68,55 @@ app.use(cors({
 
 // Helmet AFTER CORS so it doesn't interfere with those headers
 app.use(helmet());
+
+// Webhook route MUST come BEFORE express.json() middleware
+// Stripe webhooks need raw body for signature verification
+app.post('/api/webhooks/stripe', express.raw({ type: 'application/json' }), async (req, res) => {
+  const sig = req.headers['stripe-signature'];
+  const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
+
+  let event;
+
+  try {
+    event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
+  } catch (err) {
+    console.error('Webhook signature verification failed:', err.message);
+    return res.status(400).send(`Webhook Error: ${err.message}`);
+  }
+
+  try {
+    switch (event.type) {
+      case 'checkout.session.completed':
+        await handleCheckoutCompleted(event.data.object);
+        break;
+      case 'customer.subscription.created':
+      case 'customer.subscription.updated':
+        await handleSubscriptionChange(event.data.object);
+        break;
+      case 'customer.subscription.deleted':
+        await handleSubscriptionCancellation(event.data.object);
+        break;
+      case 'invoice.payment_succeeded':
+        await handleInvoicePaymentSucceeded(event.data.object);
+        break;
+      default:
+        console.log(`Unhandled event type: ${event.type}`);
+    }
+
+    res.json({ received: true });
+  } catch (error) {
+    console.error('Webhook processing error:', error);
+    res.status(500).json({ error: 'Webhook processing failed' });
+  }
+});
+
+// Test webhook endpoint (for manual testing)
+app.post('/api/webhooks/test', (req, res) => {
+  console.log('Test webhook received:', JSON.stringify(req.body, null, 2));
+  res.json({ received: true, test: true });
+});
+
+// Now apply JSON parsing middleware AFTER webhook routes
 app.use(express.json({ limit: '10mb' }));
 
 // Rate limiting

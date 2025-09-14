@@ -203,9 +203,8 @@ function App() {
       console.log('HWID:', hwid);
       console.log('Device:', deviceName);
 
-      // For demo purposes, we'll simulate license validation
-      // In production, this would call your backend API
-      setLogs((prev) => [...prev, `License validated for device: ${deviceName}`]);
+      // HWID validation is now handled by the backend API in checkAuthStatus
+      // This function is kept for testing HWID retrieval only
 
     } catch (error) {
       console.error('License validation failed:', error);

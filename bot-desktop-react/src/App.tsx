@@ -355,13 +355,16 @@ function App() {
     }} />;
   }
 
-  // Show subscription screen if authenticated but no subscription
+  // Redirect to website for subscription if authenticated but no subscription
   if (authState === 'subscribing') {
-    return <SubscriptionScreen
+    return <SubscriptionRedirectScreen
       userToken={userToken!}
       onSubscribed={(subscriptionData) => {
         setSubscription(subscriptionData);
-        // License validation handled by auth flow
+        setAuthState('authenticated');
+      }}
+      onSkip={() => {
+        // Allow user to continue without subscription (for trial/demo)
         setAuthState('authenticated');
       }}
     />;
@@ -543,6 +546,39 @@ function App() {
               <h1 className="text-2xl font-medium mb-5 text-custom">
                 {showWelcome && user ? `Hey again, ${user.email}!` : 'Dashboard'}
               </h1>
+
+              {/* License Expiration Notification */}
+              {subscription && (
+                <div className="mb-5 p-4 border border-custom rounded-neumorphism shadow-neumorphism surface">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <span className="text-sm font-medium text-custom">
+                        Your license expires in {(() => {
+                          const now = new Date();
+                          const end = new Date(subscription.current_period_end);
+                          const diffTime = end.getTime() - now.getTime();
+                          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                          if (diffDays <= 0) return 'today';
+                          if (diffDays === 1) return '1 day';
+                          if (diffDays < 7) return `${diffDays} days`;
+                          if (diffDays < 30) return `${Math.ceil(diffDays / 7)} weeks`;
+                          return `${Math.ceil(diffDays / 30)} months`;
+                        })()}
+                      </span>
+                    </div>
+                    <button
+                      onClick={() => window.open('https://paira.live', '_blank')}
+                      className="text-xs px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+                    >
+                      Renew
+                    </button>
+                  </div>
+                </div>
+              )}
 
               {/* Status Cards */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-7">
@@ -848,24 +884,17 @@ const AuthScreen: React.FC<{ onAuthenticated: (token: string, userData: any) => 
   );
 };
 
-// SubscriptionScreen Component
-const SubscriptionScreen: React.FC<{
+// SubscriptionRedirectScreen Component
+const SubscriptionRedirectScreen: React.FC<{
   userToken: string;
   onSubscribed: (subscriptionData: any) => void;
-}> = ({ userToken, onSubscribed }) => {
-  const [selectedPlan, setSelectedPlan] = useState<'monthly' | 'annual'>('monthly');
+  onSkip: () => void;
+}> = ({ userToken, onSubscribed, onSkip }) => {
   const [loading, setLoading] = useState(false);
   const [hasActiveSubscription, setHasActiveSubscription] = useState(false);
-  // Removed unused checkingStatus state
-
-  const plans = {
-    monthly: { price: '$0.60', period: 'month', priceId: 'price_1S778IHF7lE4j38pZNPnlifC' },
-    annual: { price: '$54.99', period: 'year', priceId: 'price_1S75fTHF7lE4j38pMqjFt3Im', savings: 'Save 25%' }
-  };
 
   // Check if user already has an active subscription
   const checkSubscriptionStatus = async () => {
-    // Removed checking status loading state
     try {
       const response = await fetch(`${API_BASE}/api/subscriptions/status`, {
         headers: {
@@ -885,8 +914,6 @@ const SubscriptionScreen: React.FC<{
     } catch (error) {
       console.error('Failed to check subscription status:', error);
       return false;
-    } finally {
-      // Removed checking status loading state
     }
   };
 
@@ -894,61 +921,15 @@ const SubscriptionScreen: React.FC<{
     checkSubscriptionStatus();
   }, [userToken, onSubscribed]);
 
-  const handleSubscribe = async () => {
+  const handleRedirectToWebsite = async () => {
     setLoading(true);
     try {
-      console.log('Creating checkout for plan:', selectedPlan, 'priceId:', plans[selectedPlan].priceId);
-
-      const response = await fetch(`${API_BASE}/api/subscriptions/create-checkout`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${userToken}`
-        },
-        body: JSON.stringify({ priceId: plans[selectedPlan].priceId })
-      });
-
-      console.log('Checkout response status:', response.status);
-      const data = await response.json();
-      console.log('Checkout response data:', data);
-
-      if (response.ok && data.url) {
-        console.log('Opening Stripe checkout URL:', data.url);
-        // Open Stripe checkout in external browser using Tauri shell
-        try {
-          await open(data.url);
-          console.log('Stripe checkout opened successfully');
-
-          // Show message to user about completing payment
-          alert('Payment page opened in your browser. Complete the payment to activate your subscription.\n\nAfter payment, click "Check Status" to verify activation.');
-
-          // Check status multiple times after payment
-          let attempts = 0;
-          const checkInterval = setInterval(async () => {
-            attempts++;
-            console.log(`Checking subscription status (attempt ${attempts})...`);
-
-            const activated = await checkSubscriptionStatus();
-            if (activated || attempts >= 12) { // Stop after 2 minutes (12 * 10s)
-              clearInterval(checkInterval);
-              if (!activated && attempts >= 12) {
-                console.log('Subscription not activated automatically. User may need to click "Check Status" manually.');
-              }
-            }
-          }, 10000); // Check every 10 seconds
-
-        } catch (error) {
-          console.error('Failed to open Stripe checkout:', error);
-          alert('Failed to open payment page. Please try again.');
-          return;
-        }
-      } else {
-        console.error('Failed to create checkout session:', data);
-        alert(`Failed to create checkout session: ${data.error || 'Unknown error'}`);
-      }
+      // Open the website pricing page in external browser
+      await open('https://paira.live');
+      console.log('Website opened successfully');
     } catch (error) {
-      console.error('Network error during checkout:', error);
-      alert(`Network error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error('Failed to open website:', error);
+      alert('Failed to open website. Please visit https://paira.live manually.');
     } finally {
       setLoading(false);
     }
@@ -980,82 +961,46 @@ const SubscriptionScreen: React.FC<{
 
   return (
     <div className="min-h-screen flex items-center justify-center surface p-4">
-      <div className="border border-custom rounded-neumorphism p-8 shadow-neumorphism surface max-w-2xl w-full">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-medium text-custom mb-2">Choose Your Plan</h1>
-          <p className="text-custom opacity-75">Unlock the full power of Paira Bot</p>
+      <div className="border border-custom rounded-neumorphism p-8 shadow-neumorphism surface max-w-md w-full text-center">
+        <div className="mb-6">
+          <div className="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+          </div>
+          <h1 className="text-2xl font-medium text-custom mb-2">Subscription Required</h1>
+          <p className="text-custom opacity-75 mb-4">
+            To use Paira Bot, you'll need an active subscription. Visit our website to choose a plan that works for you.
+          </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6 mb-8">
-          {/* Monthly Plan */}
-          <div
-            className={`border-2 rounded-neumorphism p-6 cursor-pointer transition-all ${
-              selectedPlan === 'monthly'
-                ? 'border-accent bg-accent bg-opacity-5'
-                : 'border-custom hover:border-accent'
-            }`}
-            onClick={() => setSelectedPlan('monthly')}
-          >
-            <div className="text-center">
-              <h3 className="text-xl font-medium text-custom mb-2">Monthly</h3>
-              <div className="text-3xl font-bold text-accent mb-1">{plans.monthly.price}</div>
-              <div className="text-custom opacity-75">per {plans.monthly.period}</div>
-            </div>
-            <ul className="mt-4 space-y-2 text-sm text-custom">
-              <li>✓ Full bot functionality</li>
-              <li>✓ HWID-based licensing</li>
-              <li>✓ Priority support</li>
-              <li>✓ Cancel anytime</li>
-            </ul>
-          </div>
-
-          {/* Annual Plan */}
-          <div
-            className={`border-2 rounded-neumorphism p-6 cursor-pointer transition-all relative ${
-              selectedPlan === 'annual'
-                ? 'border-accent bg-accent bg-opacity-5'
-                : 'border-custom hover:border-accent'
-            }`}
-            onClick={() => setSelectedPlan('annual')}
-          >
-            <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-              <span className="bg-accent text-white text-xs px-3 py-1 rounded-full font-medium">
-                {plans.annual.savings}
-              </span>
-            </div>
-            <div className="text-center">
-              <h3 className="text-xl font-medium text-custom mb-2">Annual</h3>
-              <div className="text-3xl font-bold text-accent mb-1">{plans.annual.price}</div>
-              <div className="text-custom opacity-75">per {plans.annual.period}</div>
-            </div>
-            <ul className="mt-4 space-y-2 text-sm text-custom">
-              <li>✓ All Monthly features</li>
-              <li>✓ 2 months free</li>
-              <li>✓ Exclusive beta access</li>
-              <li>✓ Premium support</li>
-            </ul>
-          </div>
-        </div>
-
-        <div className="text-center space-y-3">
+        <div className="space-y-3">
           <button
-            onClick={handleSubscribe}
+            onClick={handleRedirectToWebsite}
             disabled={loading}
-            className="w-full max-w-xs accent text-white border border-custom rounded-neumorphism px-6 py-3 font-medium text-base transition-all hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full accent text-white border border-custom rounded-neumorphism px-6 py-3 font-medium transition-all hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? 'Processing...' : `Subscribe to ${selectedPlan === 'monthly' ? 'Monthly' : 'Annual'} Plan`}
+            {loading ? 'Opening Website...' : 'View Pricing & Subscribe'}
           </button>
 
           <button
             onClick={checkSubscriptionStatus}
-            className="w-full max-w-xs surface text-custom border border-custom rounded-neumorphism px-6 py-3 font-medium text-base transition-all hover:accent hover:text-white"
+            className="w-full surface text-custom border border-custom rounded-neumorphism px-6 py-3 font-medium transition-all hover:accent hover:text-white"
           >
             Check Subscription Status
           </button>
-          <p className="text-xs text-custom opacity-50 mt-4">
-            Secure payment powered by Stripe • 30-day money-back guarantee
-          </p>
+
+          <button
+            onClick={onSkip}
+            className="w-full surface text-custom border border-custom rounded-neumorphism px-6 py-3 font-medium transition-all hover:accent hover:text-white text-sm opacity-75"
+          >
+            Continue Without Subscription
+          </button>
         </div>
+
+        <p className="text-xs text-custom opacity-50 mt-6">
+          Secure payment powered by Stripe • 30-day money-back guarantee
+        </p>
       </div>
     </div>
   );

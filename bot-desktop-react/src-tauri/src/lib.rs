@@ -6,6 +6,7 @@ use std::io::{BufRead, BufReader};
 use std::fs;
 use tauri::{State, Emitter};
 use sha2::{Sha256, Digest};
+use reqwest;
 
 #[derive(Default)]
 struct BotState {
@@ -84,41 +85,6 @@ fn get_bot_status(state: State<BotState>) -> String {
     }
 }
 
-#[tauri::command]
-fn get_hwid() -> Result<String, String> {
-    // Generate HWID from system information
-    let mut hasher = Sha256::new();
-
-    // Get CPU info (Windows)
-    if let Ok(output) = Command::new("wmic")
-        .args(&["cpu", "get", "ProcessorId", "/value"])
-        .output() {
-        if let Ok(cpu_info) = String::from_utf8(output.stdout) {
-            hasher.update(cpu_info.as_bytes());
-        }
-    }
-
-    // Get disk serial (Windows)
-    if let Ok(output) = Command::new("wmic")
-        .args(&["diskdrive", "get", "SerialNumber", "/value"])
-        .output() {
-        if let Ok(disk_info) = String::from_utf8(output.stdout) {
-            hasher.update(disk_info.as_bytes());
-        }
-    }
-
-    // Get motherboard serial (Windows)
-    if let Ok(output) = Command::new("wmic")
-        .args(&["baseboard", "get", "SerialNumber", "/value"])
-        .output() {
-        if let Ok(board_info) = String::from_utf8(output.stdout) {
-            hasher.update(board_info.as_bytes());
-        }
-    }
-
-    let hash = hasher.finalize();
-    Ok(format!("{:x}", hash))
-}
 
 #[tauri::command]
 fn get_config() -> Result<String, String> {

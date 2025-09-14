@@ -20,9 +20,29 @@ const pool = new Pool({
 // Middleware
 app.use(helmet());
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production'
-    ? process.env.FRONTEND_URL || 'https://paira.live'
-    : true, // Allow all origins in development
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps, desktop apps, curl requests)
+    if (!origin) return callback(null, true);
+
+    // Allow specific origins
+    const allowedOrigins = [
+      'https://paira.live',
+      'http://localhost:3000',
+      'http://localhost:1420', // Vite dev server
+      'tauri://localhost' // Tauri apps
+    ];
+
+    if (process.env.NODE_ENV !== 'production') {
+      // In development, allow all origins
+      return callback(null, true);
+    }
+
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    return callback(new Error('Not allowed by CORS'));
+  },
   credentials: true
 }));
 app.use(express.json({ limit: '10mb' }));

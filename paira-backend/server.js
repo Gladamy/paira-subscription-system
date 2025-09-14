@@ -17,36 +17,56 @@ const pool = new Pool({
   ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
 });
 
-// Middleware
-app.use(helmet());
+// Put CORS before helmet to ensure headers are set first
 app.use(cors({
   origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps, desktop apps, curl requests)
+    // Allow non-browser / no-origin requests (Stripe webhooks, curl, server-to-server)
     if (!origin) return callback(null, true);
 
-    // Allow specific origins
-    const allowedOrigins = [
-      'https://paira.live',
-      'https://paira-frontend-o9szbx6t9-wkqs-projects.vercel.app',
-      'https://paira-frontend-c583ftde2-wkqs-projects.vercel.app',
-      'http://localhost:3000',
-      'http://localhost:1420', // Vite dev server
-      'tauri://localhost' // Tauri apps
-    ];
+    try {
+      const url = new URL(origin);
+      const host = url.hostname;
 
-    if (process.env.NODE_ENV !== 'production') {
-      // In development, allow all origins
-      return callback(null, true);
+      const isProd = process.env.NODE_ENV === 'production';
+
+      // Exact hosts
+      const exactAllowed = new Set([
+        'paira.live',
+        'www.paira.live',
+        'localhost',
+      ]);
+
+      // Ports we allow for localhost
+      const allowedLocalPorts = new Set(['3000', '1420']);
+
+      const allow =
+        // Always allow non-prod for convenience
+        (!isProd) ||
+        // Exact root or www domain
+        exactAllowed.has(host) ||
+        // Any *.vercel.app preview
+        host.endsWith('.vercel.app') ||
+        // Local dev with known ports
+        (host === 'localhost' && (allowedLocalPorts.has(url.port) || url.port === '')) ||
+        // (Optional) allow your Railway public domain if you're calling it from a browser somewhere:
+        host.endsWith('.up.railway.app');
+
+      if (allow) {
+        return callback(null, true);
+      } else {
+        console.error('[CORS] Blocked Origin:', origin);
+        return callback(new Error('Not allowed by CORS'));
+      }
+    } catch (e) {
+      console.error('[CORS] Failed to parse Origin:', origin, e?.message);
+      return callback(new Error('Not allowed by CORS'));
     }
-
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    }
-
-    return callback(new Error('Not allowed by CORS'));
   },
   credentials: true
 }));
+
+// Helmet AFTER CORS so it doesn't interfere with those headers
+app.use(helmet());
 app.use(express.json({ limit: '10mb' }));
 
 // Rate limiting

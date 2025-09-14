@@ -116,61 +116,6 @@ app.post('/api/webhooks/test', (req, res) => {
   res.json({ received: true, test: true });
 });
 
-// Test endpoint to create a demo subscription (for testing without payment)
-app.post('/api/test/create-subscription', authenticateToken, async (req, res) => {
-  try {
-    const userId = req.user.userId;
-    const { planType = 'monthly' } = req.body;
-
-    // Create a test subscription that expires in 24 hours
-    const now = new Date();
-    const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
-
-    const result = await pool.query(`
-      INSERT INTO subscriptions (
-        user_id, stripe_subscription_id, plan_type, status,
-        current_period_start, current_period_end
-      ) VALUES (
-        $1, $2, $3, $4, $5, $6
-      )
-      ON CONFLICT (stripe_subscription_id)
-      DO UPDATE SET
-        status = EXCLUDED.status,
-        current_period_start = EXCLUDED.current_period_start,
-        current_period_end = EXCLUDED.current_period_end
-    `, [
-      userId,
-      `test-subscription-${userId}`,
-      planType,
-      'active',
-      now,
-      tomorrow
-    ]);
-
-    // Update user subscription status
-    await pool.query(
-      'UPDATE users SET subscription_status = $1 WHERE id = $2',
-      ['active', userId]
-    );
-
-    console.log(`Test subscription created for user ${userId}, expires: ${tomorrow.toISOString()}`);
-
-    res.json({
-      success: true,
-      message: 'Test subscription created successfully',
-      subscription: {
-        plan: planType,
-        status: 'active',
-        expires: tomorrow.toISOString()
-      }
-    });
-
-  } catch (error) {
-    console.error('Test subscription creation error:', error);
-    res.status(500).json({ error: 'Failed to create test subscription' });
-  }
-});
-
 // Now apply JSON parsing middleware AFTER webhook routes
 app.use(express.json({ limit: '10mb' }));
 
@@ -670,6 +615,61 @@ app.get('/api/health', (req, res) => {
 app.post('/api/webhooks/test', (req, res) => {
   console.log('Test webhook received:', JSON.stringify(req.body, null, 2));
   res.json({ received: true, test: true });
+});
+
+// Test endpoint to create a demo subscription (for testing without payment)
+app.post('/api/test/create-subscription', authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const { planType = 'monthly' } = req.body;
+
+    // Create a test subscription that expires in 24 hours
+    const now = new Date();
+    const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+
+    const result = await pool.query(`
+      INSERT INTO subscriptions (
+        user_id, stripe_subscription_id, plan_type, status,
+        current_period_start, current_period_end
+      ) VALUES (
+        $1, $2, $3, $4, $5, $6
+      )
+      ON CONFLICT (stripe_subscription_id)
+      DO UPDATE SET
+        status = EXCLUDED.status,
+        current_period_start = EXCLUDED.current_period_start,
+        current_period_end = EXCLUDED.current_period_end
+    `, [
+      userId,
+      `test-subscription-${userId}`,
+      planType,
+      'active',
+      now,
+      tomorrow
+    ]);
+
+    // Update user subscription status
+    await pool.query(
+      'UPDATE users SET subscription_status = $1 WHERE id = $2',
+      ['active', userId]
+    );
+
+    console.log(`Test subscription created for user ${userId}, expires: ${tomorrow.toISOString()}`);
+
+    res.json({
+      success: true,
+      message: 'Test subscription created successfully',
+      subscription: {
+        plan: planType,
+        status: 'active',
+        expires: tomorrow.toISOString()
+      }
+    });
+
+  } catch (error) {
+    console.error('Test subscription creation error:', error);
+    res.status(500).json({ error: 'Failed to create test subscription' });
+  }
 });
 
 // Error handling middleware

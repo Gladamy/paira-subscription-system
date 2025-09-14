@@ -222,6 +222,18 @@ function App() {
         return;
       }
 
+      // First, get user profile to set user state
+      const profileResponse = await fetch(`${API_BASE}/api/user/profile`, {
+        headers: {
+          'Authorization': `Bearer ${storedToken}`
+        }
+      });
+
+      if (profileResponse.ok) {
+        const profileData = await profileResponse.json();
+        setUser(profileData.user);
+      }
+
       // Validate license with backend
       const hwid = await invoke('get_hwid');
       const response = await fetch(`${API_BASE}/api/licenses/validate`, {
@@ -241,7 +253,7 @@ function App() {
         setSubscription(result.subscription);
         setAuthState('authenticated');
       } else {
-        setAuthState('login');
+        setAuthState('subscribing');
       }
     } catch (error) {
       console.error('Auth check failed:', error);

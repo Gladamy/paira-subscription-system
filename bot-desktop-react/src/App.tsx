@@ -860,6 +860,7 @@ const SubscriptionScreen: React.FC<{
   const [selectedPlan, setSelectedPlan] = useState<'monthly' | 'annual'>('monthly');
   const [loading, setLoading] = useState(false);
   const [hasActiveSubscription, setHasActiveSubscription] = useState(false);
+  const [checkingStatus, setCheckingStatus] = useState(false);
 
   const plans = {
     monthly: { price: '$6.99', period: 'month', priceId: 'price_1S67LIHF7lE4j38pfL7hMYpA' },
@@ -867,28 +868,34 @@ const SubscriptionScreen: React.FC<{
   };
 
   // Check if user already has an active subscription
-  useEffect(() => {
-    const checkSubscription = async () => {
-      try {
-        const response = await fetch(`${API_BASE}/api/subscriptions/status`, {
-          headers: {
-            'Authorization': `Bearer ${userToken}`
-          }
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          if (data.subscription && data.subscription.status === 'active') {
-            setHasActiveSubscription(true);
-            onSubscribed(data.subscription);
-          }
+  const checkSubscriptionStatus = async () => {
+    setCheckingStatus(true);
+    try {
+      const response = await fetch(`${API_BASE}/api/subscriptions/status`, {
+        headers: {
+          'Authorization': `Bearer ${userToken}`
         }
-      } catch (error) {
-        console.error('Failed to check subscription status:', error);
-      }
-    };
+      });
 
-    checkSubscription();
+      if (response.ok) {
+        const data = await response.json();
+        if (data.subscription && data.subscription.status === 'active') {
+          setHasActiveSubscription(true);
+          onSubscribed(data.subscription);
+          return true;
+        }
+      }
+      return false;
+    } catch (error) {
+      console.error('Failed to check subscription status:', error);
+      return false;
+    } finally {
+      setCheckingStatus(false);
+    }
+  };
+
+  useEffect(() => {
+    checkSubscriptionStatus();
   }, [userToken, onSubscribed]);
 
   const handleSubscribe = async () => {
@@ -915,18 +922,30 @@ const SubscriptionScreen: React.FC<{
         try {
           await open(data.url);
           console.log('Stripe checkout opened successfully');
+
+          // Show message to user about completing payment
+          alert('Payment page opened in your browser. Complete the payment to activate your subscription.\n\nAfter payment, click "Check Status" to verify activation.');
+
+          // Check status multiple times after payment
+          let attempts = 0;
+          const checkInterval = setInterval(async () => {
+            attempts++;
+            console.log(`Checking subscription status (attempt ${attempts})...`);
+
+            const activated = await checkSubscriptionStatus();
+            if (activated || attempts >= 12) { // Stop after 2 minutes (12 * 10s)
+              clearInterval(checkInterval);
+              if (!activated && attempts >= 12) {
+                console.log('Subscription not activated automatically. User may need to click "Check Status" manually.');
+              }
+            }
+          }, 10000); // Check every 10 seconds
+
         } catch (error) {
           console.error('Failed to open Stripe checkout:', error);
           alert('Failed to open payment page. Please try again.');
           return;
         }
-
-        // In a real app, you'd listen for the success callback
-        // For demo, we'll simulate success after a delay
-        setTimeout(() => {
-          console.log('Simulating successful subscription');
-          onSubscribed({ plan: selectedPlan, status: 'active' });
-        }, 3000);
       } else {
         console.error('Failed to create checkout session:', data);
         alert(`Failed to create checkout session: ${data.error || 'Unknown error'}`);
@@ -1028,7 +1047,15 @@ const SubscriptionScreen: React.FC<{
             disabled={loading}
             className="accent text-white border border-custom rounded-neumorphism px-8 py-4 font-medium text-lg transition-all hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? 'Processing...' : `Subscribe to ${selectedPlan === 'monthly' ? 'Monthly' : 'Annual'} Plan`}
+            {loading ? 'Processing...' : `Subscribe to ${selectedPlan === 'monthly' ? 'Monthly' : 'Annual'} Plan
+          </button>
+
+          <button
+            onClick={checkSubscriptionStatus}
+            disabled={checkingStatus}
+            className="surface text-custom border border-custom rounded-neumorphism px-6 py-3 font-medium transition-all hover:accent hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {checkingStatus ? 'Checking...' : 'Check Subscription Status'}`}
           </button>
           <p className="text-xs text-custom opacity-50 mt-4">
             Secure payment powered by Stripe • 30-day money-back guarantee

@@ -574,17 +574,10 @@ function App() {
                             // Use 'expires' field from backend response
                             const endDate = subscription.expires || subscription.current_period_end;
 
-                            if (!endDate) {
-                              console.error('No expiration date in subscription:', subscription);
-                              return 'unknown';
-                            }
+                            if (!endDate) return 'unknown';
 
                             const end = new Date(endDate);
-
-                            if (isNaN(end.getTime())) {
-                              console.error('Invalid expiration date format:', endDate);
-                              return 'unknown';
-                            }
+                            if (isNaN(end.getTime())) return 'unknown';
 
                             const diffTime = end.getTime() - now.getTime();
                             const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
@@ -595,7 +588,6 @@ function App() {
                             if (diffDays < 30) return `${Math.ceil(diffDays / 7)} weeks`;
                             return `${Math.ceil(diffDays / 30)} months`;
                           } catch (error) {
-                            console.error('Error calculating expiration:', error);
                             return 'unknown';
                           }
                         })()}

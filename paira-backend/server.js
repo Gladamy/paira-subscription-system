@@ -498,6 +498,12 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
+// Test webhook endpoint (for manual testing)
+app.post('/api/webhooks/test', (req, res) => {
+  console.log('Test webhook received:', JSON.stringify(req.body, null, 2));
+  res.json({ received: true, test: true });
+});
+
 // Error handling middleware
 app.use((error, req, res, next) => {
   console.error('Unhandled error:', error);

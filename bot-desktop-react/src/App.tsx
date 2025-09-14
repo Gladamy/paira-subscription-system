@@ -519,7 +519,7 @@ function App() {
 
           {/* Profile Section - At the very bottom */}
           {user && (
-            <div className="p-4 border-t border-custom flex-shrink-0 bg-surface">
+            <div className="p-4 border-t border-custom bg-surface">
               {!sidebarCollapsed && (
                 <div className="mb-4">
                   <div className="text-xs text-custom opacity-60 uppercase tracking-wider font-semibold mb-3">Account</div>
@@ -555,51 +555,36 @@ function App() {
         {activeTab === "dashboard" && (
           <div className="flex flex-col h-full">
             <div className="flex-shrink-0">
-              <h1 className="text-2xl font-medium mb-5 text-custom">
+              <h1 className="text-2xl font-medium mb-2 text-custom">
                 {showWelcome && user ? `Hey again, ${user.email}!` : 'Dashboard'}
               </h1>
 
-              {/* License Expiration Notification */}
+              {/* License Expiration Text */}
               {subscription && (
-                <div className="mb-5 p-4 border border-custom rounded-neumorphism shadow-neumorphism surface">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
-                      <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                      <span className="text-sm font-medium text-custom">
-                        Your license expires in {(() => {
-                          try {
-                            const now = new Date();
-                            // Use 'expires' field from backend response
-                            const endDate = subscription.expires || subscription.current_period_end;
+                <div className="mb-5 text-sm text-custom opacity-75">
+                  Your license expires in {(() => {
+                    try {
+                      const now = new Date();
+                      // Use 'expires' field from backend response
+                      const endDate = subscription.expires || subscription.current_period_end;
 
-                            if (!endDate) return 'unknown';
+                      if (!endDate) return 'unknown';
 
-                            const end = new Date(endDate);
-                            if (isNaN(end.getTime())) return 'unknown';
+                      const end = new Date(endDate);
+                      if (isNaN(end.getTime())) return 'unknown';
 
-                            const diffTime = end.getTime() - now.getTime();
-                            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                      const diffTime = end.getTime() - now.getTime();
+                      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-                            if (diffDays <= 0) return 'today';
-                            if (diffDays === 1) return '1 day';
-                            if (diffDays < 7) return `${diffDays} days`;
-                            if (diffDays < 30) return `${Math.ceil(diffDays / 7)} weeks`;
-                            return `${Math.ceil(diffDays / 30)} months`;
-                          } catch (error) {
-                            return 'unknown';
-                          }
-                        })()}
-                      </span>
-                    </div>
-                    <button
-                      onClick={() => window.open('https://paira.live', '_blank')}
-                      className="text-xs px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
-                    >
-                      Renew
-                    </button>
-                  </div>
+                      if (diffDays <= 0) return 'today';
+                      if (diffDays === 1) return '1 day';
+                      if (diffDays < 7) return `${diffDays} days`;
+                      if (diffDays < 30) return `${Math.ceil(diffDays / 7)} weeks`;
+                      return `${Math.ceil(diffDays / 30)} months`;
+                    } catch (error) {
+                      return 'unknown';
+                    }
+                  })()}. <a href="#" onClick={(e) => { e.preventDefault(); window.open('https://paira.live', '_blank'); }} className="text-blue-500 hover:text-blue-600 underline">Renew</a>
                 </div>
               )}
 

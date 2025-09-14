@@ -1,0 +1,97 @@
+{
+  "speed": {
+    "fast_mode": true,
+    "fast_disable_images": true,
+    "implicit_wait_secs": 0.1,
+    "page_change_timeout": 1.5,
+    "mutation_poll_ms": 80,
+    "human_delay_min": 0.05,
+    "human_delay_max": 0.1,
+    "max_pages_scan": 50
+  },
+  "min_item_value": 1000,
+  "rap_tiers": [
+    {
+      "name": "tier_1",
+      "max_value": 1000,
+      "min_gain_percent": 0.05,
+      "max_gain_percent": 0.08
+    },
+    {
+      "name": "tier_1b",
+      "min_value": 1000,
+      "max_value": 3000,
+      "min_gain_percent": 0.13,
+      "max_gain_percent": 0.18
+    },
+    {
+      "name": "tier_2",
+      "min_value": 3000,
+      "max_value": 5000,
+      "min_gain_percent": 0.1,
+      "max_gain_percent": 0.15
+    },
+    {
+      "name": "tier_3",
+      "min_value": 5000,
+      "max_value": 9999,
+      "min_gain_percent": 0.09,
+      "max_gain_percent": 0.15
+    },
+    {
+      "name": "tier_4",
+      "min_value": 10000,
+      "max_value": 15000,
+      "min_gain_percent": 0.06,
+      "max_gain_percent": 0.11
+    },
+    {
+      "name": "tier_5",
+      "min_value": 15000,
+      "max_value": 20000,
+      "min_gain_percent": 0.05,
+      "max_gain_percent": 0.08
+    }
+  ],
+  "trading_preferences": {
+    "trading_modes": [
+      "downgrade"
+    ],
+    "avoid_projected": true,
+    "avoid_projected_offer": true,
+    "upgrade_to_valued_only": false,
+    "valued_premium_min_percent": -0.05,
+    "valued_premium_max_percent": 0.02
+  },
+  "limits": {
+    "max_offer_items": 4,
+    "max_request_items": 4,
+    "min_item_value": 1000
+  },
+  "user": {
+    "user_id": 936459966,
+    "items_i_want_to_keep": [],
+    "cookie_value": "_|WARNING:-DO-NOT-SHARE-THIS.--Sharing-this-will-allow-someone-to-log-in-as-you-and-to-steal-your-ROBUX-and-items.|_CAEaAhAB.F820C726B880A603B490E578786F32DA624E8AC4F243472136FB77802712AB296B8CED0512CAD8FF7CA0DA0ADFBBE7F9B2537BBD1CF3627AC6EBAC0934FF457E18069A85A498227BDFE0114E9BD84898043BE59058F5FA8C363579D6BC8308B6879AA8981ABEFE01E8C703C5637CF87DAA2E80AB7A98EC8BE8A813B6B14C5FA517C07BB5F8BE7D9D68CE0848D4BAB1770C93B489423D4147D9809AA42C1B4D7808CBB399F428F544FB0B6ED17EC307F41827D6A318B51CE2B060FF1E84E2D8C2C128327103D52D88974F2D749670B7B68FD0C780AE5E40B12BA76A56304C0246D38A4832575DCC37D7BDDDBA7981099B3BFF8A87B1E16B5047207926C8B2113AEC4347B2804B6E19BA290456E94144964A2CC8E0BEDF56D3B358084F3FAF488F4AC368FC7D9A6212A6D1C56B97019548AD6A1DE3B8193FE4F94B3734F6AB446A6B096AC7F49EDF2A1F8A830A45424D043EF46595F151F3D2C8AE1DAD484333856E045FA9C65559E75F27D991C7962172E8CB259DCEE3FEB682D7BA128BE8EAAB68A58A36570EFA5CE8297939300DE148FB284309E30C7FD9B2DC2F58BEA8167804C2F12A8BD549238A3807713B707705CD90A20AB30354FCD2E368620620E45FB6AD9357CF228D17B80CD6E7DD44120907698925DCF0DFFBB82FC2766300F7BBFD0269DCFDDC858B66D6705156D85BFCD121508442AEC19D24C3BB9DC56A122A83D2094259B929DC90576E4D43797800B60C5E85C471490E3B90811C0D7B498C651C29409697505C8297F98B6ED37CBFB3F76DB4A3772C68A0400DACD8884ECDB14590D04F11D088EE2F6143F32BAA7C7723EE0B9195F65964518AE897F94DB7EFC1669B09A262FFC13FED946804DC043D0A32B0121C27D7418C345484EA5076613883D153A1B3931744B0AFE04C8B581C83FECB23F1AAD16146CD9C19141DEF5FFEE92B8DC66B707D90472B448A4F0B64BDF7D8F082BD3172CAAF56B2C945B8093E21BEC49EC1B816BE6CB0493BDA39389FBA25708F073911F460E1D75F5191EE79C262D8CCF48D99187C04DA8BBCA46B7A4013706C19A6631A360B45FB23295A5846FC3166806A75B1CCFF2A177655E6852E79EEB82634BF7F556EDF54DEA4864E6A34C79937098B7522257C0E4D962EAEE2A461119D99799D719339D384948AE2BA1EC664819A64CD7E2B30E75522A19BC2BB",
+    "totp_secret": "EEPWDG4QIDJUTKNUKJEEPHVARY======"
+  },
+  "selenium": {
+    "use_existing_chrome_profile": false,
+    "chrome_user_data_dir": "C:\\\\Users\\\\YOURUSER\\\\AppData\\\\Local\\\\Google\\\\Chrome\\\\User Data",
+    "chrome_profile_name": "Default",
+    "headless": true,
+    "window_size": "1200,900"
+  },
+  "owner_tracking": {
+    "enabled": false,
+    "target_asset_id": 19027209,
+    "min_owned_days": 3,
+    "max_owned_days": 6,
+    "page_size": 100,
+    "max_pages": 500,
+    "output_file": "owners.txt",
+    "output_csv": "",
+    "stop_when_older": 1,
+    "flush_per_page": 1,
+    "assume_sorted": 1
+  }
+}

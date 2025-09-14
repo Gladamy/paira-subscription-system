@@ -341,6 +341,109 @@ function App() {
     }
   }, [activeTab, configLoaded]);
 
+  // Import/Export functions for appearance settings
+  const exportAppearanceSettings = () => {
+    const settings = {
+      theme,
+      customAccent,
+      exportedAt: new Date().toISOString()
+    };
+
+    const dataStr = JSON.stringify(settings, null, 2);
+    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+
+    const exportFileDefaultName = `paira-appearance-settings-${new Date().toISOString().split('T')[0]}.json`;
+
+    const linkElement = document.createElement('a');
+    linkElement.setAttribute('href', dataUri);
+    linkElement.setAttribute('download', exportFileDefaultName);
+    linkElement.click();
+
+    setLogs((prev) => [...prev, "Appearance settings exported successfully"]);
+  };
+
+  const importAppearanceSettings = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+
+    input.onchange = (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          try {
+            const settings = JSON.parse(e.target?.result as string);
+            if (settings.theme) {
+              setTheme(settings.theme);
+              localStorage.setItem("botDesktop-theme", settings.theme);
+            }
+            if (settings.customAccent) {
+              setCustomAccent(settings.customAccent);
+              localStorage.setItem("botDesktop-customAccent", settings.customAccent);
+            }
+            setLogs((prev) => [...prev, "Appearance settings imported successfully"]);
+          } catch (error) {
+            setLogs((prev) => [...prev, "Error importing appearance settings: Invalid file format"]);
+          }
+        };
+        reader.readAsText(file);
+      }
+    };
+
+    input.click();
+  };
+
+  // Import/Export functions for configuration
+  const exportConfiguration = () => {
+    const configData = JSON.parse(config);
+    const exportData = {
+      ...configData,
+      exportedAt: new Date().toISOString()
+    };
+
+    const dataStr = JSON.stringify(exportData, null, 2);
+    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+
+    const exportFileDefaultName = `paira-bot-config-${new Date().toISOString().split('T')[0]}.json`;
+
+    const linkElement = document.createElement('a');
+    linkElement.setAttribute('href', dataUri);
+    linkElement.setAttribute('download', exportFileDefaultName);
+    linkElement.click();
+
+    setLogs((prev) => [...prev, "Configuration exported successfully"]);
+  };
+
+  const importConfiguration = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+
+    input.onchange = (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          try {
+            const importedConfig = JSON.parse(e.target?.result as string);
+            // Remove metadata fields
+            delete importedConfig.exportedAt;
+
+            const configString = JSON.stringify(importedConfig, null, 2);
+            setConfig(configString);
+            setLogs((prev) => [...prev, "Configuration imported successfully. Click 'Save Config' to apply changes."]);
+          } catch (error) {
+            setLogs((prev) => [...prev, "Error importing configuration: Invalid file format"]);
+          }
+        };
+        reader.readAsText(file);
+      }
+    };
+
+    input.click();
+  };
+
   const appWindow = getCurrentWindow();
 
   // Show loading screen while checking auth
@@ -670,7 +773,25 @@ function App() {
             <div className="space-y-6">
               {/* Appearance Settings */}
               <div className="border border-custom rounded-neumorphism p-5 shadow-neumorphism surface">
-                <h3 className="text-lg font-medium mb-3 text-custom">Appearance Settings</h3>
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-lg font-medium text-custom">Appearance Settings</h3>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => exportAppearanceSettings()}
+                      className="px-3 py-1 rounded text-xs font-medium transition-all surface text-custom border border-custom hover:accent hover:text-white"
+                      title="Export appearance settings"
+                    >
+                      Export
+                    </button>
+                    <button
+                      onClick={() => importAppearanceSettings()}
+                      className="px-3 py-1 rounded text-xs font-medium transition-all surface text-custom border border-custom hover:accent hover:text-white"
+                      title="Import appearance settings"
+                    >
+                      Import
+                    </button>
+                  </div>
+                </div>
 
                 {/* Theme Mode */}
                 <div className="mb-4">
@@ -727,7 +848,25 @@ function App() {
 
               {/* Config.json Editor */}
               <div className="border border-custom rounded-neumorphism p-5 shadow-neumorphism surface">
-                <h3 className="text-lg font-medium mb-3 text-custom">Configuration</h3>
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-lg font-medium text-custom">Configuration</h3>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={exportConfiguration}
+                      className="px-3 py-1 rounded text-xs font-medium transition-all surface text-custom border border-custom hover:accent hover:text-white"
+                      title="Export configuration"
+                    >
+                      Export
+                    </button>
+                    <button
+                      onClick={importConfiguration}
+                      className="px-3 py-1 rounded text-xs font-medium transition-all surface text-custom border border-custom hover:accent hover:text-white"
+                      title="Import configuration"
+                    >
+                      Import
+                    </button>
+                  </div>
+                </div>
                 <div className="border border-border rounded-neumorphism overflow-hidden shadow-neumorphism">
                   <Editor
                     height="500px"

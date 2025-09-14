@@ -435,11 +435,11 @@ function App() {
       </div>
 
       <div className="flex flex-1">
-        <aside className={`border-r border-custom shadow-neumorphism surface text-custom transition-all duration-300 ${
+        <aside className={`border-r border-custom shadow-neumorphism surface text-custom transition-all duration-300 flex flex-col ${
           sidebarCollapsed ? "w-16" : "w-56"
         }`}>
           {/* Header */}
-          <div className="p-4 border-b border-custom">
+          <div className="p-4 border-b border-custom flex-shrink-0">
             {!sidebarCollapsed && (
               <div className="flex items-center justify-between">
                 <h2 className="text-lg font-medium text-custom">Bot</h2>
@@ -462,7 +462,7 @@ function App() {
           </div>
 
           {/* Status */}
-          <div className="p-3 border-b border-custom">
+          <div className="p-3 border-b border-custom flex-shrink-0">
             <div className="flex justify-center">
               {botStatus === "Running" ? (
                 <div className="w-3 h-3 rounded-full bg-green-500 shadow-sm"></div>
@@ -473,7 +473,7 @@ function App() {
           </div>
 
           {/* Navigation */}
-          <nav className="p-2">
+          <nav className="p-2 flex-shrink-0">
             <div className="space-y-1">
               <button
                 className={`w-full flex items-center ${sidebarCollapsed ? 'justify-center' : 'justify-center gap-2'} p-3 rounded-lg font-medium transition-all duration-200 ${
@@ -502,25 +502,36 @@ function App() {
             </div>
           </nav>
 
-          {/* Profile Section */}
+          {/* Spacer to push profile to bottom */}
+          <div className="flex-1"></div>
+
+          {/* Profile Section - At the very bottom */}
           {user && (
-            <div className="mt-auto p-3 border-t border-custom">
+            <div className="p-3 border-t border-custom flex-shrink-0">
               {!sidebarCollapsed && (
                 <div className="mb-3">
-                  <div className="text-xs text-custom opacity-75 mb-1">Logged in as</div>
-                  <div className="text-sm font-medium text-custom truncate">{user.email}</div>
-                  {subscription && (
-                    <div className="text-xs text-green-600 mt-1">
-                      {subscription.plan} • Active
-                    </div>
-                  )}
+                  <div className="text-xs text-custom opacity-60 uppercase tracking-wide font-medium mb-2">Account</div>
+                  <div className="space-y-1">
+                    <div className="text-sm font-medium text-custom truncate leading-tight">{user.email}</div>
+                    {subscription && (
+                      <div className="flex items-center gap-1.5">
+                        <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                        <span className="text-xs text-green-600 font-medium capitalize">
+                          {subscription.plan} Active
+                        </span>
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
               <button
                 onClick={logout}
-                className="w-full flex items-center justify-center gap-2 p-2 rounded-lg font-medium transition-all duration-200 surface text-custom border border-custom hover:accent hover:text-white text-sm"
+                className="w-full flex items-center justify-center gap-2 p-2.5 rounded-lg font-medium transition-all duration-200 surface text-custom border border-custom hover:bg-red-50 hover:border-red-300 hover:text-red-700 text-sm"
               >
-                <span>Logout</span>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                {!sidebarCollapsed && <span>Sign Out</span>}
               </button>
             </div>
           )}

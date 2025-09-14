@@ -26,7 +26,6 @@ function App() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const [customAccent, setCustomAccent] = useState<string>("#374151");
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [licenseValid, setLicenseValid] = useState<boolean | null>(null);
   const [userToken, setUserToken] = useState<string | null>(null);
   const [authState, setAuthState] = useState<'checking' | 'authenticated' | 'login' | 'subscribing'>('checking');
   const [user, setUser] = useState<any>(null);
@@ -206,12 +205,10 @@ function App() {
 
       // For demo purposes, we'll simulate license validation
       // In production, this would call your backend API
-      setLicenseValid(true); // Simulate valid license
       setLogs((prev) => [...prev, `License validated for device: ${deviceName}`]);
 
     } catch (error) {
       console.error('License validation failed:', error);
-      setLicenseValid(false);
       setLogs((prev) => [...prev, `License validation failed: ${error}`]);
     }
   };
@@ -241,7 +238,7 @@ function App() {
 
       if (result.valid) {
         setUserToken(storedToken);
-        setLicenseValid(true);
+        // License validation handled by auth flow
         setSubscription(result.subscription);
         setAuthState('authenticated');
       } else {
@@ -262,7 +259,7 @@ function App() {
     setUserToken(null);
     setUser(null);
     setSubscription(null);
-    setLicenseValid(null);
+    // License state removed - using auth flow instead
     setAuthState('login');
     setShowWelcome(false);
   };
@@ -365,7 +362,7 @@ function App() {
       userToken={userToken!}
       onSubscribed={(subscriptionData) => {
         setSubscription(subscriptionData);
-        setLicenseValid(true);
+        // License validation handled by auth flow
         setAuthState('authenticated');
       }}
     />;
@@ -1041,18 +1038,18 @@ const SubscriptionScreen: React.FC<{
           </div>
         </div>
 
-        <div className="text-center space-y-4">
+        <div className="text-center space-y-3">
           <button
             onClick={handleSubscribe}
             disabled={loading}
-            className="accent text-white border border-custom rounded-neumorphism px-8 py-4 font-medium text-lg transition-all hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full max-w-xs accent text-white border border-custom rounded-neumorphism px-6 py-3 font-medium text-base transition-all hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? 'Processing...' : `Subscribe to ${selectedPlan === 'monthly' ? 'Monthly' : 'Annual'} Plan`}
           </button>
 
           <button
             onClick={checkSubscriptionStatus}
-            className="surface text-custom border border-custom rounded-neumorphism px-6 py-3 font-medium transition-all hover:accent hover:text-white"
+            className="w-full max-w-xs surface text-custom border border-custom rounded-neumorphism px-6 py-3 font-medium text-base transition-all hover:accent hover:text-white"
           >
             Check Subscription Status
           </button>

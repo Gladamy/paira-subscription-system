@@ -369,6 +369,16 @@ app.post('/api/licenses/validate', authenticateToken, async (req, res) => {
 // Get subscription status
 app.get('/api/subscriptions/status', authenticateToken, async (req, res) => {
   try {
+    console.log(`🔍 Checking subscription status for user: ${req.user.userId}`);
+
+    // First check if user exists
+    const userCheck = await pool.query('SELECT * FROM users WHERE id = $1', [req.user.userId]);
+    console.log(`👤 User exists: ${userCheck.rows.length > 0}`, userCheck.rows[0]);
+
+    // Check all subscriptions for this user (not just active ones)
+    const allSubs = await pool.query('SELECT * FROM subscriptions WHERE user_id = $1 ORDER BY created_at DESC', [req.user.userId]);
+    console.log(`📊 All subscriptions for user: ${allSubs.rows.length}`, allSubs.rows);
+
     const subscription = await pool.query(`
       SELECT s.*, u.subscription_status
       FROM subscriptions s
@@ -378,6 +388,24 @@ app.get('/api/subscriptions/status', authenticateToken, async (req, res) => {
       ORDER BY s.created_at DESC
       LIMIT 1
     `, [req.user.userId]);
+
+    console.log(`✅ Active subscriptions found: ${subscription.rows.length}`);
+    if (subscription.rows.length > 0) {
+      console.log(`📅 Subscription details:`, {
+        id: subscription.rows[0].id,
+        status: subscription.rows[0].status,
+        plan: subscription.rows[0].plan_type,
+        end_date: subscription.rows[0].current_period_end,
+        now: new Date().toISOString()
+      });
+    }
+
+    // Add cache control headers to prevent 304 responses
+    res.set({
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
+      'Pragma': 'no-cache',
+      'Expires': '0'
+    });
 
     if (subscription.rows.length > 0) {
       res.json({

@@ -27,6 +27,7 @@ app.use(cors({
     // Allow specific origins
     const allowedOrigins = [
       'https://paira.live',
+      'https://paira-frontend-c583ftde2-wkqs-projects.vercel.app',
       'http://localhost:3000',
       'http://localhost:1420', // Vite dev server
       'tauri://localhost' // Tauri apps
@@ -345,6 +346,7 @@ app.post('/api/subscriptions/create-checkout', authenticateToken, async (req, re
       mode: 'subscription',
       success_url: `${process.env.FRONTEND_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.FRONTEND_URL}/cancel`,
+      client_reference_id: req.user.userId, // Add user ID as client reference
       metadata: {
         userId: req.user.userId
       }

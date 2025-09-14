@@ -507,16 +507,18 @@ function App() {
 
           {/* Profile Section - At the very bottom */}
           {user && (
-            <div className="p-3 border-t border-custom flex-shrink-0">
+            <div className="p-4 border-t border-custom flex-shrink-0 bg-surface">
               {!sidebarCollapsed && (
-                <div className="mb-3">
-                  <div className="text-xs text-custom opacity-60 uppercase tracking-wide font-medium mb-2">Account</div>
-                  <div className="space-y-1">
-                    <div className="text-sm font-medium text-custom truncate leading-tight">{user.email}</div>
+                <div className="mb-4">
+                  <div className="text-xs text-custom opacity-60 uppercase tracking-wider font-semibold mb-3">Account</div>
+                  <div className="space-y-2">
+                    <div className="text-sm font-medium text-custom leading-relaxed break-words" style={{ wordBreak: 'break-word', hyphens: 'auto' }}>
+                      {user.email}
+                    </div>
                     {subscription && (
-                      <div className="flex items-center gap-1.5">
-                        <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                        <span className="text-xs text-green-600 font-medium capitalize">
+                      <div className="flex items-center gap-2 mt-2">
+                        <div className="w-2 h-2 rounded-full bg-green-500 flex-shrink-0"></div>
+                        <span className="text-xs text-green-600 font-medium capitalize leading-tight">
                           {subscription.plan} Active
                         </span>
                       </div>
@@ -526,12 +528,12 @@ function App() {
               )}
               <button
                 onClick={logout}
-                className="w-full flex items-center justify-center gap-2 p-2.5 rounded-lg font-medium transition-all duration-200 surface text-custom border border-custom hover:bg-red-50 hover:border-red-300 hover:text-red-700 text-sm"
+                className="w-full flex items-center justify-center gap-2 p-3 rounded-lg font-medium transition-all duration-200 surface text-custom border border-custom hover:bg-red-50 hover:border-red-300 hover:text-red-700 text-sm shadow-sm"
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                 </svg>
-                {!sidebarCollapsed && <span>Sign Out</span>}
+                {!sidebarCollapsed && <span className="leading-tight">Sign Out</span>}
               </button>
             </div>
           )}

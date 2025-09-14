@@ -30,6 +30,7 @@ function App() {
   const [authState, setAuthState] = useState<'checking' | 'authenticated' | 'login' | 'subscribing'>('checking');
   const [user, setUser] = useState<any>(null);
   const [subscription, setSubscription] = useState<any>(null);
+  const [showWelcome, setShowWelcome] = useState(false);
 
   // Config form state
   const [configForm, setConfigForm] = useState({
@@ -255,6 +256,16 @@ function App() {
     checkAuthStatus();
   }, []);
 
+  const logout = () => {
+    localStorage.removeItem('paira_auth_token');
+    setUserToken(null);
+    setUser(null);
+    setSubscription(null);
+    setLicenseValid(null);
+    setAuthState('login');
+    setShowWelcome(false);
+  };
+
 
   const loadConfig = async () => {
     try {
@@ -341,6 +352,9 @@ function App() {
       setUserToken(token);
       setUser(userData);
       setAuthState('subscribing');
+      setShowWelcome(true);
+      // Hide welcome message after 3 seconds
+      setTimeout(() => setShowWelcome(false), 3000);
     }} />;
   }
 
@@ -487,13 +501,38 @@ function App() {
 
             </div>
           </nav>
+
+          {/* Profile Section */}
+          {user && (
+            <div className="mt-auto p-3 border-t border-custom">
+              {!sidebarCollapsed && (
+                <div className="mb-3">
+                  <div className="text-xs text-custom opacity-75 mb-1">Logged in as</div>
+                  <div className="text-sm font-medium text-custom truncate">{user.email}</div>
+                  {subscription && (
+                    <div className="text-xs text-green-600 mt-1">
+                      {subscription.plan} • Active
+                    </div>
+                  )}
+                </div>
+              )}
+              <button
+                onClick={logout}
+                className="w-full flex items-center justify-center gap-2 p-2 rounded-lg font-medium transition-all duration-200 surface text-custom border border-custom hover:accent hover:text-white text-sm"
+              >
+                <span>Logout</span>
+              </button>
+            </div>
+          )}
         </aside>
 
       <main className="flex-1 p-5 overflow-y-auto">
         {activeTab === "dashboard" && (
           <div className="flex flex-col h-full">
             <div className="flex-shrink-0">
-              <h1 className="text-2xl font-medium mb-5 text-custom">Dashboard</h1>
+              <h1 className="text-2xl font-medium mb-5 text-custom">
+                {showWelcome && user ? `Hey again, ${user.email}!` : 'Dashboard'}
+              </h1>
 
               {/* Status Cards */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-7">
@@ -806,11 +845,37 @@ const SubscriptionScreen: React.FC<{
 }> = ({ userToken, onSubscribed }) => {
   const [selectedPlan, setSelectedPlan] = useState<'monthly' | 'annual'>('monthly');
   const [loading, setLoading] = useState(false);
+  const [hasActiveSubscription, setHasActiveSubscription] = useState(false);
 
   const plans = {
     monthly: { price: '$6.99', period: 'month', priceId: 'price_1S67LIHF7lE4j38pfL7hMYpA' },
     annual: { price: '$54.99', period: 'year', priceId: 'price_1S75fTHF7lE4j38pMqjFt3Im', savings: 'Save 25%' }
   };
+
+  // Check if user already has an active subscription
+  useEffect(() => {
+    const checkSubscription = async () => {
+      try {
+        const response = await fetch(`${API_BASE}/api/subscriptions/status`, {
+          headers: {
+            'Authorization': `Bearer ${userToken}`
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.subscription && data.subscription.status === 'active') {
+            setHasActiveSubscription(true);
+            onSubscribed(data.subscription);
+          }
+        }
+      } catch (error) {
+        console.error('Failed to check subscription status:', error);
+      }
+    };
+
+    checkSubscription();
+  }, [userToken, onSubscribed]);
 
   const handleSubscribe = async () => {
     setLoading(true);
@@ -843,6 +908,30 @@ const SubscriptionScreen: React.FC<{
       setLoading(false);
     }
   };
+
+  if (hasActiveSubscription) {
+    return (
+      <div className="min-h-screen flex items-center justify-center surface p-4">
+        <div className="border border-custom rounded-neumorphism p-8 shadow-neumorphism surface max-w-md w-full text-center">
+          <div className="mb-6">
+            <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <h1 className="text-2xl font-medium text-custom mb-2">Welcome back!</h1>
+            <p className="text-custom opacity-75">You already have an active subscription.</p>
+          </div>
+          <button
+            onClick={() => onSubscribed({ plan: 'active', status: 'active' })}
+            className="accent text-white border border-custom rounded-neumorphism px-6 py-3 font-medium transition-all hover:shadow-lg"
+          >
+            Continue to Dashboard
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center surface p-4">

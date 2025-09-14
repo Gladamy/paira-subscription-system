@@ -488,10 +488,10 @@ function App() {
           <nav className="p-2 flex-shrink-0">
             <div className="space-y-1">
               <button
-                className={`w-full flex items-center ${sidebarCollapsed ? 'justify-center' : 'justify-center gap-2'} p-3 rounded-lg font-medium transition-all duration-200 ${
+                className={`w-full flex items-center ${sidebarCollapsed ? 'justify-center' : 'justify-start gap-2'} p-3 rounded-lg font-medium transition-all duration-200 ${
                   activeTab === "dashboard"
                     ? "accent text-white"
-                    : "hover:accent hover:text-white"
+                    : "hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-100"
                 }`}
                 onClick={() => setActiveTab("dashboard")}
               >
@@ -500,10 +500,10 @@ function App() {
               </button>
 
               <button
-                className={`w-full flex items-center ${sidebarCollapsed ? 'justify-center' : 'justify-center gap-2'} p-3 rounded-lg font-medium transition-all duration-200 ${
+                className={`w-full flex items-center ${sidebarCollapsed ? 'justify-center' : 'justify-start gap-2'} p-3 rounded-lg font-medium transition-all duration-200 ${
                   activeTab === "settings"
                     ? "accent text-white"
-                    : "hover:accent hover:text-white"
+                    : "hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-100"
                 }`}
                 onClick={() => setActiveTab("settings")}
               >

@@ -34,6 +34,7 @@ app.use(cors({
         'paira.live',
         'www.paira.live',
         'localhost',
+        'tauri.localhost',
       ]);
 
       // Ports we allow for localhost

@@ -859,7 +859,7 @@ const SubscriptionScreen: React.FC<{
   // Removed unused checkingStatus state
 
   const plans = {
-    monthly: { price: '$6.99', period: 'month', priceId: 'price_1S67LIHF7lE4j38pfL7hMYpA' },
+    monthly: { price: '$0.60', period: 'month', priceId: 'price_1S778IHF7lE4j38pZNPnlifC' },
     annual: { price: '$54.99', period: 'year', priceId: 'price_1S75fTHF7lE4j38pMqjFt3Im', savings: 'Save 25%' }
   };
 

@@ -475,15 +475,18 @@ app.post('/api/webhooks/stripe', express.raw({ type: 'application/json' }), asyn
 async function handleCheckoutCompleted(session) {
   try {
     // Store the session ID -> user ID mapping for later use
-    if (session.metadata?.userId) {
+    // User ID is stored in client_reference_id, not metadata
+    if (session.client_reference_id) {
       await pool.query(`
         INSERT INTO checkout_sessions (session_id, user_id, subscription_id)
         VALUES ($1, $2, $3)
         ON CONFLICT (session_id)
         DO UPDATE SET subscription_id = EXCLUDED.subscription_id
-      `, [session.id, session.metadata.userId, session.subscription]);
+      `, [session.id, session.client_reference_id, session.subscription]);
 
-      console.log(`Checkout completed for user ${session.metadata.userId}, session: ${session.id}`);
+      console.log(`Checkout completed for user ${session.client_reference_id}, session: ${session.id}`);
+    } else {
+      console.log(`No client_reference_id found in session ${session.id}`);
     }
   } catch (error) {
     console.error('Checkout completed handler error:', error);

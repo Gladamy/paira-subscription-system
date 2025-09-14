@@ -14,7 +14,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<{ id: string; email: string } | null>(null);
   const [showPricing, setShowPricing] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -39,7 +39,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
       } else {
         setError(data.error || 'Authentication failed');
       }
-    } catch (error) {
+    } catch {
       setError('Network error. Please try again.');
     } finally {
       setLoading(false);
@@ -72,7 +72,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
       } else {
         setError(data.error || 'Failed to create checkout session');
       }
-    } catch (error) {
+    } catch {
       setError('Network error. Please try again.');
     } finally {
       setLoading(false);
@@ -81,12 +81,15 @@ export default function AuthModal({ onClose }: AuthModalProps) {
 
   if (showPricing) {
     return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-        <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-          <div className="p-6 border-b border-slate-200">
+      <div className="fixed inset-0 flex items-center justify-center z-50 p-4" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+        <div className="max-w-2xl w-full max-h-[90vh] overflow-y-auto" style={{
+          backgroundColor: '#FFFFFF',
+          border: '1px solid #E5E7EB'
+        }}>
+          <div className="p-6" style={{ borderBottom: '1px solid #E5E7EB' }}>
             <div className="flex justify-between items-center">
-              <h2 className="text-2xl font-bold text-slate-900">Choose Your Plan</h2>
-              <button onClick={onClose} className="text-slate-400 hover:text-slate-600">
+              <h2 className="text-2xl font-medium" style={{ color: '#0f0f0f', fontWeight: 500 }}>Choose Your Plan</h2>
+              <button onClick={onClose} style={{ color: '#6B7280' }}>
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
@@ -97,10 +100,15 @@ export default function AuthModal({ onClose }: AuthModalProps) {
           <div className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Monthly Plan */}
-              <div className="border-2 border-slate-200 rounded-lg p-6 hover:border-blue-500 transition-colors">
-                <h3 className="text-xl font-semibold text-slate-900 mb-2">Monthly</h3>
-                <div className="text-3xl font-bold text-slate-900 mb-4">$0.60<span className="text-lg font-normal text-slate-600">/month</span></div>
-                <ul className="space-y-2 mb-6 text-slate-600">
+              <div style={{
+                backgroundColor: '#FFFFFF',
+                border: '1px solid #E5E7EB',
+                padding: '2rem',
+                transition: 'all 0.2s'
+              }}>
+                <h3 className="text-xl font-medium mb-2" style={{ color: '#0f0f0f', fontWeight: 500 }}>Monthly</h3>
+                <div className="text-3xl font-medium mb-4" style={{ color: '#0f0f0f', fontWeight: 500 }}>$0.60<span className="text-lg font-normal" style={{ color: '#6B7280' }}>/month</span></div>
+                <ul className="space-y-2 mb-6" style={{ color: '#6B7280' }}>
                   <li>✓ Full bot functionality</li>
                   <li>✓ HWID-based licensing</li>
                   <li>✓ Priority support</li>
@@ -109,20 +117,50 @@ export default function AuthModal({ onClose }: AuthModalProps) {
                 <button
                   onClick={() => handleSubscribe('monthly')}
                   disabled={loading}
-                  className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 disabled:opacity-50"
+                  style={{
+                    width: '100%',
+                    padding: '1rem',
+                    backgroundColor: '#6B46C1',
+                    color: '#FFFFFF',
+                    fontSize: '1rem',
+                    fontWeight: 500,
+                    cursor: loading ? 'not-allowed' : 'pointer',
+                    opacity: loading ? 0.5 : 1
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!loading) e.currentTarget.style.backgroundColor = '#553C9A';
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!loading) e.currentTarget.style.backgroundColor = '#6B46C1';
+                  }}
                 >
                   {loading ? 'Processing...' : 'Subscribe Monthly'}
                 </button>
               </div>
 
               {/* Annual Plan */}
-              <div className="border-2 border-blue-500 rounded-lg p-6 relative">
-                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+              <div style={{
+                backgroundColor: '#FAFAFA',
+                border: '2px solid #6B46C1',
+                padding: '2rem',
+                position: 'relative'
+              }}>
+                <div style={{
+                  position: 'absolute',
+                  top: '-1rem',
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                  backgroundColor: '#6B46C1',
+                  color: '#FFFFFF',
+                  padding: '0.5rem 1rem',
+                  fontSize: '0.875rem',
+                  fontWeight: 500
+                }}>
                   Save 34%
                 </div>
-                <h3 className="text-xl font-semibold text-slate-900 mb-2">Annual</h3>
-                <div className="text-3xl font-bold text-slate-900 mb-4">$54.99<span className="text-lg font-normal text-slate-600">/year</span></div>
-                <ul className="space-y-2 mb-6 text-slate-600">
+                <h3 className="text-xl font-medium mb-2" style={{ color: '#0f0f0f', fontWeight: 500 }}>Annual</h3>
+                <div className="text-3xl font-medium mb-4" style={{ color: '#0f0f0f', fontWeight: 500 }}>$54.99<span className="text-lg font-normal" style={{ color: '#6B7280' }}>/year</span></div>
+                <ul className="space-y-2 mb-6" style={{ color: '#6B7280' }}>
                   <li>✓ All Monthly features</li>
                   <li>✓ 2 months free</li>
                   <li>✓ Exclusive beta access</li>
@@ -131,7 +169,22 @@ export default function AuthModal({ onClose }: AuthModalProps) {
                 <button
                   onClick={() => handleSubscribe('annual')}
                   disabled={loading}
-                  className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 disabled:opacity-50"
+                  style={{
+                    width: '100%',
+                    padding: '1rem',
+                    backgroundColor: '#6B46C1',
+                    color: '#FFFFFF',
+                    fontSize: '1rem',
+                    fontWeight: 500,
+                    cursor: loading ? 'not-allowed' : 'pointer',
+                    opacity: loading ? 0.5 : 1
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!loading) e.currentTarget.style.backgroundColor = '#553C9A';
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!loading) e.currentTarget.style.backgroundColor = '#6B46C1';
+                  }}
                 >
                   {loading ? 'Processing...' : 'Subscribe Annual'}
                 </button>
@@ -139,7 +192,14 @@ export default function AuthModal({ onClose }: AuthModalProps) {
             </div>
 
             {error && (
-              <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700">
+              <div style={{
+                marginTop: '1rem',
+                padding: '1rem',
+                backgroundColor: '#FEF2F2',
+                border: '1px solid #FECACA',
+                color: '#DC2626',
+                fontSize: '0.875rem'
+              }}>
                 {error}
               </div>
             )}
@@ -150,14 +210,19 @@ export default function AuthModal({ onClose }: AuthModalProps) {
   }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg max-w-md w-full">
-        <div className="p-6 border-b border-slate-200">
+    <div className="fixed inset-0 flex items-center justify-center z-50 p-4" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+      <div style={{
+        backgroundColor: '#FFFFFF',
+        maxWidth: '28rem',
+        width: '100%',
+        border: '1px solid #E5E7EB'
+      }}>
+        <div className="p-6" style={{ borderBottom: '1px solid #E5E7EB' }}>
           <div className="flex justify-between items-center">
-            <h2 className="text-2xl font-bold text-slate-900">
+            <h2 className="text-2xl font-medium" style={{ color: '#0f0f0f', fontWeight: 500 }}>
               {isLogin ? 'Sign In' : 'Create Account'}
             </h2>
-            <button onClick={onClose} className="text-slate-400 hover:text-slate-600">
+            <button onClick={onClose} style={{ color: '#6B7280' }}>
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
@@ -167,29 +232,53 @@ export default function AuthModal({ onClose }: AuthModalProps) {
 
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">Email</label>
+            <label className="block text-sm font-medium mb-1" style={{ color: '#374151' }}>Email</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              style={{
+                width: '100%',
+                padding: '1rem 0.75rem',
+                border: '1px solid #E5E7EB',
+                backgroundColor: '#FFFFFF',
+                color: '#000000',
+                fontFamily: "'Inter', 'SF Pro', sans-serif",
+                fontSize: '1rem',
+                outline: 'none'
+              }}
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">Password</label>
+            <label className="block text-sm font-medium mb-1" style={{ color: '#374151' }}>Password</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              style={{
+                width: '100%',
+                padding: '1rem 0.75rem',
+                border: '1px solid #E5E7EB',
+                backgroundColor: '#FFFFFF',
+                color: '#000000',
+                fontFamily: "'Inter', 'SF Pro', sans-serif",
+                fontSize: '1rem',
+                outline: 'none'
+              }}
               required
             />
           </div>
 
           {error && (
-            <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+            <div style={{
+              padding: '0.75rem',
+              backgroundColor: '#FEF2F2',
+              border: '1px solid #FECACA',
+              color: '#DC2626',
+              fontSize: '14px'
+            }}>
               {error}
             </div>
           )}
@@ -197,7 +286,22 @@ export default function AuthModal({ onClose }: AuthModalProps) {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 disabled:opacity-50"
+            style={{
+              width: '100%',
+              padding: '1rem',
+              backgroundColor: '#6B46C1',
+              color: '#FFFFFF',
+              fontSize: '1rem',
+              fontWeight: 500,
+              cursor: loading ? 'not-allowed' : 'pointer',
+              opacity: loading ? 0.5 : 1
+            }}
+            onMouseEnter={(e) => {
+              if (!loading) e.currentTarget.style.backgroundColor = '#553C9A';
+            }}
+            onMouseLeave={(e) => {
+              if (!loading) e.currentTarget.style.backgroundColor = '#6B46C1';
+            }}
           >
             {loading ? 'Please wait...' : (isLogin ? 'Sign In' : 'Create Account')}
           </button>
@@ -206,7 +310,20 @@ export default function AuthModal({ onClose }: AuthModalProps) {
         <div className="px-6 pb-6 text-center">
           <button
             onClick={() => setIsLogin(!isLogin)}
-            className="text-blue-600 hover:text-blue-800 text-sm"
+            style={{
+              color: '#6B46C1',
+              fontSize: '0.875rem',
+              textDecoration: 'underline',
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = '#553C9A';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = '#6B46C1';
+            }}
           >
             {isLogin ? "Don't have an account? Sign up" : 'Already have an account? Sign in'}
           </button>

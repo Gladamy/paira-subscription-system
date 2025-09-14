@@ -523,6 +523,15 @@ async function handleSubscriptionChange(subscription) {
 
     const userId = sessionResult.rows[0].user_id;
 
+    // Safely convert Unix timestamps to JavaScript Date objects
+    const currentPeriodStart = subscription.current_period_start
+      ? new Date(subscription.current_period_start * 1000)
+      : new Date();
+
+    const currentPeriodEnd = subscription.current_period_end
+      ? new Date(subscription.current_period_end * 1000)
+      : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days from now
+
     // Update or create subscription record
     const result = await client.query(`
       INSERT INTO subscriptions (
@@ -539,10 +548,10 @@ async function handleSubscriptionChange(subscription) {
     `, [
       userId,
       subscription.id,
-      subscription.items.data[0]?.price?.id?.includes('year') ? 'annual' : 'monthly',
+      subscription.items?.data?.[0]?.price?.id?.includes('year') ? 'annual' : 'monthly',
       subscription.status,
-      new Date(subscription.current_period_start * 1000),
-      new Date(subscription.current_period_end * 1000)
+      currentPeriodStart,
+      currentPeriodEnd
     ]);
 
     // Update user subscription status

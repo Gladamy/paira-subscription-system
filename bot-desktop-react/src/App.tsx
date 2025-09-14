@@ -860,7 +860,7 @@ const SubscriptionScreen: React.FC<{
   const [selectedPlan, setSelectedPlan] = useState<'monthly' | 'annual'>('monthly');
   const [loading, setLoading] = useState(false);
   const [hasActiveSubscription, setHasActiveSubscription] = useState(false);
-  const [checkingStatus, setCheckingStatus] = useState(false);
+  // Removed unused checkingStatus state
 
   const plans = {
     monthly: { price: '$6.99', period: 'month', priceId: 'price_1S67LIHF7lE4j38pfL7hMYpA' },
@@ -869,7 +869,7 @@ const SubscriptionScreen: React.FC<{
 
   // Check if user already has an active subscription
   const checkSubscriptionStatus = async () => {
-    setCheckingStatus(true);
+    // Removed checking status loading state
     try {
       const response = await fetch(`${API_BASE}/api/subscriptions/status`, {
         headers: {
@@ -890,7 +890,7 @@ const SubscriptionScreen: React.FC<{
       console.error('Failed to check subscription status:', error);
       return false;
     } finally {
-      setCheckingStatus(false);
+      // Removed checking status loading state
     }
   };
 

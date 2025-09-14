@@ -91,37 +91,54 @@ function SuccessPageContent() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center surface p-4">
-      <div className="border border-custom rounded-neumorphism p-6 shadow-neumorphism surface max-w-lg w-full text-center">
-        <div className="text-green-500 mb-4">
-          <svg className="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div className="min-h-screen bg-white flex flex-col items-center justify-center px-6 py-12">
+      <div className="w-full max-w-md mx-auto text-center">
+
+        {/* Success Checkmark */}
+        <div className="mb-8">
+          <svg className="w-20 h-20 mx-auto text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         </div>
 
-        <h1 className="text-xl font-semibold text-custom mb-3">Payment Successful</h1>
+        {/* Main Title */}
+        <h1 className="text-3xl font-bold text-gray-900 mb-3" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif' }}>
+          Payment Successful
+        </h1>
 
-        <p className="text-sm text-custom opacity-70 mb-4">
+        {/* Subtitle */}
+        <p className="text-lg text-gray-600 mb-8 leading-relaxed" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif' }}>
           Your subscription is now active and ready to use.
         </p>
 
+        {/* Clean Subscription Details - No UI Container */}
         {subscription && (
-          <div className="text-xs text-custom opacity-60 mb-4 space-y-1">
-            <div>Plan: <span className="font-medium">{subscription.plan}</span></div>
-            <div>Status: <span className="text-green-600">{subscription.status}</span></div>
-            <div>Expires: <span className="font-medium">{new Date(subscription.current_period_end).toLocaleDateString()}</span></div>
+          <div className="mb-10 space-y-2" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif' }}>
+            <div className="text-sm text-gray-500">
+              Plan: <span className="font-semibold text-gray-800">{subscription.plan}</span>
+            </div>
+            <div className="text-sm text-gray-500">
+              Status: <span className="font-semibold text-green-600">{subscription.status}</span>
+            </div>
+            <div className="text-sm text-gray-500">
+              Expires: <span className="font-semibold text-gray-800">{new Date(subscription.current_period_end).toLocaleDateString()}</span>
+            </div>
           </div>
         )}
 
-        <div className="space-y-3">
-          <h2 className="text-lg font-medium text-custom">Download Paira Bot</h2>
+        {/* Download Section */}
+        <div className="space-y-6">
+          <h2 className="text-xl font-semibold text-gray-900" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif' }}>
+            Download Paira Bot
+          </h2>
 
-          <div className="grid grid-cols-1 gap-3">
+          <div className="space-y-3">
             <a
               href="#"
-              className="accent text-white border border-custom rounded-neumorphism px-4 py-3 font-medium text-sm transition-all hover:shadow-lg flex items-center justify-center space-x-2"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-4 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-3 shadow-sm"
+              style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif' }}
             >
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
               </svg>
               <span>Download for Windows</span>
@@ -129,24 +146,27 @@ function SuccessPageContent() {
 
             <a
               href="#"
-              className="surface text-custom border border-custom rounded-neumorphism px-4 py-3 font-medium text-sm transition-all hover:accent hover:text-white flex items-center justify-center space-x-2"
+              className="w-full bg-gray-600 hover:bg-gray-700 text-white font-medium py-4 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-3 shadow-sm"
+              style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif' }}
             >
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l2-2a1 1 0 11-1.414 1.414L11 8.414V12a1 1 0 11-2 0V8.414L8.707 7.293z" clipRule="evenodd" />
               </svg>
               <span>Download for macOS</span>
             </a>
           </div>
 
-          <p className="text-xs text-custom opacity-50 mt-3">
+          <p className="text-sm text-gray-500 mt-6" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif' }}>
             Launch the app and sign in to activate your license.
           </p>
         </div>
 
-        <div className="mt-6 pt-4 border-t border-custom">
+        {/* Clean Back Link */}
+        <div className="mt-12">
           <button
             onClick={() => window.location.href = '/'}
-            className="text-xs text-custom opacity-60 hover:text-custom"
+            className="text-sm text-gray-400 hover:text-gray-600 transition-colors duration-200"
+            style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif' }}
           >
             ← Back to Home
           </button>

@@ -893,6 +893,8 @@ const SubscriptionScreen: React.FC<{
   const handleSubscribe = async () => {
     setLoading(true);
     try {
+      console.log('Creating checkout for plan:', selectedPlan, 'priceId:', plans[selectedPlan].priceId);
+
       const response = await fetch(`${API_BASE}/api/subscriptions/create-checkout`, {
         method: 'POST',
         headers: {
@@ -902,21 +904,29 @@ const SubscriptionScreen: React.FC<{
         body: JSON.stringify({ priceId: plans[selectedPlan].priceId })
       });
 
+      console.log('Checkout response status:', response.status);
       const data = await response.json();
+      console.log('Checkout response data:', data);
 
       if (response.ok && data.url) {
+        console.log('Opening Stripe checkout URL:', data.url);
         // Open Stripe checkout in external browser
-        window.open(data.url, '_blank');
+        const opened = window.open(data.url, '_blank');
+        console.log('Window opened:', opened);
+
         // In a real app, you'd listen for the success callback
         // For demo, we'll simulate success after a delay
         setTimeout(() => {
+          console.log('Simulating successful subscription');
           onSubscribed({ plan: selectedPlan, status: 'active' });
         }, 3000);
       } else {
-        alert('Failed to create checkout session');
+        console.error('Failed to create checkout session:', data);
+        alert(`Failed to create checkout session: ${data.error || 'Unknown error'}`);
       }
     } catch (error) {
-      alert('Network error. Please try again.');
+      console.error('Network error during checkout:', error);
+      alert(`Network error: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setLoading(false);
     }

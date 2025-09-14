@@ -570,27 +570,24 @@ function App() {
                       <span className="text-sm font-medium text-custom">
                         Your license expires in {(() => {
                           try {
-                            console.log('Subscription data:', subscription);
                             const now = new Date();
-                            const endDate = subscription.current_period_end;
+                            // Use 'expires' field from backend response
+                            const endDate = subscription.expires || subscription.current_period_end;
 
                             if (!endDate) {
-                              console.error('No end date in subscription:', subscription);
+                              console.error('No expiration date in subscription:', subscription);
                               return 'unknown';
                             }
 
                             const end = new Date(endDate);
-                            console.log('Parsed end date:', end, 'Is valid:', !isNaN(end.getTime()));
 
                             if (isNaN(end.getTime())) {
-                              console.error('Invalid end date format:', endDate);
+                              console.error('Invalid expiration date format:', endDate);
                               return 'unknown';
                             }
 
                             const diffTime = end.getTime() - now.getTime();
                             const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-                            console.log('Time difference:', diffTime, 'days:', diffDays);
 
                             if (diffDays <= 0) return 'today';
                             if (diffDays === 1) return '1 day';
@@ -598,7 +595,7 @@ function App() {
                             if (diffDays < 30) return `${Math.ceil(diffDays / 7)} weeks`;
                             return `${Math.ceil(diffDays / 30)} months`;
                           } catch (error) {
-                            console.error('Error calculating expiration:', error, 'Subscription:', subscription);
+                            console.error('Error calculating expiration:', error);
                             return 'unknown';
                           }
                         })()}

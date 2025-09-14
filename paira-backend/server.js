@@ -107,8 +107,17 @@ const initDatabase = async () => {
         last_used TIMESTAMP DEFAULT NOW()
       );
 
+      CREATE TABLE IF NOT EXISTS checkout_sessions (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        session_id VARCHAR(255) UNIQUE NOT NULL,
+        user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+        subscription_id VARCHAR(255),
+        created_at TIMESTAMP DEFAULT NOW()
+      );
+
       CREATE INDEX IF NOT EXISTS idx_licenses_user_hwid ON licenses(user_id, hwid_hash);
       CREATE INDEX IF NOT EXISTS idx_subscriptions_user ON subscriptions(user_id);
+      CREATE INDEX IF NOT EXISTS idx_checkout_sessions_session ON checkout_sessions(session_id);
     `);
 
     console.log('Database initialized successfully');
@@ -365,12 +374,18 @@ app.post('/api/webhooks/stripe', express.raw({ type: 'application/json' }), asyn
 
   try {
     switch (event.type) {
+      case 'checkout.session.completed':
+        await handleCheckoutCompleted(event.data.object);
+        break;
       case 'customer.subscription.created':
       case 'customer.subscription.updated':
         await handleSubscriptionChange(event.data.object);
         break;
       case 'customer.subscription.deleted':
         await handleSubscriptionCancellation(event.data.object);
+        break;
+      case 'invoice.payment_succeeded':
+        await handleInvoicePaymentSucceeded(event.data.object);
         break;
       default:
         console.log(`Unhandled event type: ${event.type}`);
@@ -384,11 +399,53 @@ app.post('/api/webhooks/stripe', express.raw({ type: 'application/json' }), asyn
 });
 
 // Helper functions
+async function handleCheckoutCompleted(session) {
+  try {
+    // Store the session ID -> user ID mapping for later use
+    if (session.metadata?.userId) {
+      await pool.query(`
+        INSERT INTO checkout_sessions (session_id, user_id, subscription_id)
+        VALUES ($1, $2, $3)
+        ON CONFLICT (session_id)
+        DO UPDATE SET subscription_id = EXCLUDED.subscription_id
+      `, [session.id, session.metadata.userId, session.subscription]);
+
+      console.log(`Checkout completed for user ${session.metadata.userId}, session: ${session.id}`);
+    }
+  } catch (error) {
+    console.error('Checkout completed handler error:', error);
+  }
+}
+
+async function handleInvoicePaymentSucceeded(invoice) {
+  try {
+    if (invoice.subscription) {
+      console.log(`Payment succeeded for subscription: ${invoice.subscription}`);
+    }
+  } catch (error) {
+    console.error('Invoice payment succeeded handler error:', error);
+  }
+}
+
 async function handleSubscriptionChange(subscription) {
   const client = await pool.connect();
 
   try {
     await client.query('BEGIN');
+
+    // Find user ID from checkout sessions table
+    const sessionResult = await client.query(
+      'SELECT user_id FROM checkout_sessions WHERE subscription_id = $1',
+      [subscription.id]
+    );
+
+    if (sessionResult.rows.length === 0) {
+      console.log(`No checkout session found for subscription ${subscription.id}`);
+      await client.query('COMMIT');
+      return;
+    }
+
+    const userId = sessionResult.rows[0].user_id;
 
     // Update or create subscription record
     const result = await client.query(`
@@ -404,7 +461,7 @@ async function handleSubscriptionChange(subscription) {
         current_period_start = EXCLUDED.current_period_start,
         current_period_end = EXCLUDED.current_period_end
     `, [
-      subscription.metadata?.userId,
+      userId,
       subscription.id,
       subscription.items.data[0]?.price?.id?.includes('year') ? 'annual' : 'monthly',
       subscription.status,
@@ -415,8 +472,10 @@ async function handleSubscriptionChange(subscription) {
     // Update user subscription status
     await client.query(
       'UPDATE users SET subscription_status = $1 WHERE id = $2',
-      [subscription.status, subscription.metadata?.userId]
+      [subscription.status, userId]
     );
+
+    console.log(`Subscription ${subscription.id} created/updated for user ${userId}`);
 
     await client.query('COMMIT');
   } catch (error) {

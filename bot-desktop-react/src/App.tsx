@@ -557,16 +557,22 @@ function App() {
                       </svg>
                       <span className="text-sm font-medium text-custom">
                         Your license expires in {(() => {
-                          const now = new Date();
-                          const end = new Date(subscription.current_period_end);
-                          const diffTime = end.getTime() - now.getTime();
-                          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                          try {
+                            const now = new Date();
+                            const end = new Date(subscription.current_period_end);
+                            const diffTime = end.getTime() - now.getTime();
+                            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-                          if (diffDays <= 0) return 'today';
-                          if (diffDays === 1) return '1 day';
-                          if (diffDays < 7) return `${diffDays} days`;
-                          if (diffDays < 30) return `${Math.ceil(diffDays / 7)} weeks`;
-                          return `${Math.ceil(diffDays / 30)} months`;
+                            if (isNaN(diffDays)) return 'unknown';
+                            if (diffDays <= 0) return 'today';
+                            if (diffDays === 1) return '1 day';
+                            if (diffDays < 7) return `${diffDays} days`;
+                            if (diffDays < 30) return `${Math.ceil(diffDays / 7)} weeks`;
+                            return `${Math.ceil(diffDays / 30)} months`;
+                          } catch (error) {
+                            console.error('Error calculating expiration:', error);
+                            return 'unknown';
+                          }
                         })()}
                       </span>
                     </div>

@@ -12,6 +12,9 @@ import {
 } from "lucide-react";
 import "./App.css";
 
+// Production API configuration
+const API_BASE = 'https://api.paira.live';
+
 function App() {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [botStatus, setBotStatus] = useState("Stopped");
@@ -223,7 +226,7 @@ function App() {
 
       // Validate license with backend
       const hwid = await invoke('get_hwid');
-      const response = await fetch('http://localhost:3001/api/licenses/validate', {
+      const response = await fetch(`${API_BASE}/api/licenses/validate`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -689,7 +692,7 @@ const AuthScreen: React.FC<{ onAuthenticated: (token: string, userData: any) => 
 
     try {
       const endpoint = isLogin ? '/api/auth/login' : '/api/auth/register';
-      const response = await fetch(`http://localhost:3001${endpoint}`, {
+      const response = await fetch(`${API_BASE}${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
@@ -804,7 +807,7 @@ const SubscriptionScreen: React.FC<{
   const handleSubscribe = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:3001/api/subscriptions/create-checkout', {
+      const response = await fetch(`${API_BASE}/api/subscriptions/create-checkout`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

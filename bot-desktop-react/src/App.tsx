@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import { listen } from "@tauri-apps/api/event";
 import { getCurrentWindow } from "@tauri-apps/api/window";
+import { open } from "@tauri-apps/plugin-shell";
 import Editor from "@monaco-editor/react";
 import AnsiToHtml from "ansi-to-html";
 import {
@@ -910,9 +911,15 @@ const SubscriptionScreen: React.FC<{
 
       if (response.ok && data.url) {
         console.log('Opening Stripe checkout URL:', data.url);
-        // Open Stripe checkout in external browser
-        const opened = window.open(data.url, '_blank');
-        console.log('Window opened:', opened);
+        // Open Stripe checkout in external browser using Tauri shell
+        try {
+          await open(data.url);
+          console.log('Stripe checkout opened successfully');
+        } catch (error) {
+          console.error('Failed to open Stripe checkout:', error);
+          alert('Failed to open payment page. Please try again.');
+          return;
+        }
 
         // In a real app, you'd listen for the success callback
         // For demo, we'll simulate success after a delay

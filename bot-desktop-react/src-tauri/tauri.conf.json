@@ -25,6 +25,12 @@
       "csp": null
     }
   },
+  "plugins": {
+    "opener": {
+      "allowFileUrls": false,
+      "allowHttpUrls": true
+    }
+  },
   "bundle": {
     "active": true,
     "targets": "all",

@@ -692,13 +692,20 @@ const AuthScreen: React.FC<{ onAuthenticated: (token: string, userData: any) => 
 
     try {
       const endpoint = isLogin ? '/api/auth/login' : '/api/auth/register';
+      console.log('Making request to:', `${API_BASE}${endpoint}`);
+      console.log('Request body:', { email, password });
+
       const response = await fetch(`${API_BASE}${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
       });
 
+      console.log('Response status:', response.status);
+      console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+
       const data = await response.json();
+      console.log('Response data:', data);
 
       if (response.ok) {
         localStorage.setItem('paira_auth_token', data.token);
@@ -707,7 +714,8 @@ const AuthScreen: React.FC<{ onAuthenticated: (token: string, userData: any) => 
         setError(data.error || 'Authentication failed');
       }
     } catch (error) {
-      setError('Network error. Please check if the backend is running.');
+      console.error('Network error:', error);
+      setError(`Network error: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setLoading(false);
     }
@@ -800,8 +808,8 @@ const SubscriptionScreen: React.FC<{
   const [loading, setLoading] = useState(false);
 
   const plans = {
-    monthly: { price: '$6.99', period: 'month', priceId: 'price_monthly_placeholder' },
-    annual: { price: '$54.99', period: 'year', priceId: 'price_annual_placeholder', savings: 'Save 25%' }
+    monthly: { price: '$6.99', period: 'month', priceId: 'price_1S67LIHF7lE4j38pfL7hMYpA' },
+    annual: { price: '$54.99', period: 'year', priceId: 'price_1S75fTHF7lE4j38pMqjFt3Im', savings: 'Save 25%' }
   };
 
   const handleSubscribe = async () => {

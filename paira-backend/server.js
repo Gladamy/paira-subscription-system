@@ -285,6 +285,39 @@ app.post('/api/licenses/validate', authenticateToken, async (req, res) => {
   }
 });
 
+// Get subscription status
+app.get('/api/subscriptions/status', authenticateToken, async (req, res) => {
+  try {
+    const subscription = await pool.query(`
+      SELECT s.*, u.subscription_status
+      FROM subscriptions s
+      JOIN users u ON u.id = s.user_id
+      WHERE s.user_id = $1 AND s.status = 'active'
+      AND s.current_period_end > NOW()
+      ORDER BY s.created_at DESC
+      LIMIT 1
+    `, [req.user.userId]);
+
+    if (subscription.rows.length > 0) {
+      res.json({
+        subscription: {
+          id: subscription.rows[0].id,
+          plan: subscription.rows[0].plan_type,
+          status: subscription.rows[0].status,
+          current_period_start: subscription.rows[0].current_period_start,
+          current_period_end: subscription.rows[0].current_period_end
+        }
+      });
+    } else {
+      res.json({ subscription: null });
+    }
+
+  } catch (error) {
+    console.error('Subscription status error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 // Stripe checkout session
 app.post('/api/subscriptions/create-checkout', authenticateToken, async (req, res) => {
   try {

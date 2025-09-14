@@ -334,23 +334,33 @@ app.post('/api/licenses/validate', authenticateToken, async (req, res) => {
     }
 
     // Check if HWID is registered for this user
-    const license = await pool.query(`
+    let license = await pool.query(`
       SELECT * FROM licenses
       WHERE user_id = $1 AND hwid_hash = $2 AND is_active = true
     `, [req.user.userId, hwid]);
 
+    // If no license exists for this HWID, create one automatically
     if (license.rows.length === 0) {
-      return res.status(403).json({
-        valid: false,
-        message: 'License not found for this device'
-      });
-    }
+      console.log(`Creating new HWID license for user ${req.user.userId}, HWID: ${hwid}`);
 
-    // Update last used timestamp
-    await pool.query(
-      'UPDATE licenses SET last_used = NOW() WHERE id = $1',
-      [license.rows[0].id]
-    );
+      // Get device name from request (optional)
+      const deviceName = req.body.deviceName || req.body.device_name || 'Unknown Device';
+
+      const newLicense = await pool.query(`
+        INSERT INTO licenses (user_id, hwid_hash, device_name)
+        VALUES ($1, $2, $3)
+        RETURNING *
+      `, [req.user.userId, hwid, deviceName]);
+
+      license = { rows: [newLicense.rows[0]] };
+      console.log(`HWID license created successfully: ${newLicense.rows[0].id}`);
+    } else {
+      // Update last used timestamp for existing license
+      await pool.query(
+        'UPDATE licenses SET last_used = NOW() WHERE id = $1',
+        [license.rows[0].id]
+      );
+    }
 
     res.json({
       valid: true,

@@ -344,7 +344,19 @@ app.post('/api/licenses/validate', authenticateToken, async (req, res) => {
       console.log(`Creating new HWID license for user ${req.user.userId}, HWID: ${hwid}`);
 
       // Get device name from request (optional)
-      const deviceName = req.body.deviceName || req.body.device_name || 'Unknown Device';
+      const deviceName = req.body.deviceName || req.body.device_name;
+
+      // If no device name provided, try to get it from system info
+      let finalDeviceName = deviceName;
+      if (!finalDeviceName) {
+        try {
+          // Try to get hostname or use a generic name
+          const os = require('os');
+          finalDeviceName = os.hostname() || `Device-${Date.now()}`;
+        } catch (error) {
+          finalDeviceName = `Device-${Date.now()}`;
+        }
+      }
 
       const newLicense = await pool.query(`
         INSERT INTO licenses (user_id, hwid_hash, device_name)

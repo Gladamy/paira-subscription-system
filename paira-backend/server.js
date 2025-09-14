@@ -27,6 +27,7 @@ app.use(cors({
     // Allow specific origins
     const allowedOrigins = [
       'https://paira.live',
+      'https://paira-frontend-o9szbx6t9-wkqs-projects.vercel.app',
       'https://paira-frontend-c583ftde2-wkqs-projects.vercel.app',
       'http://localhost:3000',
       'http://localhost:1420', // Vite dev server

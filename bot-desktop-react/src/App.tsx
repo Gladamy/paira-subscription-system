@@ -1041,21 +1041,20 @@ const SubscriptionScreen: React.FC<{
           </div>
         </div>
 
-        <div className="text-center">
+        <div className="text-center space-y-4">
           <button
             onClick={handleSubscribe}
             disabled={loading}
             className="accent text-white border border-custom rounded-neumorphism px-8 py-4 font-medium text-lg transition-all hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? 'Processing...' : `Subscribe to ${selectedPlan === 'monthly' ? 'Monthly' : 'Annual'} Plan
+            {loading ? 'Processing...' : `Subscribe to ${selectedPlan === 'monthly' ? 'Monthly' : 'Annual'} Plan`}
           </button>
 
           <button
             onClick={checkSubscriptionStatus}
-            disabled={checkingStatus}
-            className="surface text-custom border border-custom rounded-neumorphism px-6 py-3 font-medium transition-all hover:accent hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+            className="surface text-custom border border-custom rounded-neumorphism px-6 py-3 font-medium transition-all hover:accent hover:text-white"
           >
-            {checkingStatus ? 'Checking...' : 'Check Subscription Status'}`}
+            Check Subscription Status
           </button>
           <p className="text-xs text-custom opacity-50 mt-4">
             Secure payment powered by Stripe • 30-day money-back guarantee

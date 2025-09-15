@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface AuthModalProps {
   onClose: () => void;
@@ -16,6 +16,12 @@ export default function AuthModal({ onClose }: AuthModalProps) {
   const [error, setError] = useState('');
   const [user, setUser] = useState<{ id: string; email: string } | null>(null);
   const [showPricing, setShowPricing] = useState(false);
+  const [subscriptionStatus, setSubscriptionStatus] = useState<'checking' | 'active' | 'inactive' | null>(null);
+
+  // Check subscription status on component mount
+  useEffect(() => {
+    checkSubscriptionStatus();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,7 +41,8 @@ export default function AuthModal({ onClose }: AuthModalProps) {
       if (response.ok) {
         localStorage.setItem('paira_auth_token', data.token);
         setUser(data.user);
-        setShowPricing(true);
+        // Check subscription status after login
+        await checkSubscriptionStatus();
       } else {
         setError(data.error || 'Authentication failed');
       }
@@ -43,6 +50,43 @@ export default function AuthModal({ onClose }: AuthModalProps) {
       setError('Network error. Please try again.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const checkSubscriptionStatus = async () => {
+    const token = localStorage.getItem('paira_auth_token');
+    if (!token) return;
+
+    setSubscriptionStatus('checking');
+    try {
+      const response = await fetch(`${API_BASE}/api/subscriptions/status`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.subscription && data.subscription.status === 'active') {
+          setSubscriptionStatus('active');
+          // Get user profile
+          const profileResponse = await fetch(`${API_BASE}/api/user/profile`, {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          });
+          if (profileResponse.ok) {
+            const profileData = await profileResponse.json();
+            setUser(profileData.user);
+          }
+        } else {
+          setSubscriptionStatus('inactive');
+        }
+      } else {
+        setSubscriptionStatus('inactive');
+      }
+    } catch {
+      setSubscriptionStatus('inactive');
     }
   };
 
@@ -78,6 +122,134 @@ export default function AuthModal({ onClose }: AuthModalProps) {
       setLoading(false);
     }
   };
+
+  // Show subscription status if checking
+  if (subscriptionStatus === 'checking') {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center z-50 p-4" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+        <div style={{
+          backgroundColor: '#FFFFFF',
+          maxWidth: '28rem',
+          width: '100%',
+          border: '1px solid #E5E7EB',
+          padding: '2rem',
+          textAlign: 'center'
+        }}>
+          <div style={{ marginBottom: '1rem' }}>
+            <div style={{
+              width: '3rem',
+              height: '3rem',
+              backgroundColor: '#E5E7EB',
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 1rem'
+            }}>
+              <div style={{
+                width: '1.5rem',
+                height: '1.5rem',
+                border: '2px solid #6B46C1',
+                borderTop: '2px solid transparent',
+                borderRadius: '50%',
+                animation: 'spin 1s linear infinite'
+              }}></div>
+            </div>
+            <h2 style={{ color: '#111827', fontWeight: 500, marginBottom: '0.5rem' }}>Checking Subscription Status</h2>
+            <p style={{ color: '#6B7280', fontSize: '0.875rem' }}>Please wait while we verify your subscription...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show active subscription status
+  if (subscriptionStatus === 'active' && user) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center z-50 p-4" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+        <div style={{
+          backgroundColor: '#FFFFFF',
+          maxWidth: '28rem',
+          width: '100%',
+          border: '1px solid #E5E7EB',
+          padding: '2rem',
+          textAlign: 'center'
+        }}>
+          <div style={{ marginBottom: '1.5rem' }}>
+            <div style={{
+              width: '3rem',
+              height: '3rem',
+              backgroundColor: '#10B981',
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 1rem'
+            }}>
+              <svg style={{ width: '1.5rem', height: '1.5rem', color: '#FFFFFF' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <h2 style={{ color: '#111827', fontWeight: 500, marginBottom: '0.5rem' }}>Subscription Active</h2>
+            <p style={{ color: '#6B7280', fontSize: '0.875rem', marginBottom: '1rem' }}>
+              Welcome back, {user.email}! Your subscription is active and you can use Paira Bot.
+            </p>
+            <div style={{
+              backgroundColor: '#F0FDF4',
+              border: '1px solid #D1FAE5',
+              padding: '1rem',
+              borderRadius: '6px',
+              marginBottom: '1.5rem'
+            }}>
+              <p style={{ color: '#065F46', fontSize: '0.875rem', fontWeight: 500 }}>
+                ✓ Full access to desktop app features<br/>
+                ✓ HWID-based licensing<br/>
+                ✓ Priority support
+              </p>
+            </div>
+          </div>
+          <div style={{ display: 'flex', gap: '0.75rem' }}>
+            <button
+              onClick={() => window.open('https://paira.live/download', '_blank')}
+              style={{
+                flex: 1,
+                backgroundColor: '#6B46C1',
+                color: '#FFFFFF',
+                border: 'none',
+                borderRadius: '6px',
+                padding: '0.75rem 1rem',
+                fontSize: '0.875rem',
+                fontWeight: 500,
+                cursor: 'pointer'
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#553C9A'}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#6B46C1'}
+            >
+              Download Desktop App
+            </button>
+            <button
+              onClick={onClose}
+              style={{
+                flex: 1,
+                backgroundColor: '#FFFFFF',
+                color: '#374151',
+                border: '1px solid #E5E7EB',
+                borderRadius: '6px',
+                padding: '0.75rem 1rem',
+                fontSize: '0.875rem',
+                fontWeight: 500,
+                cursor: 'pointer'
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#F9FAFB'}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#FFFFFF'}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (showPricing) {
     return (

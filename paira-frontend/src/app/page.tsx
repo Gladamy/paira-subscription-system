@@ -3,8 +3,42 @@
 import { useState } from 'react';
 import AuthModal from '@/components/AuthModal';
 
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'https://api.paira.live';
+
 export default function Home() {
   const [showAuth, setShowAuth] = useState(false);
+  const [subscriptionStatus, setSubscriptionStatus] = useState<'checking' | 'active' | 'inactive' | null>(null);
+
+  const checkSubscriptionStatus = async () => {
+    const token = localStorage.getItem('paira_auth_token');
+    if (!token) {
+      setShowAuth(true);
+      return;
+    }
+
+    setSubscriptionStatus('checking');
+    try {
+      const response = await fetch(`${API_BASE}/api/subscriptions/status`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.subscription && data.subscription.status === 'active') {
+          setSubscriptionStatus('active');
+        } else {
+          setSubscriptionStatus('inactive');
+        }
+      } else {
+        setSubscriptionStatus('inactive');
+      }
+    } catch (error) {
+      console.error('Subscription check failed:', error);
+      setSubscriptionStatus('inactive');
+    }
+  };
 
   return (
     <div style={{
@@ -96,7 +130,7 @@ export default function Home() {
             margin: '0 auto 2.5rem',
             lineHeight: '1.6'
           }}>
-            Automate your Roblox trading with advanced algorithms, real-time price tracking, and secure HWID-based licensing.
+            Automate your Roblox trading with advanced algorithms, real-time price tracking, and secure HWID-based licensing. Available as a desktop app for the best performance.
           </p>
           <button
             onClick={() => setShowAuth(true)}
@@ -120,6 +154,90 @@ export default function Home() {
           >
             Start Free Trial
           </button>
+        </div>
+
+        {/* Download Section */}
+        <div style={{
+          backgroundColor: '#F0F9FF',
+          border: '1px solid #E0F2FE',
+          padding: '3rem 2rem',
+          textAlign: 'center',
+          marginBottom: '4rem'
+        }}>
+          <h2 style={{
+            fontSize: '2rem',
+            fontWeight: 700,
+            color: '#0C4A6E',
+            marginBottom: '1rem'
+          }}>Download Paira Bot Desktop App</h2>
+          <p style={{
+            fontSize: '1.125rem',
+            color: '#374151',
+            marginBottom: '2rem',
+            maxWidth: '600px',
+            margin: '0 auto 2rem'
+          }}>
+            Get the full desktop experience with automatic updates, enhanced performance, and seamless trading automation.
+          </p>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+            <a
+              href="/paira-bot-setup.msi"
+              download="paira-bot-setup.msi"
+              style={{
+                backgroundColor: '#0284C7',
+                color: '#FFFFFF',
+                border: 'none',
+                borderRadius: '6px',
+                padding: '1rem 2rem',
+                fontSize: '1.125rem',
+                fontWeight: 600,
+                cursor: 'pointer',
+                textDecoration: 'none',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                transition: 'all 0.2s'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#0369A1';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = '#0284C7';
+              }}
+            >
+              <span>⬇️</span>
+              Download for Windows
+            </a>
+            <button
+              onClick={() => setShowAuth(true)}
+              style={{
+                backgroundColor: '#FFFFFF',
+                color: '#374151',
+                border: '1px solid #D1D5DB',
+                borderRadius: '6px',
+                padding: '1rem 2rem',
+                fontSize: '1.125rem',
+                fontWeight: 600,
+                cursor: 'pointer',
+                transition: 'all 0.2s'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#F9FAFB';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = '#FFFFFF';
+              }}
+            >
+              Use Web Version
+            </button>
+          </div>
+          <p style={{
+            fontSize: '0.875rem',
+            color: '#6B7280',
+            marginTop: '1.5rem'
+          }}>
+            Windows 10/11 • MSI Installer • ~50MB download
+          </p>
         </div>
 
         {/* Features Section */}
@@ -338,7 +456,7 @@ export default function Home() {
             </button>
 
             <button
-              onClick={() => setShowAuth(true)}
+              onClick={checkSubscriptionStatus}
               style={{
                 backgroundColor: '#FFFFFF',
                 color: '#374151',
@@ -369,6 +487,166 @@ export default function Home() {
             </p>
           </div>
         </div>
+
+        {/* Subscription Status Messages */}
+        {subscriptionStatus === 'checking' && (
+          <div style={{
+            backgroundColor: '#EFF6FF',
+            border: '1px solid #DBEAFE',
+            padding: '2rem',
+            textAlign: 'center',
+            marginTop: '2rem'
+          }}>
+            <div style={{ marginBottom: '1rem' }}>
+              <div style={{
+                width: '3rem',
+                height: '3rem',
+                backgroundColor: '#DBEAFE',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto 1rem'
+              }}>
+                <div style={{
+                  width: '1.5rem',
+                  height: '1.5rem',
+                  border: '2px solid #3B82F6',
+                  borderTop: '2px solid transparent',
+                  borderRadius: '50%'
+                }}></div>
+              </div>
+              <h3 style={{ color: '#1E40AF', fontWeight: 600, marginBottom: '0.5rem' }}>Checking Subscription Status</h3>
+              <p style={{ color: '#3730A3', fontSize: '0.875rem' }}>Please wait while we verify your subscription...</p>
+            </div>
+          </div>
+        )}
+
+        {subscriptionStatus === 'active' && (
+          <div style={{
+            backgroundColor: '#F0FDF4',
+            border: '1px solid #D1FAE5',
+            padding: '2rem',
+            textAlign: 'center',
+            marginTop: '2rem'
+          }}>
+            <div style={{ marginBottom: '1rem' }}>
+              <div style={{
+                width: '3rem',
+                height: '3rem',
+                backgroundColor: '#10B981',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto 1rem'
+              }}>
+                <svg style={{ width: '1.5rem', height: '1.5rem', color: '#FFFFFF' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <h3 style={{ color: '#065F46', fontWeight: 600, marginBottom: '0.5rem' }}>Subscription Active</h3>
+              <p style={{ color: '#047857', fontSize: '0.875rem', marginBottom: '1rem' }}>
+                Your subscription is active! You can download and use Paira Bot Desktop App.
+              </p>
+              <div style={{
+                backgroundColor: '#ECFDF5',
+                border: '1px solid #A7F3D0',
+                padding: '1rem',
+                borderRadius: '6px',
+                marginBottom: '1.5rem',
+                display: 'inline-block'
+              }}>
+                <p style={{ color: '#065F46', fontSize: '0.875rem', fontWeight: 500 }}>
+                  ✓ Full access to desktop app features<br/>
+                  ✓ HWID-based licensing<br/>
+                  ✓ Priority support
+                </p>
+              </div>
+            </div>
+            <a
+              href="/paira-bot-setup.msi"
+              download="paira-bot-setup.msi"
+              style={{
+                backgroundColor: '#10B981',
+                color: '#FFFFFF',
+                border: 'none',
+                borderRadius: '6px',
+                padding: '1rem 2rem',
+                fontSize: '1.125rem',
+                fontWeight: 600,
+                cursor: 'pointer',
+                textDecoration: 'none',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                transition: 'all 0.2s'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#059669';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = '#10B981';
+              }}
+            >
+              <span>⬇️</span>
+              Download Desktop App
+            </a>
+          </div>
+        )}
+
+        {subscriptionStatus === 'inactive' && (
+          <div style={{
+            backgroundColor: '#FEF2F2',
+            border: '1px solid #FECACA',
+            padding: '2rem',
+            textAlign: 'center',
+            marginTop: '2rem'
+          }}>
+            <div style={{ marginBottom: '1rem' }}>
+              <div style={{
+                width: '3rem',
+                height: '3rem',
+                backgroundColor: '#F87171',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto 1rem'
+              }}>
+                <svg style={{ width: '1.5rem', height: '1.5rem', color: '#FFFFFF' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </div>
+              <h3 style={{ color: '#DC2626', fontWeight: 600, marginBottom: '0.5rem' }}>No Active Subscription</h3>
+              <p style={{ color: '#B91C1C', fontSize: '0.875rem', marginBottom: '1rem' }}>
+                You don't have an active subscription. Subscribe below to access Paira Bot Desktop App.
+              </p>
+            </div>
+            <button
+              onClick={() => setShowAuth(true)}
+              style={{
+                backgroundColor: '#DC2626',
+                color: '#FFFFFF',
+                border: 'none',
+                borderRadius: '6px',
+                padding: '1rem 2rem',
+                fontSize: '1.125rem',
+                fontWeight: 600,
+                cursor: 'pointer',
+                transition: 'all 0.2s'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#B91C1C';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = '#DC2626';
+              }}
+            >
+              Subscribe Now
+            </button>
+          </div>
+        )}
       </main>
 
       {/* Footer */}

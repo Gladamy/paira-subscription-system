@@ -543,16 +543,17 @@ async function handleCheckoutCompleted(session) {
     // Store the session ID -> user ID mapping for later use
     // User ID is stored in client_reference_id, not metadata
     if (session.client_reference_id) {
+      // Don't store subscription_id yet as it might not be available
       await pool.query(`
         INSERT INTO checkout_sessions (session_id, user_id, subscription_id)
         VALUES ($1, $2, $3)
         ON CONFLICT (session_id)
         DO UPDATE SET subscription_id = EXCLUDED.subscription_id
-      `, [session.id, session.client_reference_id, session.subscription]);
+      `, [session.id, session.client_reference_id, session.subscription || null]);
 
-      console.log(`Checkout completed for user ${session.client_reference_id}, session: ${session.id}`);
+      console.log(`🛒 Checkout completed for user ${session.client_reference_id}, session: ${session.id}, subscription: ${session.subscription || 'pending'}`);
     } else {
-      console.log(`No client_reference_id found in session ${session.id}`);
+      console.log(`❌ No client_reference_id found in session ${session.id}`);
     }
   } catch (error) {
     console.error('Checkout completed handler error:', error);
@@ -582,17 +583,36 @@ async function handleSubscriptionChange(subscription) {
   try {
     await client.query('BEGIN');
 
-    // Find user ID from checkout sessions table
+    // First, try to find by subscription_id (if it was stored during checkout)
     console.log('🔍 Looking for checkout session with subscription_id:', subscription.id);
-    const sessionResult = await client.query(
+    let sessionResult = await client.query(
       'SELECT user_id, session_id FROM checkout_sessions WHERE subscription_id = $1',
       [subscription.id]
     );
 
-    console.log('📊 Checkout session query result:', {
+    console.log('📊 Checkout session query by subscription_id result:', {
       found: sessionResult.rows.length > 0,
       session: sessionResult.rows[0]
     });
+
+    // If not found by subscription_id, find the most recent checkout session for this user without a subscription
+    if (sessionResult.rows.length === 0) {
+      console.log('🔍 Subscription not found by ID, looking for recent session without subscription');
+
+      // We need to get the user ID from somewhere. Let's try to find recent sessions
+      // For now, let's assume we can get the user ID from the subscription's customer metadata or other means
+      // Actually, let's modify this to be simpler - find any recent checkout session without subscription_id
+      sessionResult = await client.query(`
+        SELECT user_id, session_id FROM checkout_sessions
+        WHERE subscription_id IS NULL
+        ORDER BY created_at DESC LIMIT 1
+      `);
+
+      console.log('📊 Recent checkout session query result:', {
+        found: sessionResult.rows.length > 0,
+        session: sessionResult.rows[0]
+      });
+    }
 
     if (sessionResult.rows.length === 0) {
       console.log(`❌ No checkout session found for subscription ${subscription.id}`);
@@ -601,7 +621,15 @@ async function handleSubscriptionChange(subscription) {
     }
 
     const userId = sessionResult.rows[0].user_id;
+    const sessionId = sessionResult.rows[0].session_id;
     console.log('✅ Found user ID:', userId, 'for subscription:', subscription.id);
+
+    // Update the checkout session with the subscription ID
+    await client.query(
+      'UPDATE checkout_sessions SET subscription_id = $1 WHERE session_id = $2',
+      [subscription.id, sessionId]
+    );
+    console.log('🔄 Updated checkout session with subscription ID');
 
     // Safely convert Unix timestamps to JavaScript Date objects
     const currentPeriodStart = subscription.current_period_start

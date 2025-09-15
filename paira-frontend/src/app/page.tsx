@@ -10,10 +10,16 @@ export default function Home() {
   const router = useRouter();
   const [showAuth, setShowAuth] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [subscriptionStatus, setSubscriptionStatus] = useState<'checking' | 'active' | 'inactive' | null>(null);
 
   useEffect(() => {
     const token = localStorage.getItem('paira_auth_token');
     setIsLoggedIn(!!token);
+
+    // Check subscription status if logged in
+    if (token) {
+      checkSubscriptionStatus();
+    }
 
     // Handle anchor links
     if (typeof window !== 'undefined' && window.location.hash === '#pricing') {
@@ -28,6 +34,35 @@ export default function Home() {
 
   const handleAuthSuccess = () => {
     setIsLoggedIn(true);
+    // Check subscription status after successful authentication
+    checkSubscriptionStatus();
+  };
+
+  const checkSubscriptionStatus = async () => {
+    const token = localStorage.getItem('paira_auth_token');
+    if (!token) return;
+
+    setSubscriptionStatus('checking');
+    try {
+      const response = await fetch(`${API_BASE}/api/subscriptions/status`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.subscription && data.subscription.status === 'active') {
+          setSubscriptionStatus('active');
+        } else {
+          setSubscriptionStatus('inactive');
+        }
+      } else {
+        setSubscriptionStatus('inactive');
+      }
+    } catch {
+      setSubscriptionStatus('inactive');
+    }
   };
 
 
@@ -200,7 +235,16 @@ export default function Home() {
               Download for Windows
             </a>
             <button
-              onClick={isLoggedIn ? () => router.push('/dashboard') : () => setShowAuth(true)}
+              onClick={() => {
+                if (!isLoggedIn) {
+                  setShowAuth(true);
+                } else if (subscriptionStatus === 'active') {
+                  router.push('/dashboard');
+                } else {
+                  // For logged-in users without active subscription, they can purchase
+                  setShowAuth(true); // Or redirect to checkout
+                }
+              }}
               style={{
                 backgroundColor: '#FFFFFF',
                 color: '#374151',
@@ -325,7 +369,18 @@ export default function Home() {
               e.currentTarget.style.borderColor = '#E5E7EB';
               e.currentTarget.style.boxShadow = 'none';
             }}
-            onClick={isLoggedIn ? () => router.push('/dashboard') : () => setShowAuth(true)}
+            onClick={() => {
+              if (!isLoggedIn) {
+                setShowAuth(true);
+              } else if (subscriptionStatus === 'active') {
+                router.push('/dashboard');
+              } else {
+                // For logged-in users without active subscription, they can purchase
+                // This would typically redirect to Stripe checkout or show pricing options
+                // For now, we'll keep the current behavior but could be enhanced
+                setShowAuth(true); // Or redirect to checkout
+              }
+            }}
             >
               <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
                 <h3 style={{
@@ -423,7 +478,16 @@ export default function Home() {
 
           <div style={{ textAlign: 'center' }}>
             <button
-              onClick={() => setShowAuth(true)}
+              onClick={() => {
+                if (!isLoggedIn) {
+                  setShowAuth(true);
+                } else if (subscriptionStatus === 'active') {
+                  router.push('/dashboard');
+                } else {
+                  // For logged-in users without active subscription, they can purchase
+                  setShowAuth(true); // Or redirect to checkout
+                }
+              }}
               style={{
                 backgroundColor: '#6366F1',
                 color: '#FFFFFF',
@@ -443,7 +507,7 @@ export default function Home() {
                 e.currentTarget.style.backgroundColor = '#6366F1';
               }}
             >
-              Get Started
+              {isLoggedIn ? (subscriptionStatus === 'active' ? 'Go to Dashboard' : 'Subscribe Now') : 'Get Started'}
             </button>
 
 

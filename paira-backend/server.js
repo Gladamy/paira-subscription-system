@@ -595,23 +595,42 @@ async function handleSubscriptionChange(subscription) {
       session: sessionResult.rows[0]
     });
 
-    // If not found by subscription_id, find the most recent checkout session for this user without a subscription
+    // If not found by subscription_id, try to find by user ID from the subscription's customer
     if (sessionResult.rows.length === 0) {
-      console.log('🔍 Subscription not found by ID, looking for recent session without subscription');
+      console.log('🔍 Subscription not found by ID, trying to find by customer ID');
 
-      // We need to get the user ID from somewhere. Let's try to find recent sessions
-      // For now, let's assume we can get the user ID from the subscription's customer metadata or other means
-      // Actually, let's modify this to be simpler - find any recent checkout session without subscription_id
-      sessionResult = await client.query(`
-        SELECT user_id, session_id FROM checkout_sessions
-        WHERE subscription_id IS NULL
-        ORDER BY created_at DESC LIMIT 1
-      `);
+      // Get the customer email from Stripe to match with our users
+      try {
+        const customer = await stripe.customers.retrieve(subscription.customer);
+        console.log('👤 Retrieved customer from Stripe:', { id: customer.id, email: customer.email });
 
-      console.log('📊 Recent checkout session query result:', {
-        found: sessionResult.rows.length > 0,
-        session: sessionResult.rows[0]
-      });
+        if (customer.email) {
+          // Find user by email
+          const userResult = await client.query(
+            'SELECT id FROM users WHERE email = $1',
+            [customer.email]
+          );
+
+          if (userResult.rows.length > 0) {
+            const userId = userResult.rows[0].id;
+            console.log('✅ Found user ID from customer email:', userId);
+
+            // Now find the most recent checkout session for this user without a subscription
+            sessionResult = await client.query(`
+              SELECT user_id, session_id FROM checkout_sessions
+              WHERE user_id = $1 AND subscription_id IS NULL
+              ORDER BY created_at DESC LIMIT 1
+            `, [userId]);
+
+            console.log('📊 Checkout session query by user result:', {
+              found: sessionResult.rows.length > 0,
+              session: sessionResult.rows[0]
+            });
+          }
+        }
+      } catch (stripeError) {
+        console.error('❌ Error retrieving customer from Stripe:', stripeError);
+      }
     }
 
     if (sessionResult.rows.length === 0) {

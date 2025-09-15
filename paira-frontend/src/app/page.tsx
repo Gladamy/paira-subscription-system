@@ -620,7 +620,7 @@ export default function Home() {
               </div>
               <h3 style={{ color: '#DC2626', fontWeight: 600, marginBottom: '0.5rem' }}>No Active Subscription</h3>
               <p style={{ color: '#B91C1C', fontSize: '0.875rem', marginBottom: '1rem' }}>
-                You don't have an active subscription. Subscribe below to access Paira Bot Desktop App.
+                You don&apos;t have an active subscription. Subscribe below to access Paira Bot Desktop App.
               </p>
             </div>
             <button

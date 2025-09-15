@@ -7,6 +7,7 @@ use tauri::{State, Emitter, Manager};
 use tauri_plugin_shell::ShellExt;
 use sha2::{Sha256, Digest};
 use reqwest;
+use chrono;
 
 #[derive(Default)]
 struct BotState {
@@ -38,74 +39,172 @@ fn setup_desktop_folder(app: tauri::AppHandle) -> Result<String, String> {
     fs::create_dir_all(&paira_folder)
         .map_err(|e| format!("Failed to create desktop folder: {}", e))?;
 
+    // Get the resource directory where all the bot files are located
+    let resource_dir = app
+        .path()
+        .resource_dir()
+        .map_err(|e| format!("Failed to get resource directory: {}", e))?;
+
+    println!("Resource directory: {:?}", resource_dir);
+
+    // Copy the entire bot.dist folder (contains Python executable and dependencies)
+    let bot_dist_source = resource_dir.join("bot.dist");
+    let bot_dist_dest = paira_folder.join("bot.dist");
+
+    if bot_dist_source.exists() {
+        println!("Copying bot.dist from {:?} to {:?}", bot_dist_source, bot_dist_dest);
+        copy_dir_recursive(&bot_dist_source, &bot_dist_dest)
+            .map_err(|e| format!("Failed to copy bot.dist: {}", e))?;
+    } else {
+        println!("bot.dist not found at {:?}", bot_dist_source);
+        // Try alternative locations
+        let alt_resource_dir = resource_dir.parent().unwrap_or(&resource_dir);
+        let alt_bot_dist = alt_resource_dir.join("bot.dist");
+        if alt_bot_dist.exists() {
+            println!("Found bot.dist at alternative location: {:?}", alt_bot_dist);
+            copy_dir_recursive(&alt_bot_dist, &bot_dist_dest)
+                .map_err(|e| format!("Failed to copy bot.dist from alt location: {}", e))?;
+        }
+    }
+
+    // Copy config.json
+    let config_source = resource_dir.join("config.json");
+    let config_dest = paira_folder.join("config.json");
+
+    if config_source.exists() {
+        println!("Copying config.json from {:?} to {:?}", config_source, config_dest);
+        fs::copy(&config_source, &config_dest)
+            .map_err(|e| format!("Failed to copy config file: {}", e))?;
+    } else {
+        println!("config.json not found at {:?}", config_source);
+        // Create a default config file
+        let default_config = r#"{
+  "trading": {
+    "enabled": false,
+    "max_trades_per_hour": 10,
+    "min_profit_margin": 5,
+    "auto_sell_enabled": true
+  },
+  "notifications": {
+    "enabled": true,
+    "desktop_notifications": true,
+    "sound_enabled": false
+  },
+  "advanced": {
+    "debug_mode": false,
+    "log_level": "info"
+  }
+}"#;
+        fs::write(&config_dest, default_config)
+            .map_err(|e| format!("Failed to create default config file: {}", e))?;
+    }
+
+    // Create a batch file to launch the bot directly from the desktop folder
+    let bot_exe_path = bot_dist_dest.join("bot-x86_64-pc-windows-msvc.exe");
+
+    let launcher_content = format!(
+        r#"@echo off
+echo Starting Paira Bot...
+cd /d "{}"
+start "" "{}"
+echo Paira Bot launched from desktop folder!
+echo.
+echo If the bot doesn't start, make sure all files are in this folder.
+pause
+"#,
+        paira_folder.display(),
+        bot_exe_path.display()
+    );
+
+    let launcher_path = paira_folder.join("Run Paira Bot.bat");
+    fs::write(&launcher_path, launcher_content)
+        .map_err(|e| format!("Failed to create launcher: {}", e))?;
+
     // Create a README file with instructions
-    let readme_content = r#"Welcome to Paira Bot!
+    let readme_content = format!(r#"Welcome to Paira Bot!
 
-This folder contains quick access files for Paira Bot.
+This folder contains EVERYTHING you need to run Paira Bot directly from your desktop!
 
-📁 Files:
-- Paira Bot.exe (main application)
-- config.json (configuration file)
-- README.txt (this file)
+📁 Complete Folder Contents:
+├── bot.dist/ (Python bot with all dependencies)
+│   ├── bot-x86_64-pc-windows-msvc.exe (main bot executable)
+│   ├── python313.dll
+│   ├── _bz2.pyd
+│   └── ... (all Python dependencies)
+├── config.json (your configuration file)
+├── Run Paira Bot.bat (launcher script)
+└── README.txt (this file)
 
-🚀 Getting Started:
-1. Double-click "Paira Bot.exe" to launch the application
-2. Sign in with your account
-3. Configure your trading settings
-4. Start automating your Roblox trading!
+🚀 How to Run the Bot:
+1. Make sure you're signed into the desktop app first
+2. Double-click "Run Paira Bot.bat"
+3. The bot will start with all necessary files from this folder
+4. Check the console output for status messages
 
-📖 Need Help?
+⚙️ Configuration:
+- Edit config.json to customize bot settings
+- All changes are saved automatically
+
+📊 Bot Features:
+- Automated Roblox trading
+- Real-time price tracking
+- Profit optimization
+- HWID-based licensing
+
+📖 Troubleshooting:
+- If bot doesn't start: Check that all files are in this folder
+- If config errors: Make sure config.json is present and valid
+- If permission errors: Try running as administrator
+
+📞 Support:
 Visit: https://paira.live
 Support: support@paira.live
 
 Happy Trading! 🎯
-"#;
+
+---
+Folder created: {}
+Setup completed: {}
+"#, paira_folder.display(), chrono::Utc::now().format("%Y-%m-%d %H:%M:%S UTC"));
 
     let readme_path = paira_folder.join("README.txt");
     fs::write(&readme_path, readme_content)
         .map_err(|e| format!("Failed to create README file: {}", e))?;
 
-    // Try to create a shortcut to the main executable
-    // Get the install directory (where the app is installed)
-    let install_dir = app
-        .path()
-        .resource_dir()
-        .map_err(|e| format!("Failed to get install directory: {}", e))?
-        .parent()
-        .ok_or("Could not determine install directory")?
-        .to_path_buf();
-
-    let exe_path = install_dir.join("Paira Bot.exe");
-
-    // Create a batch file to launch the app (easier than creating shortcuts)
-    let launcher_content = format!(
-        r#"@echo off
-echo Starting Paira Bot...
-start "" "{}"
-echo Paira Bot launched!
-timeout /t 2 >nul
-"#,
-        exe_path.display()
-    );
-
-    let launcher_path = paira_folder.join("Launch Paira Bot.bat");
-    fs::write(&launcher_path, launcher_content)
-        .map_err(|e| format!("Failed to create launcher: {}", e))?;
-
-    // Create a config shortcut (copy the config file)
-    let config_source = install_dir.join("resources").join("config.json");
-    let config_dest = paira_folder.join("config.json");
-
-    if config_source.exists() {
-        fs::copy(&config_source, &config_dest)
-            .map_err(|e| format!("Failed to copy config file: {}", e))?;
-    }
-
     // Mark first run as complete
     fs::write(&first_run_marker, "completed")
         .map_err(|e| format!("Failed to create first-run marker: {}", e))?;
 
-    Ok(format!("Desktop folder created successfully at: {}", paira_folder.display()))
+    Ok(format!("Complete desktop setup finished! All bot files copied to: {}", paira_folder.display()))
+}
+
+// Helper function to copy directories recursively
+fn copy_dir_recursive(src: &PathBuf, dst: &PathBuf) -> Result<(), String> {
+    if !src.exists() {
+        return Err(format!("Source directory does not exist: {:?}", src));
+    }
+
+    fs::create_dir_all(dst)
+        .map_err(|e| format!("Failed to create destination directory: {}", e))?;
+
+    for entry in fs::read_dir(src)
+        .map_err(|e| format!("Failed to read source directory: {}", e))? {
+        let entry = entry
+            .map_err(|e| format!("Failed to read directory entry: {}", e))?;
+        let entry_path = entry.path();
+        let file_name = entry_path.file_name()
+            .ok_or("Failed to get file name")?;
+        let dest_path = dst.join(file_name);
+
+        if entry_path.is_dir() {
+            copy_dir_recursive(&entry_path, &dest_path)?;
+        } else {
+            fs::copy(&entry_path, &dest_path)
+                .map_err(|e| format!("Failed to copy file {:?} to {:?}: {}", entry_path, dest_path, e))?;
+        }
+    }
+
+    Ok(())
 }
 
 #[tauri::command]

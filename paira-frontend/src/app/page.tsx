@@ -6,10 +6,10 @@ import AuthModal from '@/components/AuthModal';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'https://api.paira.live';
 
-// Stripe Price IDs (these should be in environment variables in production)
+// Stripe Price IDs - Update these with your actual Stripe price IDs
 const STRIPE_PRICES = {
-  monthly: process.env.NEXT_PUBLIC_STRIPE_PRICE_MONTHLY || 'price_monthly_test',
-  annual: process.env.NEXT_PUBLIC_STRIPE_PRICE_ANNUAL || 'price_annual_test'
+  monthly: process.env.NEXT_PUBLIC_STRIPE_PRICE_MONTHLY || 'price_0XXX', // Replace with your monthly price ID
+  annual: process.env.NEXT_PUBLIC_STRIPE_PRICE_ANNUAL || 'price_1XXX'    // Replace with your annual price ID
 };
 
 export default function Home() {

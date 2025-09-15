@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "tauri-app",
-  "version": "1.0.0",
-  "identifier": "com.glada.tauri-app",
+  "productName": "Paira Bot",
+  "version": "1.1.0",
+  "identifier": "com.paira.bot",
   "build": {
     "beforeDevCommand": "npm run dev",
     "devUrl": "http://localhost:1420",

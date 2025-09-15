@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 interface AuthModalProps {
   onClose: () => void;
@@ -9,6 +10,7 @@ interface AuthModalProps {
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'https://api.paira.live';
 
 export default function AuthModal({ onClose }: AuthModalProps) {
+  const router = useRouter();
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -78,6 +80,9 @@ export default function AuthModal({ onClose }: AuthModalProps) {
             const profileData = await profileResponse.json();
             setUser(profileData.user);
           }
+          // Redirect to dashboard for active users
+          onClose();
+          router.push('/dashboard');
         } else {
           setSubscriptionStatus('inactive');
         }
@@ -130,93 +135,6 @@ export default function AuthModal({ onClose }: AuthModalProps) {
     );
   }
 
-  // Show active subscription status
-  if (subscriptionStatus === 'active' && user) {
-    return (
-      <div className="fixed inset-0 flex items-center justify-center z-50 p-4" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
-        <div style={{
-          backgroundColor: '#FFFFFF',
-          maxWidth: '28rem',
-          width: '100%',
-          border: '1px solid #E5E7EB',
-          padding: '2rem',
-          textAlign: 'center'
-        }}>
-          <div style={{ marginBottom: '1.5rem' }}>
-            <div style={{
-              width: '3rem',
-              height: '3rem',
-              backgroundColor: '#10B981',
-              borderRadius: '50%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              margin: '0 auto 1rem'
-            }}>
-              <svg style={{ width: '1.5rem', height: '1.5rem', color: '#FFFFFF' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-            </div>
-            <h2 style={{ color: '#111827', fontWeight: 500, marginBottom: '0.5rem' }}>Subscription Active</h2>
-            <p style={{ color: '#6B7280', fontSize: '0.875rem', marginBottom: '1rem' }}>
-              Welcome back, {user.email}! Your subscription is active and you can use Paira Bot.
-            </p>
-            <div style={{
-              backgroundColor: '#F0FDF4',
-              border: '1px solid #D1FAE5',
-              padding: '1rem',
-              borderRadius: '6px',
-              marginBottom: '1.5rem'
-            }}>
-              <p style={{ color: '#065F46', fontSize: '0.875rem', fontWeight: 500 }}>
-                ✓ Full access to desktop app features<br/>
-                ✓ HWID-based licensing<br/>
-                ✓ Priority support
-              </p>
-            </div>
-          </div>
-          <div style={{ display: 'flex', gap: '0.75rem' }}>
-            <button
-              onClick={() => window.open('https://paira.live/download', '_blank')}
-              style={{
-                flex: 1,
-                backgroundColor: '#6B46C1',
-                color: '#FFFFFF',
-                border: 'none',
-                borderRadius: '6px',
-                padding: '0.75rem 1rem',
-                fontSize: '0.875rem',
-                fontWeight: 500,
-                cursor: 'pointer'
-              }}
-              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#553C9A'}
-              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#6B46C1'}
-            >
-              Download Desktop App
-            </button>
-            <button
-              onClick={onClose}
-              style={{
-                flex: 1,
-                backgroundColor: '#FFFFFF',
-                color: '#374151',
-                border: '1px solid #E5E7EB',
-                borderRadius: '6px',
-                padding: '0.75rem 1rem',
-                fontSize: '0.875rem',
-                fontWeight: 500,
-                cursor: 'pointer'
-              }}
-              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#F9FAFB'}
-              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#FFFFFF'}
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 p-4" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>

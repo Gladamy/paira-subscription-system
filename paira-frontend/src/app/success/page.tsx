@@ -80,10 +80,10 @@ function SuccessPageContent() {
           <h1 className="text-lg font-semibold text-custom mb-3">Verification Failed</h1>
           <p className="text-sm text-custom opacity-70 mb-4">{error}</p>
           <button
-            onClick={() => window.location.href = '/'}
+            onClick={() => window.location.href = '/dashboard'}
             className="accent text-white border border-custom rounded-neumorphism px-4 py-2 font-medium text-sm transition-all hover:shadow-lg"
           >
-            Return to Home
+            Go to Dashboard
           </button>
         </div>
       </div>
@@ -165,11 +165,11 @@ function SuccessPageContent() {
         {/* Clean Back Link */}
         <div className="mt-12">
           <button
-            onClick={() => window.location.href = '/'}
+            onClick={() => window.location.href = '/dashboard'}
             className="text-sm text-gray-400 hover:text-gray-600 transition-colors duration-200"
             style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif' }}
           >
-            ← Back to Home
+            ← Go to Dashboard
           </button>
         </div>
       </div>

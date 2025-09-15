@@ -1,44 +1,21 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import AuthModal from '@/components/AuthModal';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'https://api.paira.live';
 
 export default function Home() {
+  const router = useRouter();
   const [showAuth, setShowAuth] = useState(false);
-  const [subscriptionStatus, setSubscriptionStatus] = useState<'checking' | 'active' | 'inactive' | null>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const checkSubscriptionStatus = async () => {
+  useEffect(() => {
     const token = localStorage.getItem('paira_auth_token');
-    if (!token) {
-      setShowAuth(true);
-      return;
-    }
+    setIsLoggedIn(!!token);
+  }, []);
 
-    setSubscriptionStatus('checking');
-    try {
-      const response = await fetch(`${API_BASE}/api/subscriptions/status`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        if (data.subscription && data.subscription.status === 'active') {
-          setSubscriptionStatus('active');
-        } else {
-          setSubscriptionStatus('inactive');
-        }
-      } else {
-        setSubscriptionStatus('inactive');
-      }
-    } catch (error) {
-      console.error('Subscription check failed:', error);
-      setSubscriptionStatus('inactive');
-    }
-  };
 
   return (
     <div style={{
@@ -80,7 +57,7 @@ export default function Home() {
               }}>Bot</span>
             </div>
             <button
-              onClick={() => setShowAuth(true)}
+              onClick={isLoggedIn ? () => router.push('/dashboard') : () => setShowAuth(true)}
               style={{
                 backgroundColor: '#F9FAFB',
                 border: '1px solid #E5E7EB',
@@ -99,7 +76,7 @@ export default function Home() {
                 e.currentTarget.style.backgroundColor = '#F9FAFB';
               }}
             >
-              Get Started
+              {isLoggedIn ? 'Dashboard' : 'Get Started'}
             </button>
           </div>
         </div>
@@ -133,7 +110,7 @@ export default function Home() {
             Automate your Roblox trading with advanced algorithms, real-time price tracking, and secure HWID-based licensing. Available as a desktop app for the best performance.
           </p>
           <button
-            onClick={() => setShowAuth(true)}
+            onClick={isLoggedIn ? () => router.push('/dashboard') : () => setShowAuth(true)}
             style={{
               backgroundColor: '#6366F1',
               color: '#FFFFFF',
@@ -152,7 +129,7 @@ export default function Home() {
               e.currentTarget.style.backgroundColor = '#6366F1';
             }}
           >
-            Start Free Trial
+            {isLoggedIn ? 'Go to Dashboard' : 'Start Free Trial'}
           </button>
         </div>
 
@@ -209,7 +186,7 @@ export default function Home() {
               Download for Windows
             </a>
             <button
-              onClick={() => setShowAuth(true)}
+              onClick={isLoggedIn ? () => router.push('/dashboard') : () => setShowAuth(true)}
               style={{
                 backgroundColor: '#FFFFFF',
                 color: '#374151',
@@ -228,7 +205,7 @@ export default function Home() {
                 e.currentTarget.style.backgroundColor = '#FFFFFF';
               }}
             >
-              Use Web Version
+              {isLoggedIn ? 'Go to Dashboard' : 'Use Web Version'}
             </button>
           </div>
           <p style={{
@@ -334,7 +311,7 @@ export default function Home() {
               e.currentTarget.style.borderColor = '#E5E7EB';
               e.currentTarget.style.boxShadow = 'none';
             }}
-            onClick={() => setShowAuth(true)}
+            onClick={isLoggedIn ? () => router.push('/dashboard') : () => setShowAuth(true)}
             >
               <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
                 <h3 style={{
@@ -455,28 +432,6 @@ export default function Home() {
               Get Started
             </button>
 
-            <button
-              onClick={checkSubscriptionStatus}
-              style={{
-                backgroundColor: '#FFFFFF',
-                color: '#374151',
-                border: '1px solid #E5E7EB',
-                borderRadius: '6px',
-                padding: '0.875rem 2rem',
-                fontSize: '1rem',
-                fontWeight: 500,
-                cursor: 'pointer',
-                transition: 'all 0.2s'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#F9FAFB';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#FFFFFF';
-              }}
-            >
-              Check Subscription Status
-            </button>
 
             <p style={{
               fontSize: '0.875rem',
@@ -488,114 +443,8 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Subscription Status Messages */}
-        {subscriptionStatus === 'checking' && (
-          <div style={{
-            backgroundColor: '#EFF6FF',
-            border: '1px solid #DBEAFE',
-            padding: '2rem',
-            textAlign: 'center',
-            marginTop: '2rem'
-          }}>
-            <div style={{ marginBottom: '1rem' }}>
-              <div style={{
-                width: '3rem',
-                height: '3rem',
-                backgroundColor: '#DBEAFE',
-                borderRadius: '50%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                margin: '0 auto 1rem'
-              }}>
-                <div style={{
-                  width: '1.5rem',
-                  height: '1.5rem',
-                  border: '2px solid #3B82F6',
-                  borderTop: '2px solid transparent',
-                  borderRadius: '50%'
-                }}></div>
-              </div>
-              <h3 style={{ color: '#1E40AF', fontWeight: 600, marginBottom: '0.5rem' }}>Checking Subscription Status</h3>
-              <p style={{ color: '#3730A3', fontSize: '0.875rem' }}>Please wait while we verify your subscription...</p>
-            </div>
-          </div>
-        )}
 
-        {subscriptionStatus === 'active' && (
-          <div style={{
-            backgroundColor: '#F0FDF4',
-            border: '1px solid #D1FAE5',
-            padding: '2rem',
-            textAlign: 'center',
-            marginTop: '2rem'
-          }}>
-            <div style={{ marginBottom: '1rem' }}>
-              <div style={{
-                width: '3rem',
-                height: '3rem',
-                backgroundColor: '#10B981',
-                borderRadius: '50%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                margin: '0 auto 1rem'
-              }}>
-                <svg style={{ width: '1.5rem', height: '1.5rem', color: '#FFFFFF' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-              <h3 style={{ color: '#065F46', fontWeight: 600, marginBottom: '0.5rem' }}>Subscription Active</h3>
-              <p style={{ color: '#047857', fontSize: '0.875rem', marginBottom: '1rem' }}>
-                Your subscription is active! You can download and use Paira Bot Desktop App.
-              </p>
-              <div style={{
-                backgroundColor: '#ECFDF5',
-                border: '1px solid #A7F3D0',
-                padding: '1rem',
-                borderRadius: '6px',
-                marginBottom: '1.5rem',
-                display: 'inline-block'
-              }}>
-                <p style={{ color: '#065F46', fontSize: '0.875rem', fontWeight: 500 }}>
-                  ✓ Full access to desktop app features<br/>
-                  ✓ HWID-based licensing<br/>
-                  ✓ Priority support
-                </p>
-              </div>
-            </div>
-            <a
-              href="/paira-bot-setup.msi"
-              download="paira-bot-setup.msi"
-              style={{
-                backgroundColor: '#10B981',
-                color: '#FFFFFF',
-                border: 'none',
-                borderRadius: '6px',
-                padding: '1rem 2rem',
-                fontSize: '1.125rem',
-                fontWeight: 600,
-                cursor: 'pointer',
-                textDecoration: 'none',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                transition: 'all 0.2s'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#059669';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#10B981';
-              }}
-            >
-              <span>⬇️</span>
-              Download Desktop App
-            </a>
-          </div>
-        )}
 
-        {subscriptionStatus === 'inactive' && (
           <div style={{
             backgroundColor: '#FEF2F2',
             border: '1px solid #FECACA',
@@ -673,7 +522,7 @@ export default function Home() {
             marginBottom: '2rem'
           }}>Join thousands of traders using Paira Bot</p>
           <button
-            onClick={() => setShowAuth(true)}
+            onClick={isLoggedIn ? () => router.push('/dashboard') : () => setShowAuth(true)}
             style={{
               backgroundColor: '#6366F1',
               color: '#FFFFFF',
@@ -692,7 +541,7 @@ export default function Home() {
               e.currentTarget.style.backgroundColor = '#6366F1';
             }}
           >
-            Start Free Trial
+            {isLoggedIn ? 'Go to Dashboard' : 'Start Free Trial'}
           </button>
           <div style={{
             marginTop: '2rem',

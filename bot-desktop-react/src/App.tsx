@@ -1,15 +1,17 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import { listen } from "@tauri-apps/api/event";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { open } from "@tauri-apps/plugin-shell";
-import Editor from "@monaco-editor/react";
-import AnsiToHtml from "ansi-to-html";
 import {
   LayoutDashboard,
   Settings,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Download,
+  Info,
+  Eye,
+  X
 } from "lucide-react";
 import "./App.css";
 
@@ -31,33 +33,10 @@ function App() {
   const [user, setUser] = useState<any>(null);
   const [subscription, setSubscription] = useState<any>(null);
   const [showWelcome, setShowWelcome] = useState(false);
+  const [updateInfo, setUpdateInfo] = useState<any>(null);
+  const [showUpdateNotification, setShowUpdateNotification] = useState(false);
+  const [showConfigModal, setShowConfigModal] = useState(false);
 
-  // Config form state
-  const [configForm, setConfigForm] = useState({
-    speed: {
-      fast_mode: true,
-      fast_disable_images: true,
-      implicit_wait_secs: 0.1,
-      page_change_timeout: 1.5,
-      mutation_poll_ms: 80,
-      human_delay_min: 0.05,
-      human_delay_max: 0.1,
-      max_pages_scan: 50
-    },
-    trading_preferences: {
-      trading_modes: ["downgrade"],
-      avoid_projected: true,
-      avoid_projected_offer: true,
-      upgrade_to_valued_only: false,
-      valued_premium_min_percent: -0.05,
-      valued_premium_max_percent: 0.02
-    },
-    limits: {
-      max_offer_items: 4,
-      max_request_items: 4,
-      min_item_value: 1000
-    }
-  });
 
   // Helper function to calculate brightness of a color
   const getBrightness = (hex: string) => {
@@ -102,31 +81,6 @@ function App() {
   const themeColors = generateThemeColors(customAccent);
   const currentThemeColors = themeColors[theme];
 
-  const ansiConverter = useMemo(() => new AnsiToHtml({
-    fg: currentThemeColors.text,
-    bg: currentThemeColors.surface,
-    newline: true,
-    escapeXML: true,
-    stream: true,
-    colors: {
-      0: '#000000', // black
-      1: '#ef4444', // red (bright red)
-      2: customAccent, // green -> use accent color (for success messages)
-      3: '#eab308', // yellow (bright yellow)
-      4: customAccent, // blue -> use accent color
-      5: '#a855f7', // magenta (bright magenta)
-      6: '#06b6d4', // cyan (bright cyan)
-      7: currentThemeColors.text, // white -> use theme text color
-      8: '#6b7280', // bright black (gray)
-      9: '#f87171', // bright red
-      10: '#4ade80', // bright green
-      11: '#facc15', // bright yellow
-      12: customAccent, // bright blue -> use accent color
-      13: '#c084fc', // bright magenta
-      14: '#22d3ee', // bright cyan
-      15: currentThemeColors.text, // bright white -> use theme text color
-    },
-  }), [currentThemeColors.text, currentThemeColors.surface, customAccent]);
 
   useEffect(() => {
     const unlisten = listen("bot-log", (event) => {
@@ -194,23 +148,6 @@ function App() {
     return () => clearInterval(interval);
   }, []);
 
-  // License validation (demo - would normally run on app start)
-  const validateLicense = async () => {
-    try {
-      const hwid = await invoke('get_hwid');
-      const deviceName = await invoke('get_device_name');
-
-      console.log('HWID:', hwid);
-      console.log('Device:', deviceName);
-
-      // HWID validation is now handled by the backend API in checkAuthStatus
-      // This function is kept for testing HWID retrieval only
-
-    } catch (error) {
-      console.error('License validation failed:', error);
-      setLogs((prev) => [...prev, `License validation failed: ${error}`]);
-    }
-  };
 
   // License validation and auth check on app start
   const checkAuthStatus = async () => {
@@ -263,7 +200,11 @@ function App() {
 
   useEffect(() => {
     checkAuthStatus();
-  }, []);
+    // Check for updates after auth
+    if (authState === 'authenticated') {
+      checkForUpdates();
+    }
+  }, [authState]);
 
   const logout = () => {
     localStorage.removeItem('paira_auth_token');
@@ -275,39 +216,24 @@ function App() {
     setShowWelcome(false);
   };
 
+  // Check for updates
+  const checkForUpdates = async () => {
+    try {
+      const updateData = await invoke("check_for_updates") as any;
+      const currentVersion = "1.1.0"; // Updated to current version
+      if (updateData && updateData.version !== currentVersion) {
+        setUpdateInfo(updateData);
+        setShowUpdateNotification(true);
+      }
+    } catch (error) {
+      console.error('Failed to check for updates:', error);
+    }
+  };
+
 
   const loadConfig = async () => {
     try {
       const configData = await invoke("get_config");
-      const parsedConfig = JSON.parse(configData as string);
-
-      // Update form state with loaded config
-      setConfigForm({
-        speed: {
-          fast_mode: parsedConfig.speed?.fast_mode ?? true,
-          fast_disable_images: parsedConfig.speed?.fast_disable_images ?? true,
-          implicit_wait_secs: parsedConfig.speed?.implicit_wait_secs ?? 0.1,
-          page_change_timeout: parsedConfig.speed?.page_change_timeout ?? 1.5,
-          mutation_poll_ms: parsedConfig.speed?.mutation_poll_ms ?? 80,
-          human_delay_min: parsedConfig.speed?.human_delay_min ?? 0.05,
-          human_delay_max: parsedConfig.speed?.human_delay_max ?? 0.1,
-          max_pages_scan: parsedConfig.speed?.max_pages_scan ?? 50
-        },
-        trading_preferences: {
-          trading_modes: parsedConfig.trading_preferences?.trading_modes ?? ["downgrade"],
-          avoid_projected: parsedConfig.trading_preferences?.avoid_projected ?? true,
-          avoid_projected_offer: parsedConfig.trading_preferences?.avoid_projected_offer ?? true,
-          upgrade_to_valued_only: parsedConfig.trading_preferences?.upgrade_to_valued_only ?? false,
-          valued_premium_min_percent: parsedConfig.trading_preferences?.valued_premium_min_percent ?? -0.05,
-          valued_premium_max_percent: parsedConfig.trading_preferences?.valued_premium_max_percent ?? 0.02
-        },
-        limits: {
-          max_offer_items: parsedConfig.limits?.max_offer_items ?? 4,
-          max_request_items: parsedConfig.limits?.max_request_items ?? 4,
-          min_item_value: parsedConfig.limits?.min_item_value ?? 1000
-        }
-      });
-
       setConfig(configData as string);
       setConfigLoaded(true);
     } catch (error) {
@@ -315,25 +241,6 @@ function App() {
     }
   };
 
-  const saveConfig = async () => {
-    try {
-      // Merge form data with existing config to preserve other sections
-      const existingConfig = JSON.parse(config);
-      const updatedConfig = {
-        ...existingConfig,
-        speed: configForm.speed,
-        trading_preferences: configForm.trading_preferences,
-        limits: configForm.limits
-      };
-
-      const configString = JSON.stringify(updatedConfig, null, 2);
-      await invoke("save_config", { config: configString });
-      setConfig(configString);
-      setLogs((prev) => [...prev, "Configuration saved successfully"]);
-    } catch (error) {
-      setLogs((prev) => [...prev, `Error saving config: ${error}`]);
-    }
-  };
 
   useEffect(() => {
     if (activeTab === "settings" && !configLoaded) {
@@ -549,6 +456,30 @@ function App() {
         </div>
       </div>
 
+      {/* Update Notification Banner */}
+      {showUpdateNotification && updateInfo && (
+        <div className="bg-blue-500 text-white px-4 py-2 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Info className="w-5 h-5" />
+            <span className="text-sm font-medium">Update available: v{updateInfo.version}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setActiveTab("updates")}
+              className="text-sm underline hover:no-underline"
+            >
+              View Details
+            </button>
+            <button
+              onClick={() => setShowUpdateNotification(false)}
+              className="text-white hover:text-gray-200 text-lg leading-none"
+            >
+              ×
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="flex flex-1">
         <aside className={`border-r border-custom shadow-neumorphism surface text-custom transition-all duration-300 flex flex-col ${
           sidebarCollapsed ? "w-16" : "w-56"
@@ -612,6 +543,18 @@ function App() {
               >
                 <Settings className="w-5 h-5 flex-shrink-0" />
                 {!sidebarCollapsed && <span className="text-sm">Settings</span>}
+              </button>
+
+              <button
+                className={`w-full flex items-center ${sidebarCollapsed ? 'justify-center' : 'justify-start gap-2'} p-3 rounded-lg font-medium transition-all duration-200 ${
+                  activeTab === "updates"
+                    ? "accent text-white"
+                    : "hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-100"
+                }`}
+                onClick={() => setActiveTab("updates")}
+              >
+                <Download className="w-5 h-5 flex-shrink-0" />
+                {!sidebarCollapsed && <span className="text-sm">Updates</span>}
               </button>
 
             </div>
@@ -721,12 +664,6 @@ function App() {
                 >
                   Stop Bot
                 </button>
-                <button
-                  className="surface text-custom border border-custom rounded-neumorphism px-6 py-3 font-medium transition-all hover:accent hover:text-white"
-                  onClick={validateLicense}
-                >
-                  Test License
-                </button>
               </div>
             </div>
 
@@ -736,33 +673,87 @@ function App() {
                 <div className="p-3 border-b border-custom">
                   <h3 className="text-sm font-medium text-custom">Activity Logs</h3>
                 </div>
-                <div className="flex-1 p-2 overflow-y-auto">
-                  <div className="space-y-0.5">
-                    {logs.length === 0 ? (
-                      <div className="text-center py-4 text-custom opacity-50">
-                        <p className="text-xs">No logs yet. Start the bot to see activity.</p>
+                <div className="flex-1 p-3 overflow-y-auto surface text-custom text-sm">
+                  {logs.length === 0 ? (
+                    <div className="text-center py-8 opacity-50">
+                      <p>No activity yet. Start the bot to see live updates.</p>
+                    </div>
+                  ) : (
+                    logs.slice(-50).map((log, index) => (
+                      <div key={index} className="mb-1 leading-tight">
+                        {log.replace(/\x1b\[[0-9;]*m/g, '')} {/* Strip ANSI color codes */}
                       </div>
-                    ) : (
-                      logs.slice(-50).map((log, index) => (
-                        <div
-                          key={index}
-                          className="px-2 py-1 rounded surface border border-custom text-xs font-mono"
-                        >
-                          <div className="flex items-start gap-1.5">
-                            <div className="flex-shrink-0 w-1 h-1 rounded-full bg-accent mt-1 opacity-60"></div>
-                            <div className="flex-1 min-w-0">
-                              <div
-                                className="text-custom break-words leading-tight"
-                                dangerouslySetInnerHTML={{ __html: ansiConverter.toHtml(log) }}
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      ))
-                    )}
-                  </div>
+                    ))
+                  )}
                 </div>
               </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === "updates" && (
+          <div>
+            <h1 className="text-2xl font-medium mb-5 text-custom">Updates</h1>
+            <div className="space-y-6">
+              <div className="border border-custom rounded-neumorphism p-5 shadow-neumorphism surface">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-medium text-custom">Current Version</h3>
+                  <span className="px-3 py-1 bg-accent text-white rounded-full text-sm font-medium">v1.1.0</span>
+                </div>
+                <button
+                  onClick={checkForUpdates}
+                  className="accent text-white border border-custom rounded-neumorphism px-4 py-2 font-medium transition-all hover:shadow-lg"
+                >
+                  Check for Updates
+                </button>
+              </div>
+
+              {updateInfo && (
+                <div className="border border-custom rounded-neumorphism p-5 shadow-neumorphism surface">
+                  <div className="flex items-center gap-3 mb-4">
+                    <Info className="w-6 h-6 text-blue-500" />
+                    <h3 className="text-lg font-medium text-custom">Update Available: v{updateInfo.version}</h3>
+                  </div>
+                  <p className="text-custom opacity-75 mb-4">Released on {new Date(updateInfo.release_date).toLocaleDateString()}</p>
+
+                  <div className="space-y-4 mb-6">
+                    <h4 className="font-medium text-custom">Changelog:</h4>
+                    {updateInfo.changelog.map((entry: any, index: number) => (
+                      <div key={index} className="border-l-2 border-accent pl-4">
+                        <h5 className="font-medium text-custom">v{entry.version} - {new Date(entry.date).toLocaleDateString()}</h5>
+                        <ul className="mt-2 space-y-1">
+                          {entry.changes.map((change: string, changeIndex: number) => (
+                            <li key={changeIndex} className="text-sm text-custom opacity-75 flex items-start gap-2">
+                              <span className="text-accent mt-1">•</span>
+                              <span>{change}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+
+                  <button
+                    onClick={() => open(updateInfo.download_url)}
+                    className="accent text-white border border-custom rounded-neumorphism px-6 py-3 font-medium transition-all hover:shadow-lg flex items-center gap-2"
+                  >
+                    <Download className="w-5 h-5" />
+                    Download Update
+                  </button>
+                </div>
+              )}
+
+              {!updateInfo && (
+                <div className="border border-custom rounded-neumorphism p-5 shadow-neumorphism surface text-center">
+                  <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <h3 className="text-lg font-medium text-custom mb-2">You're Up to Date</h3>
+                  <p className="text-custom opacity-75">No updates available at this time.</p>
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -846,7 +837,7 @@ function App() {
                 </div>
               </div>
 
-              {/* Config.json Editor */}
+              {/* Configuration Viewer */}
               <div className="border border-custom rounded-neumorphism p-5 shadow-neumorphism surface">
                 <div className="flex items-center justify-between mb-3">
                   <h3 className="text-lg font-medium text-custom">Configuration</h3>
@@ -867,35 +858,20 @@ function App() {
                     </button>
                   </div>
                 </div>
-                <div className="border border-border rounded-neumorphism overflow-hidden shadow-neumorphism">
-                  <Editor
-                    height="500px"
-                    language="json"
-                    value={config}
-                    onChange={(value) => setConfig(value || "")}
-                    theme={theme === "dark" ? "vs-dark" : "vs"}
-                    options={{
-                      minimap: { enabled: false },
-                      fontSize: 14,
-                      lineNumbers: "on",
-                      roundedSelection: false,
-                      scrollBeyondLastLine: false,
-                      automaticLayout: true,
-                    }}
-                  />
-                </div>
-                <div className="mt-4 flex gap-3">
+                <div className="text-center py-12">
+                  <div className="w-16 h-16 bg-accent bg-opacity-10 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Eye className="w-8 h-8 text-accent" />
+                  </div>
+                  <h4 className="text-lg font-medium text-custom mb-2">View Configuration</h4>
+                  <p className="text-custom opacity-75 mb-6 max-w-md mx-auto">
+                    Click below to view your current bot configuration. To make changes, import a new configuration file.
+                  </p>
                   <button
-                    className="accent text-white border border-custom rounded-neumorphism px-4 py-2 font-medium transition-all hover:shadow-lg"
-                    onClick={saveConfig}
+                    onClick={() => setShowConfigModal(true)}
+                    className="accent text-white border border-custom rounded-neumorphism px-6 py-3 font-medium transition-all hover:shadow-lg flex items-center gap-2 mx-auto"
                   >
-                    Save Config
-                  </button>
-                  <button
-                    className="border border-custom rounded-neumorphism px-4 py-2 font-medium transition-all surface text-custom hover:accent hover:text-white"
-                    onClick={loadConfig}
-                  >
-                    Reload Config
+                    <Eye className="w-5 h-5" />
+                    View Config
                   </button>
                 </div>
               </div>
@@ -904,6 +880,37 @@ function App() {
         )}
 
       </main>
+
+      {/* Configuration Modal */}
+      {showConfigModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="border border-custom rounded-neumorphism shadow-neumorphism surface max-w-4xl w-full max-h-[90vh] flex flex-col">
+            <div className="flex items-center justify-between p-6 border-b border-custom">
+              <h2 className="text-xl font-medium text-custom">Bot Configuration</h2>
+              <button
+                onClick={() => setShowConfigModal(false)}
+                className="p-2 rounded surface border border-custom hover:accent hover:text-white transition-all"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="flex-1 p-6 overflow-y-auto">
+              <pre className="text-sm text-custom font-mono bg-surface border border-custom rounded p-4 whitespace-pre-wrap">
+                {config}
+              </pre>
+            </div>
+            <div className="flex justify-end gap-3 p-6 border-t border-custom">
+              <button
+                onClick={() => setShowConfigModal(false)}
+                className="px-4 py-2 rounded surface text-custom border border-custom hover:accent hover:text-white transition-all"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       </div>
     </div>
   );

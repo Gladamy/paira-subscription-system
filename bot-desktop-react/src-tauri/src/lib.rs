@@ -1,16 +1,15 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 use std::process::{Command, Stdio};
 use std::sync::{Arc, Mutex};
-use std::thread;
-use std::io::{BufRead, BufReader};
 use std::fs;
-use tauri::{State, Emitter};
+use tauri::{State, Emitter, Manager};
+use tauri_plugin_shell::ShellExt;
 use sha2::{Sha256, Digest};
 use reqwest;
 
 #[derive(Default)]
 struct BotState {
-    process: Arc<Mutex<Option<std::process::Child>>>,
+    process: Arc<Mutex<Option<tauri_plugin_shell::process::CommandChild>>>,
 }
 
 #[tauri::command]
@@ -19,55 +18,63 @@ fn greet(name: &str) -> String {
 }
 
 #[tauri::command]
-fn start_bot(app: tauri::AppHandle, state: State<BotState>) -> Result<String, String> {
+async fn start_bot(app: tauri::AppHandle, state: State<'_, BotState>) -> Result<String, String> {
     let mut process_guard = state.process.lock().unwrap();
     if process_guard.is_some() {
         return Err("Bot is already running".to_string());
     }
 
-    // Run python bot.py in the parent directory
-    let mut child = Command::new("python")
-        .arg("bot.py")
-        .current_dir("../../")
+    // Get the resource directory where the bot executable is located
+    let resource_dir = app
+        .path()
+        .resource_dir()
+        .map_err(|e| format!("Failed to get resource directory: {}", e))?;
+
+    let bot_exe_path = resource_dir.join("bot.dist").join("bot-x86_64-pc-windows-msvc.exe");
+
+    // Verify the executable exists
+    if !bot_exe_path.exists() {
+        return Err(format!("Bot executable not found at: {:?}", bot_exe_path));
+    }
+
+    // Spawn the bot process directly
+    let (mut rx, child) = app
+        .shell()
+        .command(bot_exe_path.to_string_lossy().to_string())
         .env("PYTHONUNBUFFERED", "1")
-        .stdout(Stdio::piped())
-        .stderr(Stdio::piped())
         .spawn()
         .map_err(|e| format!("Failed to start bot: {}", e))?;
 
-    let stdout = child.stdout.take().unwrap();
-    let stderr = child.stderr.take().unwrap();
     let app_handle_stdout = app.clone();
     let app_handle_stderr = app.clone();
 
-    // Spawn thread to read stdout
-    thread::spawn(move || {
-        let reader = BufReader::new(stdout);
-        for line in reader.lines() {
-            if let Ok(line) = line {
-                let _ = app_handle_stdout.emit("bot-log", line);
-            }
-        }
-    });
-
-    // Spawn thread to read stderr
-    thread::spawn(move || {
-        let reader = BufReader::new(stderr);
-        for line in reader.lines() {
-            if let Ok(line) = line {
-                let _ = app_handle_stderr.emit("bot-log", format!("ERROR: {}", line));
+    // Spawn async task to handle output
+    tauri::async_runtime::spawn(async move {
+        while let Some(event) = rx.recv().await {
+            match event {
+                tauri_plugin_shell::process::CommandEvent::Stdout(line_bytes) => {
+                    if let Ok(line) = String::from_utf8(line_bytes) {
+                        let _ = app_handle_stdout.emit("bot-log", line);
+                    }
+                }
+                tauri_plugin_shell::process::CommandEvent::Stderr(line_bytes) => {
+                    if let Ok(line) = String::from_utf8(line_bytes) {
+                        let _ = app_handle_stderr.emit("bot-log", format!("ERROR: {}", line));
+                    }
+                }
+                _ => {}
             }
         }
     });
 
     *process_guard = Some(child);
-    Ok("Bot started".to_string())
+    Ok("Bot started successfully".to_string())
 }
 
 #[tauri::command]
-fn stop_bot(state: State<BotState>) -> Result<String, String> {
+fn stop_bot(state: State<'_, BotState>) -> Result<String, String> {
     let mut process_guard = state.process.lock().unwrap();
-    if let Some(mut child) = process_guard.take() {
+    if let Some(child) = process_guard.take() {
         child.kill().map_err(|e| format!("Failed to stop bot: {}", e))?;
         Ok("Bot stopped".to_string())
     } else {
@@ -76,7 +83,7 @@ fn stop_bot(state: State<BotState>) -> Result<String, String> {
 }
 
 #[tauri::command]
-fn get_bot_status(state: State<BotState>) -> String {
+fn get_bot_status(state: State<'_, BotState>) -> String {
     let process_guard = state.process.lock().unwrap();
     if process_guard.is_some() {
         "Running".to_string()
@@ -87,13 +94,25 @@ fn get_bot_status(state: State<BotState>) -> String {
 
 
 #[tauri::command]
-fn get_config() -> Result<String, String> {
-    fs::read_to_string("../../config.json").map_err(|e| format!("Failed to read config: {}", e))
+fn get_config(app: tauri::AppHandle) -> Result<String, String> {
+    let resource_dir = app
+        .path()
+        .resource_dir()
+        .map_err(|e| format!("Failed to get resource directory: {}", e))?;
+
+    let config_path = resource_dir.join("config.json");
+    fs::read_to_string(config_path).map_err(|e| format!("Failed to read config: {}", e))
 }
 
 #[tauri::command]
-fn save_config(config: String) -> Result<(), String> {
-    fs::write("../../config.json", config).map_err(|e| format!("Failed to save config: {}", e))
+fn save_config(app: tauri::AppHandle, config: String) -> Result<(), String> {
+    let resource_dir = app
+        .path()
+        .resource_dir()
+        .map_err(|e| format!("Failed to get resource directory: {}", e))?;
+
+    let config_path = resource_dir.join("config.json");
+    fs::write(config_path, config).map_err(|e| format!("Failed to save config: {}", e))
 }
 
 #[tauri::command]
@@ -229,13 +248,33 @@ async fn validate_license(hwid: String, user_token: String) -> Result<serde_json
     }
 }
 
+#[tauri::command]
+async fn check_for_updates() -> Result<serde_json::Value, String> {
+    let client = reqwest::Client::new();
+    let api_base = std::env::var("API_BASE").unwrap_or_else(|_| "https://api.paira.live".to_string());
+
+    let response = client
+        .get(format!("{}/api/updates/latest", api_base))
+        .send()
+        .await
+        .map_err(|e| format!("Network error: {}", e))?;
+
+    if response.status().is_success() {
+        let result: serde_json::Value = response.json().await
+            .map_err(|e| format!("JSON parse error: {}", e))?;
+        Ok(result)
+    } else {
+        Err(format!("Failed to check for updates: {}", response.status()))
+    }
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_shell::init())
         .manage(BotState::default())
-        .invoke_handler(tauri::generate_handler![greet, start_bot, stop_bot, get_bot_status, get_config, save_config, get_hwid, get_device_name, validate_license])
+        .invoke_handler(tauri::generate_handler![greet, start_bot, stop_bot, get_bot_status, get_config, save_config, get_hwid, get_device_name, validate_license, check_for_updates])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

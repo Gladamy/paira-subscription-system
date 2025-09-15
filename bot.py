@@ -5,6 +5,7 @@ import random
 import requests
 import hmac, hashlib, struct, base64
 import re
+import sys
 from itertools import combinations
 from typing import Optional, List, Dict, Set, Tuple
 from pathlib import Path
@@ -30,7 +31,8 @@ AVOID_PROJECTED_OFFER = False
 PROJECTED_UNKNOWN_IS_PROJECTED = False
 
 # Load configuration from JSON file
-with open('config.json', 'r') as f:
+config_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'config.json')
+with open(config_path, 'r') as f:
     config = json.load(f)
 
 # Update config-dependent values
@@ -146,7 +148,8 @@ TABLE_ID = "bc_owners_table"  # per your HTML
 
 
 # Load configuration from JSON file
-with open('config.json', 'r') as f:
+config_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'config.json')
+with open(config_path, 'r') as f:
     config = json.load(f)
 
 # Owner tracking config
@@ -246,6 +249,7 @@ WINDOW_SIZE = config['selenium']['window_size']
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
 
 from selenium.webdriver.support.ui import WebDriverWait, Select
 from selenium.webdriver.support import expected_conditions as EC
@@ -294,8 +298,21 @@ def build_driver():
         opts.add_argument(f"--user-data-dir={CHROME_USER_DATA_DIR}")
         opts.add_argument(f"--profile-directory={CHROME_PROFILE_NAME}")
 
-    # Use Selenium Manager (no Service, no webdriver_manager)
-    driver = webdriver.Chrome(options=opts)
+    # Use bundled chromedriver directly (bypass Selenium Manager)
+    if hasattr(sys, '_MEIPASS'):
+        # Running in PyInstaller bundle
+        chromedriver_path = os.path.join(sys._MEIPASS, 'chromedriver.exe')
+    else:
+        # Running in development
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        chromedriver_path = os.path.join(current_dir, 'chromedriver.exe')
+
+    if os.path.exists(chromedriver_path):
+        service = Service(executable_path=chromedriver_path)
+        driver = webdriver.Chrome(service=service, options=opts)
+    else:
+        raise RuntimeError(f"Chromedriver not found at {chromedriver_path}")
+
     driver.set_page_load_timeout(30)
     driver.implicitly_wait(IMPLICIT_WAIT_SECS)
     return driver
@@ -1448,14 +1465,10 @@ def main():
                         best_mode = mode
                         break
 
-                # if still nothing (e.g., modes disabled), fall back to any
+                # if no trades found in configured modes, skip this user
                 if not best:
-                    all_trades = sum(mode_lists.values(), [])
-                    if not all_trades:
-                        processed_users.add(other_user_id)
-                        continue
-                    best = all_trades[0]
-                    best_mode = best.get("mode", "trade")
+                    processed_users.add(other_user_id)
+                    continue
 
                 print(f"{light_gray}-------{RESET_COLOR}")
                 print(f"{white}User ID: {other_user_id}{RESET_COLOR}")

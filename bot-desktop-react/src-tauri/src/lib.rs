@@ -104,21 +104,69 @@ fn setup_desktop_folder(app: tauri::AppHandle) -> Result<String, String> {
 
     let launcher_content = format!(
         r#"@echo off
-echo Starting Paira Bot...
-cd /d "{}"
-start "" "{}"
-echo Paira Bot launched from desktop folder!
+echo ========================================
+echo    Starting Paira Bot
+echo ========================================
 echo.
-echo If the bot doesn't start, make sure all files are in this folder.
+cd /d "{}"
+echo Working directory: %CD%
+echo.
+if exist "{}" (
+    echo Found bot executable: {}
+    echo Starting bot...
+    start "" "{}"
+    echo.
+    echo Paira Bot launched successfully!
+    echo Check the console window for bot output.
+) else (
+    echo ERROR: Bot executable not found!
+    echo Expected location: {}
+    echo.
+    echo Please make sure all bot files are in this folder.
+    echo You may need to reinstall the application.
+)
+echo.
 pause
 "#,
         paira_folder.display(),
+        bot_exe_path.display(),
+        bot_exe_path.display(),
+        bot_exe_path.display(),
         bot_exe_path.display()
     );
 
     let launcher_path = paira_folder.join("Run Paira Bot.bat");
     fs::write(&launcher_path, launcher_content)
         .map_err(|e| format!("Failed to create launcher: {}", e))?;
+
+    // Create a desktop shortcut (Windows .lnk file) using PowerShell
+    let shortcut_script = format!(
+        r#"$WshShell = New-Object -comObject WScript.Shell
+$Shortcut = $WshShell.CreateShortcut("{}\Run Paira Bot.lnk")
+$Shortcut.TargetPath = "{}\Run Paira Bot.bat"
+$Shortcut.WorkingDirectory = "{}"
+$Shortcut.IconLocation = "{}\Run Paira Bot.bat,0"
+$Shortcut.Description = "Launch Paira Bot - Complete standalone version"
+$Shortcut.Save()
+"#,
+        desktop_path.display(),
+        paira_folder.display(),
+        paira_folder.display(),
+        paira_folder.display()
+    );
+
+    let ps_script_path = paira_folder.join("create_shortcut.ps1");
+    fs::write(&ps_script_path, shortcut_script)
+        .map_err(|e| format!("Failed to create shortcut script: {}", e))?;
+
+    // Execute the PowerShell script to create the desktop shortcut
+    let ps_command = format!("powershell -ExecutionPolicy Bypass -File \"{}\"", ps_script_path.display());
+    let _ = Command::new("cmd")
+        .args(&["/C", &ps_command])
+        .output(); // Ignore errors if PowerShell fails
+
+    // Clean up the temporary PowerShell script
+    let _ = fs::remove_file(&ps_script_path);
 
     // Create a README file with instructions
     let readme_content = format!(r#"Welcome to Paira Bot!

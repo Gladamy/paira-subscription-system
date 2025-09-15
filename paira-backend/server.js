@@ -483,6 +483,11 @@ app.post('/api/subscriptions/create-checkout', authenticateToken, async (req, re
 
 // Stripe webhooks
 app.post('/api/webhooks/stripe', express.raw({ type: 'application/json' }), async (req, res) => {
+  console.log('🔗 Webhook received:', {
+    headers: req.headers,
+    body: req.body ? JSON.parse(req.body.toString()) : null
+  });
+
   const sig = req.headers['stripe-signature'];
   const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
@@ -490,33 +495,44 @@ app.post('/api/webhooks/stripe', express.raw({ type: 'application/json' }), asyn
 
   try {
     event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
+    console.log('✅ Webhook signature verified for event:', event.type);
   } catch (err) {
-    console.error('Webhook signature verification failed:', err.message);
+    console.error('❌ Webhook signature verification failed:', err.message);
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
   try {
+    console.log('🎯 Processing webhook event:', event.type, event.id);
+
     switch (event.type) {
       case 'checkout.session.completed':
+        console.log('🛒 Processing checkout.session.completed');
         await handleCheckoutCompleted(event.data.object);
         break;
       case 'customer.subscription.created':
+        console.log('📝 Processing customer.subscription.created');
+        await handleSubscriptionChange(event.data.object);
+        break;
       case 'customer.subscription.updated':
+        console.log('🔄 Processing customer.subscription.updated');
         await handleSubscriptionChange(event.data.object);
         break;
       case 'customer.subscription.deleted':
+        console.log('🗑️ Processing customer.subscription.deleted');
         await handleSubscriptionCancellation(event.data.object);
         break;
       case 'invoice.payment_succeeded':
+        console.log('💰 Processing invoice.payment_succeeded');
         await handleInvoicePaymentSucceeded(event.data.object);
         break;
       default:
-        console.log(`Unhandled event type: ${event.type}`);
+        console.log(`⚠️ Unhandled event type: ${event.type}`);
     }
 
+    console.log('✅ Webhook processed successfully');
     res.json({ received: true });
   } catch (error) {
-    console.error('Webhook processing error:', error);
+    console.error('❌ Webhook processing error:', error);
     res.status(500).json({ error: 'Webhook processing failed' });
   }
 });
@@ -554,24 +570,38 @@ async function handleInvoicePaymentSucceeded(invoice) {
 }
 
 async function handleSubscriptionChange(subscription) {
+  console.log('🔄 handleSubscriptionChange called with subscription:', {
+    id: subscription.id,
+    status: subscription.status,
+    customer: subscription.customer,
+    items: subscription.items?.data?.length || 0
+  });
+
   const client = await pool.connect();
 
   try {
     await client.query('BEGIN');
 
     // Find user ID from checkout sessions table
+    console.log('🔍 Looking for checkout session with subscription_id:', subscription.id);
     const sessionResult = await client.query(
-      'SELECT user_id FROM checkout_sessions WHERE subscription_id = $1',
+      'SELECT user_id, session_id FROM checkout_sessions WHERE subscription_id = $1',
       [subscription.id]
     );
 
+    console.log('📊 Checkout session query result:', {
+      found: sessionResult.rows.length > 0,
+      session: sessionResult.rows[0]
+    });
+
     if (sessionResult.rows.length === 0) {
-      console.log(`No checkout session found for subscription ${subscription.id}`);
+      console.log(`❌ No checkout session found for subscription ${subscription.id}`);
       await client.query('COMMIT');
       return;
     }
 
     const userId = sessionResult.rows[0].user_id;
+    console.log('✅ Found user ID:', userId, 'for subscription:', subscription.id);
 
     // Safely convert Unix timestamps to JavaScript Date objects
     const currentPeriodStart = subscription.current_period_start
@@ -605,12 +635,19 @@ async function handleSubscriptionChange(subscription) {
     ]);
 
     // Update user subscription status
+    console.log('🔄 Updating user subscription status to:', subscription.status);
     await client.query(
       'UPDATE users SET subscription_status = $1 WHERE id = $2',
       [subscription.status, userId]
     );
 
-    console.log(`Subscription ${subscription.id} created/updated for user ${userId}`);
+    console.log(`✅ Subscription ${subscription.id} created/updated for user ${userId}`);
+    console.log('📅 Subscription details:', {
+      plan: subscription.items?.data?.[0]?.price?.id?.includes('year') ? 'annual' : 'monthly',
+      status: subscription.status,
+      start: currentPeriodStart,
+      end: currentPeriodEnd
+    });
 
     await client.query('COMMIT');
   } catch (error) {

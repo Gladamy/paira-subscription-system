@@ -176,7 +176,8 @@ const initDatabase = async () => {
         device_name VARCHAR(255),
         is_active BOOLEAN DEFAULT true,
         created_at TIMESTAMP DEFAULT NOW(),
-        last_used TIMESTAMP DEFAULT NOW()
+        last_used TIMESTAMP DEFAULT NOW(),
+        UNIQUE(user_id, hwid_hash)
       );
 
       CREATE TABLE IF NOT EXISTS checkout_sessions (
@@ -333,45 +334,58 @@ app.post('/api/licenses/validate', authenticateToken, async (req, res) => {
       });
     }
 
-    // Check if HWID is registered for this user
-    let license = await pool.query(`
-      SELECT * FROM licenses
-      WHERE user_id = $1 AND hwid_hash = $2 AND is_active = true
-    `, [req.user.userId, hwid]);
+    // Get device name from request (optional)
+    const deviceName = req.body.deviceName || req.body.device_name;
 
-    // If no license exists for this HWID, create one automatically
-    if (license.rows.length === 0) {
-      console.log(`Creating new HWID license for user ${req.user.userId}, HWID: ${hwid}`);
-
-      // Get device name from request (optional)
-      const deviceName = req.body.deviceName || req.body.device_name;
-
-      // If no device name provided, try to get it from system info
-      let finalDeviceName = deviceName;
-      if (!finalDeviceName) {
-        try {
-          // Try to get hostname or use a generic name
-          const os = require('os');
-          finalDeviceName = os.hostname() || `Device-${Date.now()}`;
-        } catch (error) {
-          finalDeviceName = `Device-${Date.now()}`;
-        }
+    // If no device name provided, try to get it from system info
+    let finalDeviceName = deviceName;
+    if (!finalDeviceName) {
+      try {
+        // Try to get hostname or use a generic name
+        const os = require('os');
+        finalDeviceName = os.hostname() || `Device-${Date.now()}`;
+      } catch (error) {
+        finalDeviceName = `Device-${Date.now()}`;
       }
+    }
 
-      const newLicense = await pool.query(`
-        INSERT INTO licenses (user_id, hwid_hash, device_name)
-        VALUES ($1, $2, $3)
+    // Try to create or update the license using INSERT ... ON CONFLICT
+    // This prevents race conditions and duplicate licenses
+    try {
+      const licenseResult = await pool.query(`
+        INSERT INTO licenses (user_id, hwid_hash, device_name, last_used)
+        VALUES ($1, $2, $3, NOW())
+        ON CONFLICT (user_id, hwid_hash)
+        DO UPDATE SET
+          last_used = NOW(),
+          device_name = EXCLUDED.device_name
         RETURNING *
-      `, [req.user.userId, hwid, deviceName]);
+      `, [req.user.userId, hwid, finalDeviceName]);
 
-      license = { rows: [newLicense.rows[0]] };
-      console.log(`HWID license created successfully: ${newLicense.rows[0].id}`);
-    } else {
-      // Update last used timestamp for existing license
-      await pool.query(
-        'UPDATE licenses SET last_used = NOW() WHERE id = $1',
-        [license.rows[0].id]
-      );
+      const license = licenseResult.rows[0];
+      console.log(`HWID license ${licenseResult.rowCount === 1 ? 'created' : 'updated'} for user ${req.user.userId}, HWID: ${hwid}, License ID: ${license.id}`);
+
+    } catch (error) {
+      // If the unique constraint fails due to race condition, try to find and update existing
+      console.log(`License creation conflict, finding existing license for user ${req.user.userId}, HWID: ${hwid}`);
+
+      const existingLicense = await pool.query(`
+        SELECT * FROM licenses
+        WHERE user_id = $1 AND hwid_hash = $2 AND is_active = true
+      `, [req.user.userId, hwid]);
+
+      if (existingLicense.rows.length > 0) {
+        // Update the existing license
+        await pool.query(
+          'UPDATE licenses SET last_used = NOW(), device_name = $1 WHERE id = $2',
+          [finalDeviceName, existingLicense.rows[0].id]
+        );
+        console.log(`Updated existing HWID license: ${existingLicense.rows[0].id}`);
+      } else {
+        // This shouldn't happen, but log it
+        console.error(`Failed to create or find license for user ${req.user.userId}, HWID: ${hwid}`);
+        return res.status(500).json({ error: 'Failed to validate license' });
+      }
     }
 
     res.json({

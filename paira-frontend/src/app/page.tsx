@@ -495,7 +495,6 @@ export default function Home() {
               Subscribe Now
             </button>
           </div>
-        )}
       </main>
 
       {/* Footer */}

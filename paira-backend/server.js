@@ -639,6 +639,41 @@ app.post('/api/webhooks/test', (req, res) => {
   res.json({ received: true, test: true });
 });
 
+// Get latest update info
+app.get('/api/updates/latest', (req, res) => {
+  // For now, return static data. In production, this could be from a database or config file
+  const latestVersion = {
+    version: "1.0.1",
+    release_date: "2025-01-15",
+    changelog: [
+      {
+        version: "1.0.1",
+        date: "2025-01-15",
+        changes: [
+          "Fixed Selenium Manager compatibility issues",
+          "Updated ChromeDriver to latest version",
+          "Improved bot stability and performance",
+          "Fixed config.json loading in bundled app",
+          "Added automatic update notifications"
+        ]
+      },
+      {
+        version: "1.0.0",
+        date: "2025-01-01",
+        changes: [
+          "Initial release",
+          "Basic trading bot functionality",
+          "GUI interface",
+          "License validation system"
+        ]
+      }
+    ],
+    download_url: "https://paira-frontend-e1pwg7y7k-wkqs-projects.vercel.app/success"
+  };
+
+  res.json(latestVersion);
+});
+
 // Test endpoint to create a demo subscription (for testing without payment)
 app.post('/api/test/create-subscription', authenticateToken, async (req, res) => {
   try {

@@ -374,7 +374,7 @@ export default function Home() {
             onMouseLeave={(e) => {
               e.currentTarget.style.boxShadow = 'none';
             }}
-            onClick={() => setShowAuth(true)}
+            onClick={isLoggedIn ? () => router.push('/dashboard') : () => setShowAuth(true)}
             >
               <div style={{
                 position: 'absolute',

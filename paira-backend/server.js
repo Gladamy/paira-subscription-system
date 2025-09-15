@@ -654,7 +654,9 @@ app.get('/api/updates/latest', (req, res) => {
           "Updated ChromeDriver to latest version",
           "Improved bot stability and performance",
           "Fixed config.json loading in bundled app",
-          "Added automatic update notifications"
+          "Added automatic update notifications",
+          "Simplified activity logs display",
+          "Enhanced GUI with better theming"
         ]
       },
       {
@@ -668,7 +670,7 @@ app.get('/api/updates/latest', (req, res) => {
         ]
       }
     ],
-    download_url: "https://paira-frontend-e1pwg7y7k-wkqs-projects.vercel.app/success"
+    download_url: "https://paira-frontend-lhuktw7uc-wkqs-projects.vercel.app/paira-bot-setup.msi"
   };
 
   res.json(latestVersion);

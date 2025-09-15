@@ -5,11 +5,12 @@ import { useRouter } from 'next/navigation';
 
 interface AuthModalProps {
   onClose: () => void;
+  onAuthSuccess?: () => void;
 }
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'https://api.paira.live';
 
-export default function AuthModal({ onClose }: AuthModalProps) {
+export default function AuthModal({ onClose, onAuthSuccess }: AuthModalProps) {
   const router = useRouter();
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
@@ -42,6 +43,8 @@ export default function AuthModal({ onClose }: AuthModalProps) {
       if (response.ok) {
         localStorage.setItem('paira_auth_token', data.token);
         setUser(data.user);
+        // Notify parent component of successful authentication
+        onAuthSuccess?.();
         // Check subscription status after login
         await checkSubscriptionStatus();
       } else {
@@ -88,6 +91,9 @@ export default function AuthModal({ onClose }: AuthModalProps) {
         }
       } else {
         setSubscriptionStatus('inactive');
+        // For inactive users, close modal and redirect to pricing section
+        onClose();
+        router.push('/#pricing');
       }
     } catch {
       setSubscriptionStatus('inactive');

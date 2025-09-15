@@ -14,7 +14,21 @@ export default function Home() {
   useEffect(() => {
     const token = localStorage.getItem('paira_auth_token');
     setIsLoggedIn(!!token);
+
+    // Handle anchor links
+    if (typeof window !== 'undefined' && window.location.hash === '#pricing') {
+      setTimeout(() => {
+        const pricingElement = document.getElementById('pricing');
+        if (pricingElement) {
+          pricingElement.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    }
   }, []);
+
+  const handleAuthSuccess = () => {
+    setIsLoggedIn(true);
+  };
 
 
   return (
@@ -274,7 +288,7 @@ export default function Home() {
         </div>
 
         {/* Pricing Section */}
-        <div style={{
+        <div id="pricing" style={{
           backgroundColor: '#F9FAFB',
           border: '1px solid #F3F4F6',
           padding: '3rem 2rem',
@@ -554,7 +568,7 @@ export default function Home() {
       </footer>
 
       {/* Auth Modal */}
-      {showAuth && <AuthModal onClose={() => setShowAuth(false)} />}
+      {showAuth && <AuthModal onClose={() => setShowAuth(false)} onAuthSuccess={handleAuthSuccess} />}
     </div>
   );
 }

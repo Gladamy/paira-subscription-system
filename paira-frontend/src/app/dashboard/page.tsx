@@ -286,7 +286,7 @@ export default function Dashboard() {
                 No active subscription found.
               </p>
               <button
-                onClick={() => router.push('/')}
+                onClick={() => router.push('/#pricing')}
                 style={{
                   backgroundColor: '#DC2626',
                   color: '#FFFFFF',

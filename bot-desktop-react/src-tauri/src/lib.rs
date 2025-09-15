@@ -2,6 +2,7 @@
 use std::process::{Command, Stdio};
 use std::sync::{Arc, Mutex};
 use std::fs;
+use std::path::PathBuf;
 use tauri::{State, Emitter, Manager};
 use tauri_plugin_shell::ShellExt;
 use sha2::{Sha256, Digest};
@@ -10,6 +11,101 @@ use reqwest;
 #[derive(Default)]
 struct BotState {
     process: Arc<Mutex<Option<tauri_plugin_shell::process::CommandChild>>>,
+}
+
+#[tauri::command]
+fn setup_desktop_folder(app: tauri::AppHandle) -> Result<String, String> {
+    // Get the app data directory to check for first-run marker
+    let app_data_dir = app
+        .path()
+        .app_data_dir()
+        .map_err(|e| format!("Failed to get app data directory: {}", e))?;
+
+    let first_run_marker = app_data_dir.join("first_run_complete");
+
+    // Check if this is the first run
+    if first_run_marker.exists() {
+        return Ok("Desktop setup already completed".to_string());
+    }
+
+    // Get desktop path
+    let desktop_path = dirs::desktop_dir()
+        .ok_or("Could not find desktop directory")?;
+
+    let paira_folder = desktop_path.join("Paira Bot");
+
+    // Create Paira Bot folder on desktop
+    fs::create_dir_all(&paira_folder)
+        .map_err(|e| format!("Failed to create desktop folder: {}", e))?;
+
+    // Create a README file with instructions
+    let readme_content = r#"Welcome to Paira Bot!
+
+This folder contains quick access files for Paira Bot.
+
+📁 Files:
+- Paira Bot.exe (main application)
+- config.json (configuration file)
+- README.txt (this file)
+
+🚀 Getting Started:
+1. Double-click "Paira Bot.exe" to launch the application
+2. Sign in with your account
+3. Configure your trading settings
+4. Start automating your Roblox trading!
+
+📖 Need Help?
+Visit: https://paira.live
+Support: support@paira.live
+
+Happy Trading! 🎯
+"#;
+
+    let readme_path = paira_folder.join("README.txt");
+    fs::write(&readme_path, readme_content)
+        .map_err(|e| format!("Failed to create README file: {}", e))?;
+
+    // Try to create a shortcut to the main executable
+    // Get the install directory (where the app is installed)
+    let install_dir = app
+        .path()
+        .resource_dir()
+        .map_err(|e| format!("Failed to get install directory: {}", e))?
+        .parent()
+        .ok_or("Could not determine install directory")?
+        .to_path_buf();
+
+    let exe_path = install_dir.join("Paira Bot.exe");
+
+    // Create a batch file to launch the app (easier than creating shortcuts)
+    let launcher_content = format!(
+        r#"@echo off
+echo Starting Paira Bot...
+start "" "{}"
+echo Paira Bot launched!
+timeout /t 2 >nul
+"#,
+        exe_path.display()
+    );
+
+    let launcher_path = paira_folder.join("Launch Paira Bot.bat");
+    fs::write(&launcher_path, launcher_content)
+        .map_err(|e| format!("Failed to create launcher: {}", e))?;
+
+    // Create a config shortcut (copy the config file)
+    let config_source = install_dir.join("resources").join("config.json");
+    let config_dest = paira_folder.join("config.json");
+
+    if config_source.exists() {
+        fs::copy(&config_source, &config_dest)
+            .map_err(|e| format!("Failed to copy config file: {}", e))?;
+    }
+
+    // Mark first run as complete
+    fs::write(&first_run_marker, "completed")
+        .map_err(|e| format!("Failed to create first-run marker: {}", e))?;
+
+    Ok(format!("Desktop folder created successfully at: {}", paira_folder.display()))
 }
 
 #[tauri::command]
@@ -274,7 +370,18 @@ pub fn run() {
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_shell::init())
         .manage(BotState::default())
-        .invoke_handler(tauri::generate_handler![greet, start_bot, stop_bot, get_bot_status, get_config, save_config, get_hwid, get_device_name, validate_license, check_for_updates])
+        .invoke_handler(tauri::generate_handler![greet, setup_desktop_folder, start_bot, stop_bot, get_bot_status, get_config, save_config, get_hwid, get_device_name, validate_license, check_for_updates])
+        .setup(|app| {
+            // Run desktop setup on app startup
+            let app_handle = app.handle().clone();
+            tauri::async_runtime::spawn(async move {
+                match setup_desktop_folder(app_handle) {
+                    Ok(message) => println!("Desktop setup: {}", message),
+                    Err(error) => eprintln!("Desktop setup failed: {}", error),
+                }
+            });
+            Ok(())
+        })
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

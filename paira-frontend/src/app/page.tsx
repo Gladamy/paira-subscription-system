@@ -6,6 +6,12 @@ import AuthModal from '@/components/AuthModal';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'https://api.paira.live';
 
+// Stripe Price IDs (these should be in environment variables in production)
+const STRIPE_PRICES = {
+  monthly: process.env.NEXT_PUBLIC_STRIPE_PRICE_MONTHLY || 'price_monthly_test',
+  annual: process.env.NEXT_PUBLIC_STRIPE_PRICE_ANNUAL || 'price_annual_test'
+};
+
 export default function Home() {
   const router = useRouter();
   const [showAuth, setShowAuth] = useState(false);
@@ -36,6 +42,40 @@ export default function Home() {
     setIsLoggedIn(true);
     // Check subscription status after successful authentication
     checkSubscriptionStatus();
+  };
+
+  const handleStripeCheckout = async (priceId: string) => {
+    try {
+      const token = localStorage.getItem('paira_auth_token');
+      if (!token) {
+        setShowAuth(true);
+        return;
+      }
+
+      const response = await fetch(`${API_BASE}/api/subscriptions/create-checkout`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ priceId })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        // Redirect to Stripe checkout
+        window.location.href = data.url;
+      } else if (response.status === 401) {
+        // Token expired or invalid, show auth modal
+        setShowAuth(true);
+      } else {
+        console.error('Failed to create checkout session');
+        alert('Failed to start checkout process. Please try again.');
+      }
+    } catch (error) {
+      console.error('Checkout error:', error);
+      alert('Network error. Please try again.');
+    }
   };
 
   const checkSubscriptionStatus = async () => {
@@ -159,7 +199,7 @@ export default function Home() {
             Automate your Roblox trading with advanced algorithms, real-time price tracking, and secure HWID-based licensing. Available as a desktop app for the best performance.
           </p>
           <button
-            onClick={isLoggedIn ? () => router.push('/dashboard') : () => setShowAuth(true)}
+            onClick={() => handleStripeCheckout(STRIPE_PRICES.annual)}
             style={{
               backgroundColor: '#6366F1',
               color: '#FFFFFF',
@@ -235,16 +275,7 @@ export default function Home() {
               Download for Windows
             </a>
             <button
-              onClick={() => {
-                if (!isLoggedIn) {
-                  setShowAuth(true);
-                } else if (subscriptionStatus === 'active') {
-                  router.push('/dashboard');
-                } else {
-                  // For logged-in users without active subscription, they can purchase
-                  setShowAuth(true); // Or redirect to checkout
-                }
-              }}
+              onClick={() => handleStripeCheckout(STRIPE_PRICES.monthly)}
               style={{
                 backgroundColor: '#FFFFFF',
                 color: '#374151',
@@ -369,18 +400,7 @@ export default function Home() {
               e.currentTarget.style.borderColor = '#E5E7EB';
               e.currentTarget.style.boxShadow = 'none';
             }}
-            onClick={() => {
-              if (!isLoggedIn) {
-                setShowAuth(true);
-              } else if (subscriptionStatus === 'active') {
-                router.push('/dashboard');
-              } else {
-                // For logged-in users without active subscription, they can purchase
-                // This would typically redirect to Stripe checkout or show pricing options
-                // For now, we'll keep the current behavior but could be enhanced
-                setShowAuth(true); // Or redirect to checkout
-              }
-            }}
+            onClick={() => handleStripeCheckout(STRIPE_PRICES.monthly)}
             >
               <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
                 <h3 style={{
@@ -478,16 +498,7 @@ export default function Home() {
 
           <div style={{ textAlign: 'center' }}>
             <button
-              onClick={() => {
-                if (!isLoggedIn) {
-                  setShowAuth(true);
-                } else if (subscriptionStatus === 'active') {
-                  router.push('/dashboard');
-                } else {
-                  // For logged-in users without active subscription, they can purchase
-                  setShowAuth(true); // Or redirect to checkout
-                }
-              }}
+              onClick={() => handleStripeCheckout(STRIPE_PRICES.annual)}
               style={{
                 backgroundColor: '#6366F1',
                 color: '#FFFFFF',
@@ -551,7 +562,7 @@ export default function Home() {
               </p>
             </div>
             <button
-              onClick={() => setShowAuth(true)}
+              onClick={() => handleStripeCheckout(STRIPE_PRICES.monthly)}
               style={{
                 backgroundColor: '#DC2626',
                 color: '#FFFFFF',

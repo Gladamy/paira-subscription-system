@@ -134,8 +134,8 @@ function SuccessPageContent() {
 
           <div className="space-y-3">
             <a
-              href="/paira-bot-setup.exe"
-              download="paira-bot-setup.exe"
+              href="/paira-bot-setup.msi"
+              download="paira-bot-setup.msi"
               className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-4 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-3 shadow-sm"
               style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif' }}
             >

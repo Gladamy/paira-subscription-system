@@ -18,12 +18,6 @@ export default function AuthModal({ onClose, onAuthSuccess }: AuthModalProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [user, setUser] = useState<{ id: string; email: string } | null>(null);
-  const [subscriptionStatus, setSubscriptionStatus] = useState<'checking' | 'active' | 'inactive' | null>(null);
-
-  // Check subscription status on component mount
-  useEffect(() => {
-    checkSubscriptionStatus();
-  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,10 +37,10 @@ export default function AuthModal({ onClose, onAuthSuccess }: AuthModalProps) {
       if (response.ok) {
         localStorage.setItem('paira_auth_token', data.token);
         setUser(data.user);
+        // Close modal immediately after successful authentication
+        onClose();
         // Notify parent component of successful authentication
         onAuthSuccess?.();
-        // Check subscription status after login
-        await checkSubscriptionStatus();
       } else {
         setError(data.error || 'Authentication failed');
       }
@@ -57,89 +51,8 @@ export default function AuthModal({ onClose, onAuthSuccess }: AuthModalProps) {
     }
   };
 
-  const checkSubscriptionStatus = async () => {
-    const token = localStorage.getItem('paira_auth_token');
-    if (!token) return;
-
-    setSubscriptionStatus('checking');
-    try {
-      const response = await fetch(`${API_BASE}/api/subscriptions/status`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        if (data.subscription && data.subscription.status === 'active') {
-          setSubscriptionStatus('active');
-          // Get user profile
-          const profileResponse = await fetch(`${API_BASE}/api/user/profile`, {
-            headers: {
-              'Authorization': `Bearer ${token}`
-            }
-          });
-          if (profileResponse.ok) {
-            const profileData = await profileResponse.json();
-            setUser(profileData.user);
-          }
-          // Redirect to dashboard for active users
-          onClose();
-          router.push('/dashboard');
-        } else {
-          setSubscriptionStatus('inactive');
-        }
-      } else {
-        setSubscriptionStatus('inactive');
-        // For inactive users, close modal and redirect to pricing section
-        onClose();
-        router.push('/#pricing');
-      }
-    } catch {
-      setSubscriptionStatus('inactive');
-    }
-  };
 
 
-  // Show subscription status if checking
-  if (subscriptionStatus === 'checking') {
-    return (
-      <div className="fixed inset-0 flex items-center justify-center z-50 p-4" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
-        <div style={{
-          backgroundColor: '#FFFFFF',
-          maxWidth: '28rem',
-          width: '100%',
-          border: '1px solid #E5E7EB',
-          padding: '2rem',
-          textAlign: 'center'
-        }}>
-          <div style={{ marginBottom: '1rem' }}>
-            <div style={{
-              width: '3rem',
-              height: '3rem',
-              backgroundColor: '#E5E7EB',
-              borderRadius: '50%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              margin: '0 auto 1rem'
-            }}>
-              <div style={{
-                width: '1.5rem',
-                height: '1.5rem',
-                border: '2px solid #6B46C1',
-                borderTop: '2px solid transparent',
-                borderRadius: '50%',
-                animation: 'spin 1s linear infinite'
-              }}></div>
-            </div>
-            <h2 style={{ color: '#111827', fontWeight: 500, marginBottom: '0.5rem' }}>Checking Subscription Status</h2>
-            <p style={{ color: '#6B7280', fontSize: '0.875rem' }}>Please wait while we verify your subscription...</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
 
   return (

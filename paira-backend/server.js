@@ -643,11 +643,11 @@ app.post('/api/webhooks/test', (req, res) => {
 app.get('/api/updates/latest', (req, res) => {
   // For now, return static data. In production, this could be from a database or config file
   const latestVersion = {
-    version: "1.0.1",
+    version: "1.1.0",
     release_date: "2025-01-15",
     changelog: [
       {
-        version: "1.0.1",
+        version: "1.1.0",
         date: "2025-01-15",
         changes: [
           "Fixed Selenium Manager compatibility issues",

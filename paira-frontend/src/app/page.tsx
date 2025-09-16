@@ -275,7 +275,7 @@ export default function Home() {
             <div style={{
               backgroundColor: '#FFFFFF',
               border: '1px solid rgba(15, 23, 42, 0.1)',
-              borderRadius: '12px',
+              borderRadius: '20px',
               padding: '2.5rem',
               textAlign: 'center',
               boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
@@ -307,7 +307,7 @@ export default function Home() {
                 <span style={{
                   fontSize: '3rem',
                   fontWeight: 800,
-                  color: '#7C3AED',
+                  color: '#1F2937',
                   fontFamily: "'Inter', 'SF Pro Display', system-ui, sans-serif"
                 }}>$0.60</span>
                 <span style={{
@@ -393,7 +393,7 @@ export default function Home() {
                 onClick={() => handleStripeCheckout(STRIPE_PRICES.monthly)}
                 style={{
                   width: '100%',
-                  backgroundColor: '#7C3AED',
+                  backgroundColor: '#1F2937',
                   color: '#FFFFFF',
                   border: 'none',
                   padding: '1rem 2rem',
@@ -401,16 +401,16 @@ export default function Home() {
                   fontWeight: 600,
                   cursor: 'pointer',
                   transition: 'all 0.2s',
-                  borderRadius: '8px',
+                  borderRadius: '12px',
                   fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#6D28D9';
+                  e.currentTarget.style.backgroundColor = '#111827';
                   e.currentTarget.style.transform = 'translateY(-1px)';
-                  e.currentTarget.style.boxShadow = '0 10px 25px rgba(124, 58, 237, 0.3)';
+                  e.currentTarget.style.boxShadow = '0 10px 25px rgba(31, 41, 55, 0.3)';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = '#7C3AED';
+                  e.currentTarget.style.backgroundColor = '#1F2937';
                   e.currentTarget.style.transform = 'translateY(0)';
                   e.currentTarget.style.boxShadow = 'none';
                 }}
@@ -423,7 +423,7 @@ export default function Home() {
             <div style={{
               background: 'linear-gradient(135deg, #7C3AED 0%, #6D28D9 100%)',
               color: '#FFFFFF',
-              borderRadius: '12px',
+              borderRadius: '20px',
               padding: '2.5rem',
               textAlign: 'center',
               position: 'relative',
@@ -472,7 +472,7 @@ export default function Home() {
                 <span style={{
                   fontSize: '3rem',
                   fontWeight: 800,
-                  color: '#FFFFFF',
+                  color: '#1F2937',
                   fontFamily: "'Inter', 'SF Pro Display', system-ui, sans-serif"
                 }}>$54.99</span>
                 <span style={{
@@ -571,14 +571,14 @@ export default function Home() {
                 style={{
                   width: '100%',
                   backgroundColor: '#FFFFFF',
-                  color: '#7C3AED',
+                  color: '#1F2937',
                   border: 'none',
                   padding: '1rem 2rem',
                   fontSize: '1rem',
                   fontWeight: 700,
                   cursor: 'pointer',
                   transition: 'all 0.2s',
-                  borderRadius: '8px',
+                  borderRadius: '12px',
                   fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif",
                   letterSpacing: '0.025em'
                 }}

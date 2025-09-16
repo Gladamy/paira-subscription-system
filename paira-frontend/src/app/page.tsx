@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import AuthModal from '@/components/AuthModal';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'https://api.paira.live';
 
@@ -13,7 +12,6 @@ const STRIPE_PRICES = {
 
 export default function Home() {
   const router = useRouter();
-  const [showAuth, setShowAuth] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
@@ -42,7 +40,7 @@ export default function Home() {
         const data = await response.json();
         window.location.href = data.url;
       } else if (response.status === 401) {
-        setShowAuth(true);
+        router.push('/auth/signin');
       } else {
         console.error('Failed to create checkout session');
         alert('Failed to start checkout process. Please try again.');
@@ -93,7 +91,7 @@ export default function Home() {
               }}>Bot</span>
             </div>
             <button
-              onClick={isLoggedIn ? () => router.push('/dashboard') : () => setShowAuth(true)}
+              onClick={isLoggedIn ? () => router.push('/dashboard') : () => router.push('/auth/signin')}
               style={{
                 backgroundColor: 'transparent',
                 border: '1px solid rgba(15, 23, 42, 0.2)',
@@ -153,7 +151,7 @@ export default function Home() {
             Automate your Roblox trading with advanced algorithms, real-time price tracking, and secure HWID-based licensing.
           </p>
           <button
-            onClick={() => handleStripeCheckout(STRIPE_PRICES.annual)}
+            onClick={isLoggedIn ? () => router.push('/dashboard') : () => router.push('/auth/signup')}
             style={{
               backgroundColor: '#7C3AED',
               color: '#FFFFFF',
@@ -625,8 +623,6 @@ export default function Home() {
         </div>
       </footer>
 
-      {/* Auth Modal */}
-      {showAuth && <AuthModal onClose={() => setShowAuth(false)} />}
     </div>
   );
 }

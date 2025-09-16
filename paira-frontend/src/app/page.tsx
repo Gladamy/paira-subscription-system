@@ -262,7 +262,7 @@ export default function Home() {
               color: '#475569',
               marginBottom: '3rem',
               fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
-            }}>Start free, upgrade when you're ready</p>
+            }}>Start free, upgrade when you&apos;re ready</p>
 
             <div style={{
               display: 'grid',

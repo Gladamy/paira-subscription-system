@@ -124,8 +124,9 @@ export default function Home() {
       <main style={{ padding: '4rem 1rem', maxWidth: '1200px', margin: '0 auto' }}>
         {/* Hero Section - Ultra Clean */}
         <div style={{
+          backgroundColor: '#F8FAFC',
           textAlign: 'center',
-          padding: '4rem 0',
+          padding: '4rem 2rem',
           marginBottom: '4rem'
         }}>
           <h1 style={{
@@ -183,9 +184,11 @@ export default function Home() {
 
         {/* Features - Clean Grid */}
         <div style={{
+          backgroundColor: '#F8FAFC',
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
           gap: '3rem',
+          padding: '4rem 2rem',
           marginBottom: '4rem'
         }}>
           <div style={{ textAlign: 'center' }}>

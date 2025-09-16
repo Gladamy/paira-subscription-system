@@ -45,7 +45,7 @@ const Header = ({ user, onLogout }: { user: UserProfile | null; onLogout: () => 
           <div style={{
             width: '2.25rem',
             height: '2.25rem',
-            backgroundColor: '#2563EB',
+            backgroundColor: '#1F2937',
             borderRadius: '0.75rem',
             display: 'flex',
             alignItems: 'center',
@@ -297,15 +297,15 @@ export default function Dashboard() {
     }}>
       <Header user={user} onLogout={handleLogout} />
 
-      <div style={{ maxWidth: '80rem', margin: '0 auto', padding: '2rem' }}>
+      <div style={{ maxWidth: '80rem', margin: '0 auto', padding: '1.5rem' }}>
         {/* Welcome Section */}
         <div style={{
           backgroundColor: 'rgba(255, 255, 255, 0.6)',
           backdropFilter: 'blur(12px)',
           border: '1px solid rgba(229, 231, 235, 0.3)',
           borderRadius: '1rem',
-          padding: '2rem',
-          marginBottom: '2rem',
+          padding: '1.5rem',
+          marginBottom: '1.5rem',
           boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)'
         }}>
           <div style={{
@@ -344,8 +344,8 @@ export default function Dashboard() {
           backdropFilter: 'blur(12px)',
           border: '1px solid rgba(229, 231, 235, 0.3)',
           borderRadius: '1rem',
-          padding: '2rem',
-          marginBottom: '2rem',
+          padding: '1.5rem',
+          marginBottom: '1.5rem',
           boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)'
         }}>
           <h2 style={{
@@ -422,7 +422,7 @@ export default function Dashboard() {
             backdropFilter: 'blur(12px)',
             border: '1px solid rgba(229, 231, 235, 0.3)',
             borderRadius: '1rem',
-            padding: '2rem',
+            padding: '1.5rem',
             boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)'
           }}>
             <div style={{ marginBottom: '1.5rem' }}>
@@ -453,7 +453,7 @@ export default function Dashboard() {
                   <div style={{
                     width: '3rem',
                     height: '3rem',
-                    backgroundColor: '#2563EB',
+                    backgroundColor: '#1F2937',
                     borderRadius: '0.5rem',
                     display: 'flex',
                     alignItems: 'center',
@@ -486,7 +486,7 @@ export default function Dashboard() {
                   href="/paira-bot-setup.msi"
                   download="paira-bot-setup.msi"
                   style={{
-                    backgroundColor: '#2563EB',
+                    backgroundColor: '#1F2937',
                     color: '#FFFFFF',
                     border: 'none',
                     borderRadius: '0.5rem',
@@ -497,11 +497,8 @@ export default function Dashboard() {
                     textDecoration: 'none',
                     display: 'inline-flex',
                     alignItems: 'center',
-                    gap: '0.5rem',
-                    transition: 'background-color 0.2s'
+                    gap: '0.5rem'
                   }}
-                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#1D4ED8'}
-                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#2563EB'}
                 >
                   <span style={{
                     fontSize: '1rem',
@@ -586,7 +583,7 @@ export default function Dashboard() {
             backdropFilter: 'blur(12px)',
             border: '1px solid rgba(229, 231, 235, 0.3)',
             borderRadius: '1rem',
-            padding: '2rem',
+            padding: '1.5rem',
             boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
             textAlign: 'center'
           }}>
@@ -623,18 +620,15 @@ export default function Dashboard() {
             <button
               onClick={() => router.push('/')}
               style={{
-                backgroundColor: '#2563EB',
+                backgroundColor: '#1F2937',
                 color: '#FFFFFF',
                 border: 'none',
                 borderRadius: '0.5rem',
                 padding: '0.75rem 2.5rem',
                 fontSize: '1rem',
                 fontWeight: '600',
-                cursor: 'pointer',
-                transition: 'background-color 0.2s'
+                cursor: 'pointer'
               }}
-              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#1D4ED8'}
-              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#2563EB'}
             >
               Subscribe Now
             </button>

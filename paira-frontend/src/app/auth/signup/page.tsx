@@ -56,7 +56,7 @@ export default function SignUp() {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      padding: '2rem 1rem'
+      padding: '1rem'
     }}>
       <div style={{
         backgroundColor: '#FFFFFF',
@@ -70,7 +70,7 @@ export default function SignUp() {
         {/* Header */}
         <div style={{
           backgroundColor: '#F8FAFC',
-          padding: '2rem 2rem 1.5rem',
+          padding: '1.5rem 2rem 1rem',
           textAlign: 'center',
           borderTopLeftRadius: '20px',
           borderTopRightRadius: '20px'
@@ -92,7 +92,7 @@ export default function SignUp() {
 
         {/* Form */}
         <form onSubmit={handleSubmit} style={{
-          padding: '2rem',
+          padding: '1.5rem',
           backgroundColor: '#FFFFFF'
         }}>
           <div style={{ marginBottom: '1.5rem' }}>
@@ -241,20 +241,6 @@ export default function SignUp() {
               transition: 'all 0.2s',
               marginBottom: '1.5rem'
             }}
-            onMouseEnter={(e) => {
-              if (!loading) {
-                e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
-                e.currentTarget.style.transform = 'translateY(-1px)';
-                e.currentTarget.style.boxShadow = '0 10px 25px rgba(0, 0, 0, 0.1)';
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (!loading) {
-                e.currentTarget.style.backgroundColor = '#FFFFFF';
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = 'none';
-              }
-            }}
           >
             {loading ? 'Creating account...' : 'Create Account'}
           </button>
@@ -263,7 +249,7 @@ export default function SignUp() {
         {/* Footer */}
         <div style={{
           backgroundColor: '#F8FAFC',
-          padding: '1.5rem 2rem 2rem',
+          padding: '1rem 2rem 1.5rem',
           textAlign: 'center',
           borderBottomLeftRadius: '20px',
           borderBottomRightRadius: '20px'

@@ -2,21 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
-import {
-  Bell,
-  Settings,
-  Download,
-  Monitor,
-  Smartphone,
-  Check,
-  User,
-  LogOut,
-  ChevronDown
-} from "lucide-react";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'https://api.paira.live';
 
@@ -39,48 +24,155 @@ const Header = ({ user, onLogout }: { user: UserProfile | null; onLogout: () => 
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
 
   return (
-    <div className="bg-white/80 backdrop-blur-sm border-b border-gray-200/60 px-8 py-5 sticky top-0 z-50">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center">
-          <div className="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center mr-4 shadow-sm">
-            <span className="text-white font-bold text-sm">P</span>
+    <div style={{
+      backgroundColor: 'rgba(255, 255, 255, 0.8)',
+      backdropFilter: 'blur(8px)',
+      borderBottom: '1px solid rgba(229, 231, 235, 0.6)',
+      padding: '1.25rem 2rem',
+      position: 'sticky',
+      top: 0,
+      zIndex: 50
+    }}>
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        maxWidth: '80rem',
+        margin: '0 auto'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <div style={{
+            width: '2.25rem',
+            height: '2.25rem',
+            backgroundColor: '#2563EB',
+            borderRadius: '0.75rem',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginRight: '1rem',
+            boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'
+          }}>
+            <span style={{ color: '#FFFFFF', fontWeight: 'bold', fontSize: '0.875rem' }}>P</span>
           </div>
-          <span className="text-xl font-bold text-gray-900 tracking-tight">Paira Bot</span>
+          <span style={{
+            fontSize: '1.25rem',
+            fontWeight: 'bold',
+            color: '#111827',
+            letterSpacing: '-0.025em'
+          }}>Paira Bot</span>
         </div>
 
         {/* Profile Dropdown */}
-        <div className="relative">
+        <div style={{ position: 'relative' }}>
           <button
-            className="flex items-center space-x-4 p-3 rounded-xl hover:bg-gray-50 transition-all duration-200"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '1rem',
+              padding: '0.75rem',
+              borderRadius: '0.75rem',
+              transition: 'all 0.2s',
+              border: 'none',
+              backgroundColor: 'transparent',
+              cursor: 'pointer'
+            }}
             onMouseEnter={() => setShowProfileDropdown(true)}
             onMouseLeave={() => setShowProfileDropdown(false)}
+            onClick={() => setShowProfileDropdown(!showProfileDropdown)}
           >
-            <div className="w-9 h-9 bg-gray-100 rounded-full flex items-center justify-center">
-              <User size={18} className="text-gray-600" />
+            <div style={{
+              width: '2.25rem',
+              height: '2.25rem',
+              backgroundColor: '#F3F4F6',
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}>
+              <span style={{ fontSize: '1.125rem' }}>👤</span>
             </div>
-            <span className="text-sm font-semibold text-gray-700">{user?.email}</span>
-            <ChevronDown size={16} className="text-gray-400" />
+            <span style={{
+              fontSize: '0.875rem',
+              fontWeight: '600',
+              color: '#374151'
+            }}>{user?.email}</span>
+            <span style={{
+              fontSize: '0.75rem',
+              color: '#9CA3AF',
+              transition: 'transform 0.2s'
+            }}>▼</span>
           </button>
 
           {showProfileDropdown && (
             <div
-              className="absolute right-0 top-full mt-3 w-64 bg-white rounded-2xl shadow-xl border border-gray-200/60 py-3 z-50"
+              style={{
+                position: 'absolute',
+                right: 0,
+                top: '100%',
+                marginTop: '0.75rem',
+                width: '16rem',
+                backgroundColor: '#FFFFFF',
+                borderRadius: '1rem',
+                boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)',
+                border: '1px solid rgba(229, 231, 235, 0.6)',
+                padding: '0.75rem 0',
+                zIndex: 50
+              }}
               onMouseEnter={() => setShowProfileDropdown(true)}
               onMouseLeave={() => setShowProfileDropdown(false)}
             >
-              <div className="px-5 py-3 border-b border-gray-100">
-                <p className="text-sm font-semibold text-gray-900">{user?.email}</p>
-                <p className="text-xs text-gray-500 font-medium">Monthly Plan</p>
+              <div style={{
+                padding: '0.75rem 1.25rem',
+                borderBottom: '1px solid #F3F4F6'
+              }}>
+                <p style={{
+                  fontSize: '0.875rem',
+                  fontWeight: '600',
+                  color: '#111827'
+                }}>{user?.email}</p>
+                <p style={{
+                  fontSize: '0.75rem',
+                  color: '#6B7280',
+                  fontWeight: '500'
+                }}>Monthly Plan</p>
               </div>
-              <button className="w-full flex items-center px-5 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
-                <Settings size={16} className="mr-3" />
+              <button
+                style={{
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  padding: '0.75rem 1.25rem',
+                  fontSize: '0.875rem',
+                  color: '#374151',
+                  backgroundColor: 'transparent',
+                  border: 'none',
+                  cursor: 'pointer',
+                  transition: 'background-color 0.2s'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#F9FAFB'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+              >
+                <span style={{ marginRight: '0.75rem' }}>⚙️</span>
                 Account Settings
               </button>
               <button
                 onClick={onLogout}
-                className="w-full flex items-center px-5 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                style={{
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  padding: '0.75rem 1.25rem',
+                  fontSize: '0.875rem',
+                  color: '#DC2626',
+                  backgroundColor: 'transparent',
+                  border: 'none',
+                  cursor: 'pointer',
+                  transition: 'background-color 0.2s'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#FEF2F2'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
               >
-                <LogOut size={16} className="mr-3" />
+                <span style={{ marginRight: '0.75rem' }}>🚪</span>
                 Sign Out
               </button>
             </div>
@@ -184,143 +276,364 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+    <div style={{
+      minHeight: '100vh',
+      backgroundColor: '#F8FAFC',
+      fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+    }}>
       <Header user={user} onLogout={handleLogout} />
 
-      <div className="max-w-6xl mx-auto p-8">
-        {/* Enhanced Greeting Card */}
-        <Card className="bg-glass-card/80 border-glass-border/60 shadow-glass rounded-2xl backdrop-blur-sm mb-8">
-          <CardContent className="p-8">
-            <div className="flex items-start justify-between">
-              <div className="space-y-2">
-                <h1 className="text-3xl font-semibold text-sidebar-active-text">
-                  Welcome back!
-                </h1>
-                <p className="text-warm-muted">{user?.email}</p>
-                <p className="text-warm-muted mt-3 max-w-2xl">
-                  Manage your subscription and download the latest version of Paira Bot.
-                </p>
-              </div>
-              <div className="flex items-center gap-2">
-                <Button variant="icon-button" size="icon">
-                  <Bell className="w-4 h-4" />
-                </Button>
-                <Button variant="icon-button" size="icon">
-                  <Settings className="w-4 h-4" />
-                </Button>
-              </div>
+      <div style={{ maxWidth: '80rem', margin: '0 auto', padding: '2rem' }}>
+        {/* Welcome Section */}
+        <div style={{
+          backgroundColor: 'rgba(255, 255, 255, 0.8)',
+          backdropFilter: 'blur(8px)',
+          border: '1px solid rgba(229, 231, 235, 0.6)',
+          borderRadius: '1rem',
+          padding: '2rem',
+          marginBottom: '2rem',
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)'
+        }}>
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'flex-start'
+          }}>
+            <div>
+              <h1 style={{
+                fontSize: '2.25rem',
+                fontWeight: '600',
+                color: '#1F2937',
+                marginBottom: '0.5rem'
+              }}>
+                Welcome back!
+              </h1>
+              <p style={{
+                fontSize: '1.125rem',
+                color: '#6B7280',
+                marginBottom: '1rem'
+              }}>{user?.email}</p>
+              <p style={{
+                color: '#6B7280',
+                maxWidth: '32rem',
+                lineHeight: '1.6'
+              }}>
+                Manage your subscription and download the latest version of Paira Bot.
+              </p>
             </div>
-          </CardContent>
-        </Card>
+            <div style={{ display: 'flex', gap: '0.5rem' }}>
+              <button style={{
+                width: '2.5rem',
+                height: '2.5rem',
+                borderRadius: '0.5rem',
+                backgroundColor: '#F3F4F6',
+                border: 'none',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                <span style={{ fontSize: '1rem' }}>🔔</span>
+              </button>
+              <button style={{
+                width: '2.5rem',
+                height: '2.5rem',
+                borderRadius: '0.5rem',
+                backgroundColor: '#F3F4F6',
+                border: 'none',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                <span style={{ fontSize: '1rem' }}>⚙️</span>
+              </button>
+            </div>
+          </div>
+        </div>
 
         {/* Subscription Status */}
-        <Card className="bg-glass-card/80 border-glass-border/60 shadow-glass rounded-2xl backdrop-blur-sm mb-8">
-          <CardContent className="p-8">
-            <h2 className="text-xl font-semibold text-sidebar-active-text mb-6">Subscription Status</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="space-y-2">
-                <p className="text-sm text-warm-muted">Status</p>
-                <div className="flex items-center gap-2">
-                  <Badge className="bg-green-50 text-green-700 hover:bg-green-50">
-                    <Check className="w-3 h-3 mr-1" />
-                    {subscription?.status === 'active' ? 'Active' : 'Inactive'}
-                  </Badge>
-                </div>
-              </div>
-              <div className="space-y-2">
-                <p className="text-sm text-warm-muted">Current Plan</p>
-                <p className="font-semibold text-sidebar-active-text">{subscription?.plan || 'N/A'}</p>
-              </div>
-              <div className="space-y-2">
-                <p className="text-sm text-warm-muted">Expires On</p>
-                <p className="font-semibold text-sidebar-active-text">
-                  {subscription?.current_period_end
-                    ? new Date(subscription.current_period_end).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'short',
-                        day: 'numeric'
-                      })
-                    : 'N/A'
-                  }
-                </p>
-              </div>
+        <div style={{
+          backgroundColor: 'rgba(255, 255, 255, 0.8)',
+          backdropFilter: 'blur(8px)',
+          border: '1px solid rgba(229, 231, 235, 0.6)',
+          borderRadius: '1rem',
+          padding: '2rem',
+          marginBottom: '2rem',
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)'
+        }}>
+          <h2 style={{
+            fontSize: '1.5rem',
+            fontWeight: '600',
+            color: '#1F2937',
+            marginBottom: '1.5rem'
+          }}>Subscription Status</h2>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: '1.5rem'
+          }}>
+            <div>
+              <p style={{
+                fontSize: '0.875rem',
+                color: '#6B7280',
+                marginBottom: '0.5rem'
+              }}>Status</p>
+              <span style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                padding: '0.25rem 0.75rem',
+                borderRadius: '0.5rem',
+                fontSize: '0.75rem',
+                fontWeight: '600',
+                backgroundColor: subscription?.status === 'active' ? '#D1FAE5' : '#FEF3C7',
+                color: subscription?.status === 'active' ? '#065F46' : '#92400E'
+              }}>
+                <span style={{ marginRight: '0.25rem' }}>✓</span>
+                {subscription?.status === 'active' ? 'Active' : 'Inactive'}
+              </span>
             </div>
-          </CardContent>
-        </Card>
+            <div>
+              <p style={{
+                fontSize: '0.875rem',
+                color: '#6B7280',
+                marginBottom: '0.5rem'
+              }}>Current Plan</p>
+              <p style={{
+                fontSize: '1.125rem',
+                fontWeight: '600',
+                color: '#1F2937'
+              }}>{subscription?.plan || 'N/A'}</p>
+            </div>
+            <div>
+              <p style={{
+                fontSize: '0.875rem',
+                color: '#6B7280',
+                marginBottom: '0.5rem'
+              }}>Expires On</p>
+              <p style={{
+                fontSize: '1.125rem',
+                fontWeight: '600',
+                color: '#1F2937'
+              }}>
+                {subscription?.current_period_end
+                  ? new Date(subscription.current_period_end).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'short',
+                      day: 'numeric'
+                    })
+                  : 'N/A'
+                }
+              </p>
+            </div>
+          </div>
+        </div>
 
         {/* Download Section */}
         {subscription?.status === 'active' ? (
-          <Card className="bg-glass-card/80 border-glass-border/60 shadow-glass rounded-2xl backdrop-blur-sm">
-            <CardContent className="p-8">
-              <div className="space-y-6">
-                <div>
-                  <h2 className="text-xl font-semibold text-sidebar-active-text mb-2">Download Paira Bot</h2>
-                  <p className="text-warm-muted">Get the latest version of Paira Bot Desktop App.</p>
-                </div>
+          <div style={{
+            backgroundColor: 'rgba(255, 255, 255, 0.8)',
+            backdropFilter: 'blur(8px)',
+            border: '1px solid rgba(229, 231, 235, 0.6)',
+            borderRadius: '1rem',
+            padding: '2rem',
+            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)'
+          }}>
+            <div style={{ marginBottom: '1.5rem' }}>
+              <h2 style={{
+                fontSize: '1.5rem',
+                fontWeight: '600',
+                color: '#1F2937',
+                marginBottom: '0.5rem'
+              }}>Download Paira Bot</h2>
+              <p style={{ color: '#6B7280' }}>Get the latest version of Paira Bot Desktop App.</p>
+            </div>
 
-                {/* Windows Download */}
-                <div className="bg-gradient-subtle rounded-xl p-6 border border-soft-border">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center">
-                        <Monitor className="w-6 h-6 text-white" />
-                      </div>
-                      <div>
-                        <h3 className="font-semibold text-sidebar-active-text">Download for Windows</h3>
-                        <p className="text-sm text-warm-muted">Windows 10/11</p>
-                        <p className="text-xs text-warm-muted mt-1">MSI Installer • ~70MB download</p>
-                      </div>
-                    </div>
-                    <Button className="bg-blue-600 hover:bg-blue-700 text-white px-6">
-                      <Download className="w-4 h-4 mr-2" />
-                      Download Now
-                    </Button>
+            {/* Windows Download */}
+            <div style={{
+              background: 'linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%)',
+              border: '1px solid #E2E8F0',
+              borderRadius: '0.75rem',
+              padding: '1.5rem',
+              marginBottom: '1.5rem'
+            }}>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                  <div style={{
+                    width: '3rem',
+                    height: '3rem',
+                    backgroundColor: '#2563EB',
+                    borderRadius: '0.5rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}>
+                    <span style={{ fontSize: '1.25rem', color: '#FFFFFF' }}>💻</span>
+                  </div>
+                  <div>
+                    <h3 style={{
+                      fontSize: '1.125rem',
+                      fontWeight: '600',
+                      color: '#1F2937'
+                    }}>Download for Windows</h3>
+                    <p style={{
+                      fontSize: '0.875rem',
+                      color: '#6B7280'
+                    }}>Windows 10/11</p>
+                    <p style={{
+                      fontSize: '0.75rem',
+                      color: '#9CA3AF',
+                      marginTop: '0.25rem'
+                    }}>MSI Installer • ~70MB download</p>
                   </div>
                 </div>
-
-                <Separator />
-
-                {/* Other Platforms */}
-                <div>
-                  <h3 className="font-medium text-sidebar-active-text mb-4">Other Platforms</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="flex items-center gap-3 p-4 bg-gradient-subtle rounded-lg border border-soft-border opacity-60">
-                      <Smartphone className="w-5 h-5 text-warm-muted" />
-                      <div>
-                        <p className="font-medium text-sidebar-active-text">macOS, Linux, Mobile</p>
-                        <p className="text-sm text-warm-muted">Coming soon</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-center p-4">
-                      <Button variant="action-chip" disabled>
-                        View Options
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ) : (
-          <Card className="bg-glass-card/80 border-glass-border/60 shadow-glass rounded-2xl backdrop-blur-sm">
-            <CardContent className="p-8">
-              <div className="text-center">
-                <div className="w-20 h-20 bg-red-50 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                  <svg className="w-10 h-10 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <h2 className="text-xl font-bold text-sidebar-active-text mb-3 tracking-tight">No Active Subscription</h2>
-                <p className="text-warm-muted mb-8 leading-relaxed max-w-md mx-auto">You need an active subscription to download Paira Bot.</p>
-                <Button
-                  onClick={() => router.push('/')}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-10"
+                <a
+                  href="/paira-bot-setup.msi"
+                  download="paira-bot-setup.msi"
+                  style={{
+                    backgroundColor: '#2563EB',
+                    color: '#FFFFFF',
+                    border: 'none',
+                    borderRadius: '0.5rem',
+                    padding: '0.75rem 1.5rem',
+                    fontSize: '0.875rem',
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                    textDecoration: 'none',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    transition: 'background-color 0.2s'
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#1D4ED8'}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#2563EB'}
                 >
-                  Subscribe Now
-                </Button>
+                  <span>⬇️</span>
+                  Download Now
+                </a>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+
+            {/* Other Platforms */}
+            <div>
+              <h3 style={{
+                fontSize: '1.125rem',
+                fontWeight: '500',
+                color: '#1F2937',
+                marginBottom: '1rem'
+              }}>Other Platforms</h3>
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+                gap: '1rem'
+              }}>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.75rem',
+                  padding: '1rem',
+                  background: 'linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%)',
+                  border: '1px solid #E2E8F0',
+                  borderRadius: '0.5rem',
+                  opacity: 0.6
+                }}>
+                  <span style={{ fontSize: '1.25rem' }}>📱</span>
+                  <div>
+                    <p style={{
+                      fontSize: '0.875rem',
+                      fontWeight: '500',
+                      color: '#1F2937'
+                    }}>macOS, Linux, Mobile</p>
+                    <p style={{
+                      fontSize: '0.75rem',
+                      color: '#6B7280'
+                    }}>Coming soon</p>
+                  </div>
+                </div>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '1rem'
+                }}>
+                  <button
+                    style={{
+                      backgroundColor: '#F3F4F6',
+                      color: '#6B7280',
+                      border: '1px solid #D1D5DB',
+                      borderRadius: '0.5rem',
+                      padding: '0.75rem 1.5rem',
+                      fontSize: '0.875rem',
+                      fontWeight: '600',
+                      cursor: 'not-allowed',
+                      opacity: 0.6
+                    }}
+                    disabled
+                  >
+                    View Options
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div style={{
+            backgroundColor: 'rgba(255, 255, 255, 0.8)',
+            backdropFilter: 'blur(8px)',
+            border: '1px solid rgba(229, 231, 235, 0.6)',
+            borderRadius: '1rem',
+            padding: '2rem',
+            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
+            textAlign: 'center'
+          }}>
+            <div style={{
+              width: '5rem',
+              height: '5rem',
+              backgroundColor: '#FEF2F2',
+              borderRadius: '1rem',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 1.5rem'
+            }}>
+              <span style={{ fontSize: '2rem' }}>⚠️</span>
+            </div>
+            <h2 style={{
+              fontSize: '1.5rem',
+              fontWeight: 'bold',
+              color: '#1F2937',
+              marginBottom: '0.75rem'
+            }}>No Active Subscription</h2>
+            <p style={{
+              color: '#6B7280',
+              marginBottom: '2rem',
+              maxWidth: '28rem',
+              margin: '0 auto 2rem',
+              lineHeight: '1.6'
+            }}>You need an active subscription to download Paira Bot.</p>
+            <button
+              onClick={() => router.push('/')}
+              style={{
+                backgroundColor: '#2563EB',
+                color: '#FFFFFF',
+                border: 'none',
+                borderRadius: '0.5rem',
+                padding: '0.75rem 2.5rem',
+                fontSize: '1rem',
+                fontWeight: '600',
+                cursor: 'pointer',
+                transition: 'background-color 0.2s'
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#1D4ED8'}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#2563EB'}
+            >
+              Subscribe Now
+            </button>
+          </div>
         )}
       </div>
     </div>

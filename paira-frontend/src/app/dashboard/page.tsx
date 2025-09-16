@@ -302,7 +302,7 @@ export default function Dashboard() {
           }}>
             <div>
               <h1 style={{
-                fontSize: '2.25rem',
+                fontSize: '1.875rem',
                 fontWeight: '600',
                 color: '#1F2937',
                 marginBottom: '0.5rem'
@@ -321,34 +321,6 @@ export default function Dashboard() {
               }}>
                 Manage your subscription and download the latest version of Paira Bot.
               </p>
-            </div>
-            <div style={{ display: 'flex', gap: '0.5rem' }}>
-              <button style={{
-                width: '2.5rem',
-                height: '2.5rem',
-                borderRadius: '0.5rem',
-                backgroundColor: '#F3F4F6',
-                border: 'none',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}>
-                <span style={{ fontSize: '1rem' }}>🔔</span>
-              </button>
-              <button style={{
-                width: '2.5rem',
-                height: '2.5rem',
-                borderRadius: '0.5rem',
-                backgroundColor: '#F3F4F6',
-                border: 'none',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}>
-                <span style={{ fontSize: '1rem' }}>⚙️</span>
-              </button>
             </div>
           </div>
         </div>
@@ -473,7 +445,7 @@ export default function Dashboard() {
                     alignItems: 'center',
                     justifyContent: 'center'
                   }}>
-                    <span style={{ fontSize: '1.25rem', color: '#FFFFFF' }}>💻</span>
+                    <span style={{ fontSize: '1.25rem', color: '#FFFFFF' }}>🪟</span>
                   </div>
                   <div>
                     <h3 style={{

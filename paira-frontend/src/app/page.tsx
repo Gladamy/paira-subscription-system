@@ -23,7 +23,7 @@ export default function Home() {
     try {
       const token = localStorage.getItem('paira_auth_token');
       if (!token) {
-        setShowAuth(true);
+        router.push('/auth/signin');
         return;
       }
 

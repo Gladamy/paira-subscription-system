@@ -2,11 +2,25 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { CheckCircle, Calendar, Download, Monitor, Smartphone, User, Settings, LogOut, ChevronDown } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
+import {
+  Bell,
+  Settings,
+  Download,
+  Monitor,
+  Smartphone,
+  Check,
+  User,
+  LogOut,
+  ChevronDown
+} from "lucide-react";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'https://api.paira.live';
 
-interface User {
+interface UserProfile {
   id: string;
   email: string;
   created_at?: string;
@@ -21,7 +35,7 @@ interface Subscription {
 }
 
 // Header Component
-const Header = ({ user, onLogout }: { user: User | null; onLogout: () => void }) => {
+const Header = ({ user, onLogout }: { user: UserProfile | null; onLogout: () => void }) => {
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
 
   return (
@@ -80,7 +94,7 @@ const Header = ({ user, onLogout }: { user: User | null; onLogout: () => void })
 // Main Dashboard Component
 export default function Dashboard() {
   const router = useRouter();
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<UserProfile | null>(null);
   const [subscription, setSubscription] = useState<Subscription | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -138,10 +152,10 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-3"></div>
-          <p className="text-sm text-gray-600">Loading dashboard...</p>
+          <p className="text-sm text-slate-600">Loading dashboard...</p>
         </div>
       </div>
     );
@@ -149,15 +163,15 @@ export default function Dashboard() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
         <div className="border border-red-200 rounded-xl p-6 shadow-sm bg-white max-w-sm w-full text-center">
           <div className="text-red-500 mb-3">
             <svg className="w-10 h-10 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
-          <h1 className="text-lg font-semibold text-gray-900 mb-3">Error</h1>
-          <p className="text-sm text-gray-600 mb-4">{error}</p>
+          <h1 className="text-lg font-semibold text-slate-900 mb-3">Error</h1>
+          <p className="text-sm text-slate-600 mb-4">{error}</p>
           <button
             onClick={() => router.push('/')}
             className="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200"
@@ -170,143 +184,143 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50/30" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+    <div className="min-h-screen bg-slate-50" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
       <Header user={user} onLogout={handleLogout} />
 
-      <div className="max-w-7xl mx-auto px-8 py-12">
-        {/* Welcome Section */}
-        <div className="mb-12">
-          <div className="flex items-center justify-between">
-            <div className="space-y-2">
-              <h1 className="text-2xl font-bold text-gray-900 tracking-tight">
-                Welcome back!
-              </h1>
-              <p className="text-gray-600 font-medium">
-                {user?.email}
-              </p>
-            </div>
-            <div className="text-right max-w-md">
-              <p className="text-gray-500 leading-relaxed">
-                Manage your subscription and download the latest version of Paira Bot.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Subscription Status Card */}
-        <div className="bg-white rounded-2xl border border-gray-200/60 p-8 mb-10 shadow-sm">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold text-gray-900 tracking-tight">Subscription Status</h2>
-            <div className={`flex items-center px-4 py-2 rounded-full text-sm font-semibold ${
-              subscription?.status === 'active'
-                ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                : 'bg-amber-50 text-amber-700 border border-amber-200'
-            }`}>
-              <CheckCircle size={16} className="mr-2" />
-              {subscription?.status === 'active' ? 'Active' : 'Inactive'}
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Plan */}
-            <div className="space-y-3">
-              <div className="text-sm font-semibold text-gray-600 uppercase tracking-wider">Current Plan</div>
-              <div className="text-3xl font-bold text-gray-900">{subscription?.plan || 'N/A'}</div>
-            </div>
-
-            {/* Expires */}
-            <div className="space-y-3">
-              <div className="text-sm font-semibold text-gray-600 uppercase tracking-wider">Expires On</div>
-              <div className="flex items-center text-xl font-semibold text-gray-900">
-                <Calendar size={18} className="mr-3 text-gray-400" />
-                {subscription?.current_period_end
-                  ? new Date(subscription.current_period_end).toLocaleDateString('en-US', {
-                      year: 'numeric',
-                      month: 'short',
-                      day: 'numeric'
-                    })
-                  : 'N/A'
-                }
+      <div className="max-w-6xl mx-auto p-8">
+        {/* Enhanced Greeting Card */}
+        <Card className="bg-glass-card/80 border-glass-border/60 shadow-glass rounded-2xl backdrop-blur-sm mb-8">
+          <CardContent className="p-8">
+            <div className="flex items-start justify-between">
+              <div className="space-y-2">
+                <h1 className="text-3xl font-semibold text-sidebar-active-text">
+                  Welcome back!
+                </h1>
+                <p className="text-warm-muted">{user?.email}</p>
+                <p className="text-warm-muted mt-3 max-w-2xl">
+                  Manage your subscription and download the latest version of Paira Bot.
+                </p>
+              </div>
+              <div className="flex items-center gap-2">
+                <Button variant="icon-button" size="icon">
+                  <Bell className="w-4 h-4" />
+                </Button>
+                <Button variant="icon-button" size="icon">
+                  <Settings className="w-4 h-4" />
+                </Button>
               </div>
             </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
+
+        {/* Subscription Status */}
+        <Card className="bg-glass-card/80 border-glass-border/60 shadow-glass rounded-2xl backdrop-blur-sm mb-8">
+          <CardContent className="p-8">
+            <h2 className="text-xl font-semibold text-sidebar-active-text mb-6">Subscription Status</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="space-y-2">
+                <p className="text-sm text-warm-muted">Status</p>
+                <div className="flex items-center gap-2">
+                  <Badge className="bg-green-50 text-green-700 hover:bg-green-50">
+                    <Check className="w-3 h-3 mr-1" />
+                    {subscription?.status === 'active' ? 'Active' : 'Inactive'}
+                  </Badge>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <p className="text-sm text-warm-muted">Current Plan</p>
+                <p className="font-semibold text-sidebar-active-text">{subscription?.plan || 'N/A'}</p>
+              </div>
+              <div className="space-y-2">
+                <p className="text-sm text-warm-muted">Expires On</p>
+                <p className="font-semibold text-sidebar-active-text">
+                  {subscription?.current_period_end
+                    ? new Date(subscription.current_period_end).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                      })
+                    : 'N/A'
+                  }
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Download Section */}
         {subscription?.status === 'active' ? (
-          <div className="bg-white rounded-2xl border border-gray-200/60 p-8 shadow-sm">
-            <div className="flex items-center justify-between mb-8">
-              <div>
-                <h2 className="text-xl font-bold text-gray-900 tracking-tight mb-2">Download Paira Bot</h2>
-                <p className="text-gray-600 leading-relaxed">Get the latest version of Paira Bot Desktop App.</p>
-              </div>
-              <div className="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center">
-                <Download size={24} className="text-blue-600" />
-              </div>
-            </div>
+          <Card className="bg-glass-card/80 border-glass-border/60 shadow-glass rounded-2xl backdrop-blur-sm">
+            <CardContent className="p-8">
+              <div className="space-y-6">
+                <div>
+                  <h2 className="text-xl font-semibold text-sidebar-active-text mb-2">Download Paira Bot</h2>
+                  <p className="text-warm-muted">Get the latest version of Paira Bot Desktop App.</p>
+                </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Windows Download */}
-              <div className="border border-gray-200 rounded-2xl p-8 hover:border-blue-300 hover:bg-blue-50/50 transition-all duration-300 group">
-                <div className="flex items-center mb-6">
-                  <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mr-4 group-hover:bg-blue-200 transition-colors">
-                    <Monitor size={20} className="text-blue-600" />
-                  </div>
-                  <div>
-                    <div className="font-semibold text-gray-900 text-lg">Download for Windows</div>
-                    <div className="text-gray-500">Windows 10/11</div>
+                {/* Windows Download */}
+                <div className="bg-gradient-subtle rounded-xl p-6 border border-soft-border">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center">
+                        <Monitor className="w-6 h-6 text-white" />
+                      </div>
+                      <div>
+                        <h3 className="font-semibold text-sidebar-active-text">Download for Windows</h3>
+                        <p className="text-sm text-warm-muted">Windows 10/11</p>
+                        <p className="text-xs text-warm-muted mt-1">MSI Installer • ~70MB download</p>
+                      </div>
+                    </div>
+                    <Button className="bg-blue-600 hover:bg-blue-700 text-white px-6">
+                      <Download className="w-4 h-4 mr-2" />
+                      Download Now
+                    </Button>
                   </div>
                 </div>
-                <div className="text-sm text-gray-500 mb-6 leading-relaxed">MSI Installer • ~70MB download</div>
-                <a
-                  href="/paira-bot-setup.msi"
-                  download="paira-bot-setup.msi"
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-200 flex items-center justify-center shadow-sm hover:shadow-md"
-                >
-                  <Download size={18} className="mr-2" />
-                  Download Now
-                </a>
-              </div>
 
-              {/* Other Platforms */}
-              <div className="border border-gray-200 rounded-2xl p-8 hover:border-gray-300 hover:bg-gray-50/50 transition-all duration-300 group">
-                <div className="flex items-center mb-6">
-                  <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center mr-4 group-hover:bg-gray-200 transition-colors">
-                    <Smartphone size={20} className="text-gray-600" />
-                  </div>
-                  <div>
-                    <div className="font-semibold text-gray-900 text-lg">Other Platforms</div>
-                    <div className="text-gray-500">macOS, Linux, Mobile</div>
+                <Separator />
+
+                {/* Other Platforms */}
+                <div>
+                  <h3 className="font-medium text-sidebar-active-text mb-4">Other Platforms</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="flex items-center gap-3 p-4 bg-gradient-subtle rounded-lg border border-soft-border opacity-60">
+                      <Smartphone className="w-5 h-5 text-warm-muted" />
+                      <div>
+                        <p className="font-medium text-sidebar-active-text">macOS, Linux, Mobile</p>
+                        <p className="text-sm text-warm-muted">Coming soon</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-center p-4">
+                      <Button variant="action-chip" disabled>
+                        View Options
+                      </Button>
+                    </div>
                   </div>
                 </div>
-                <div className="text-sm text-gray-500 mb-6 leading-relaxed">Coming soon</div>
-                <button
-                  onClick={() => window.open('https://paira.live/download', '_blank')}
-                  className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-4 px-6 rounded-xl transition-all duration-200 shadow-sm hover:shadow-md"
-                >
-                  View Options
-                </button>
               </div>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         ) : (
-          <div className="bg-white rounded-2xl border border-gray-200/60 p-8 shadow-sm">
-            <div className="text-center">
-              <div className="w-20 h-20 bg-red-50 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <svg className="w-10 h-10 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+          <Card className="bg-glass-card/80 border-glass-border/60 shadow-glass rounded-2xl backdrop-blur-sm">
+            <CardContent className="p-8">
+              <div className="text-center">
+                <div className="w-20 h-20 bg-red-50 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                  <svg className="w-10 h-10 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <h2 className="text-xl font-bold text-sidebar-active-text mb-3 tracking-tight">No Active Subscription</h2>
+                <p className="text-warm-muted mb-8 leading-relaxed max-w-md mx-auto">You need an active subscription to download Paira Bot.</p>
+                <Button
+                  onClick={() => router.push('/')}
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-10"
+                >
+                  Subscribe Now
+                </Button>
               </div>
-              <h2 className="text-xl font-bold text-gray-900 mb-3 tracking-tight">No Active Subscription</h2>
-              <p className="text-gray-600 mb-8 leading-relaxed max-w-md mx-auto">You need an active subscription to download Paira Bot.</p>
-              <button
-                onClick={() => router.push('/')}
-                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 px-10 rounded-xl transition-all duration-200 shadow-sm hover:shadow-md"
-              >
-                Subscribe Now
-              </button>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         )}
       </div>
     </div>

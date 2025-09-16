@@ -1,7 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 interface AuthModalProps {
   onClose: () => void;
@@ -11,13 +10,11 @@ interface AuthModalProps {
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'https://api.paira.live';
 
 export default function AuthModal({ onClose, onAuthSuccess }: AuthModalProps) {
-  const router = useRouter();
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [user, setUser] = useState<{ id: string; email: string } | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,7 +33,6 @@ export default function AuthModal({ onClose, onAuthSuccess }: AuthModalProps) {
 
       if (response.ok) {
         localStorage.setItem('paira_auth_token', data.token);
-        setUser(data.user);
         // Close modal immediately after successful authentication
         onClose();
         // Notify parent component of successful authentication

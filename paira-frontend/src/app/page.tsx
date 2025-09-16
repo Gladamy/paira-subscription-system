@@ -6,10 +6,9 @@ import AuthModal from '@/components/AuthModal';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'https://api.paira.live';
 
-// Stripe Price IDs - Update these with your actual Stripe price IDs
 const STRIPE_PRICES = {
-  monthly: process.env.NEXT_PUBLIC_STRIPE_PRICE_MONTHLY || 'price_0XXX', // Replace with your monthly price ID
-  annual: process.env.NEXT_PUBLIC_STRIPE_PRICE_ANNUAL || 'price_1XXX'    // Replace with your annual price ID
+  monthly: process.env.NEXT_PUBLIC_STRIPE_PRICE_MONTHLY || 'price_0XXX',
+  annual: process.env.NEXT_PUBLIC_STRIPE_PRICE_ANNUAL || 'price_1XXX'
 };
 
 export default function Home() {
@@ -41,10 +40,8 @@ export default function Home() {
 
       if (response.ok) {
         const data = await response.json();
-        // Redirect to Stripe checkout
         window.location.href = data.url;
       } else if (response.status === 401) {
-        // Token expired or invalid, show auth modal
         setShowAuth(true);
       } else {
         console.error('Failed to create checkout session');
@@ -120,82 +117,65 @@ export default function Home() {
       </header>
 
       {/* Main Content */}
-      <main style={{ padding: '6rem 1rem', maxWidth: '1400px', margin: '0 auto' }}>
-        {/* Hero Section */}
+      <main style={{ padding: '4rem 1rem', maxWidth: '1200px', margin: '0 auto' }}>
+        {/* Hero Section - Ultra Clean */}
         <div style={{
           textAlign: 'center',
-          padding: '6rem 0 8rem',
-          marginBottom: '6rem'
-        }}>
-          <h1 style={{
-            fontSize: '4.5rem',
-            fontWeight: 800,
-            color: '#111827',
-            marginBottom: '2rem',
-            lineHeight: '1.05',
-            letterSpacing: '-0.025em',
-            fontFamily: "'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif"
-          }}>
-            Professional Roblox<br/>
-            Trading Automation
-          </h1>
-          <p style={{
-            fontSize: '1.5rem',
-            color: '#4B5563',
-            marginBottom: '3.5rem',
-            maxWidth: '700px',
-            margin: '0 auto 3.5rem',
-            lineHeight: '1.6',
-            fontWeight: '400',
-            fontFamily: "'Inter', 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif"
-          }}>
-            Automate your Roblox trading with advanced algorithms, real-time price tracking, and secure HWID-based licensing. Available as a desktop app for the best performance.
-          </p>
-          <div style={{ marginBottom: '2rem' }}>
-            <button
-              onClick={() => handleStripeCheckout(STRIPE_PRICES.annual)}
-              style={{
-                backgroundColor: '#6366F1',
-                color: '#FFFFFF',
-                border: 'none',
-                padding: '1.25rem 3rem',
-                fontSize: '1.25rem',
-                fontWeight: 600,
-                cursor: 'pointer',
-                transition: 'all 0.2s',
-                fontFamily: "'Inter', 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif",
-                letterSpacing: '0.025em'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#5855EB';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#6366F1';
-              }}
-            >
-              {isLoggedIn ? 'Go to Dashboard' : 'Start Free Trial'}
-            </button>
-          </div>
-          <p style={{
-            fontSize: '1rem',
-            color: '#9CA3AF',
-            fontFamily: "'Inter', 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif"
-          }}>
-            ✓ No credit card required • ✓ Cancel anytime • ✓ 30-day guarantee
-          </p>
-        </div>
-
-        {/* Features Section */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-          gap: '2rem',
+          padding: '4rem 0',
           marginBottom: '4rem'
         }}>
-          <div style={{
-            padding: '2rem',
-            textAlign: 'center'
+          <h1 style={{
+            fontSize: '3.5rem',
+            fontWeight: 700,
+            color: '#111827',
+            marginBottom: '1.5rem',
+            lineHeight: '1.1',
+            fontFamily: "'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif"
           }}>
+            Professional Roblox Trading Automation
+          </h1>
+          <p style={{
+            fontSize: '1.25rem',
+            color: '#6B7280',
+            marginBottom: '2.5rem',
+            maxWidth: '600px',
+            margin: '0 auto 2.5rem',
+            lineHeight: '1.6',
+            fontWeight: '400'
+          }}>
+            Automate your Roblox trading with advanced algorithms, real-time price tracking, and secure HWID-based licensing.
+          </p>
+          <button
+            onClick={() => handleStripeCheckout(STRIPE_PRICES.annual)}
+            style={{
+              backgroundColor: '#6366F1',
+              color: '#FFFFFF',
+              border: 'none',
+              padding: '1rem 2rem',
+              fontSize: '1.125rem',
+              fontWeight: 600,
+              cursor: 'pointer',
+              transition: 'all 0.2s'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = '#5855EB';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = '#6366F1';
+            }}
+          >
+            {isLoggedIn ? 'Go to Dashboard' : 'Start Free Trial'}
+          </button>
+        </div>
+
+        {/* Features - Clean Grid */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+          gap: '3rem',
+          marginBottom: '4rem'
+        }}>
+          <div style={{ textAlign: 'center' }}>
             <h3 style={{
               fontSize: '1.25rem',
               fontWeight: 600,
@@ -210,10 +190,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div style={{
-            padding: '2rem',
-            textAlign: 'center'
-          }}>
+          <div style={{ textAlign: 'center' }}>
             <h3 style={{
               fontSize: '1.25rem',
               fontWeight: 600,
@@ -228,10 +205,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div style={{
-            padding: '2rem',
-            textAlign: 'center'
-          }}>
+          <div style={{ textAlign: 'center' }}>
             <h3 style={{
               fontSize: '1.25rem',
               fontWeight: 600,
@@ -247,39 +221,29 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Pricing Section */}
+        {/* Pricing - Minimal */}
         <div style={{
           backgroundColor: '#F9FAFB',
-          border: '1px solid #E5E7EB',
           padding: '3rem 2rem',
-          marginBottom: '4rem'
+          textAlign: 'center'
         }}>
-          <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-            <h2 style={{
-              fontSize: '2.25rem',
-              fontWeight: 700,
-              color: '#111827',
-              marginBottom: '1rem'
-            }}>Choose Your Plan</h2>
-            <p style={{
-              fontSize: '1rem',
-              color: '#6B7280'
-            }}>
-              Start free, upgrade when you're ready
-            </p>
-          </div>
+          <h2 style={{
+            fontSize: '2rem',
+            fontWeight: 700,
+            color: '#111827',
+            marginBottom: '2rem'
+          }}>Choose Your Plan</h2>
 
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
             gap: '2rem',
-            maxWidth: '800px',
+            maxWidth: '700px',
             margin: '0 auto'
           }}>
             {/* Monthly Plan */}
             <div style={{
               backgroundColor: '#FFFFFF',
-              border: '1px solid #E5E7EB',
               padding: '2rem',
               textAlign: 'center'
             }}>
@@ -300,19 +264,6 @@ export default function Home() {
                 fontSize: '0.875rem',
                 marginBottom: '2rem'
               }}>per month</div>
-              <ul style={{
-                textAlign: 'left',
-                listStyle: 'none',
-                padding: 0,
-                marginBottom: '2rem',
-                fontSize: '0.875rem',
-                color: '#374151'
-              }}>
-                <li style={{ marginBottom: '0.5rem' }}>✓ Full bot functionality</li>
-                <li style={{ marginBottom: '0.5rem' }}>✓ HWID-based licensing</li>
-                <li style={{ marginBottom: '0.5rem' }}>✓ Priority support</li>
-                <li>✓ Cancel anytime</li>
-              </ul>
               <button
                 onClick={() => handleStripeCheckout(STRIPE_PRICES.monthly)}
                 style={{
@@ -340,7 +291,6 @@ export default function Home() {
             {/* Annual Plan */}
             <div style={{
               backgroundColor: '#FFFFFF',
-              border: '2px solid #6366F1',
               padding: '2rem',
               textAlign: 'center',
               position: 'relative'
@@ -373,19 +323,6 @@ export default function Home() {
                 fontSize: '0.875rem',
                 marginBottom: '2rem'
               }}>per year</div>
-              <ul style={{
-                textAlign: 'left',
-                listStyle: 'none',
-                padding: 0,
-                marginBottom: '2rem',
-                fontSize: '0.875rem',
-                color: '#374151'
-              }}>
-                <li style={{ marginBottom: '0.5rem' }}>✓ All Monthly features</li>
-                <li style={{ marginBottom: '0.5rem' }}>✓ 2 months free</li>
-                <li style={{ marginBottom: '0.5rem' }}>✓ Exclusive beta access</li>
-                <li>✓ Premium support</li>
-              </ul>
               <button
                 onClick={() => handleStripeCheckout(STRIPE_PRICES.annual)}
                 style={{
@@ -410,20 +347,6 @@ export default function Home() {
               </button>
             </div>
           </div>
-
-          <div style={{
-            textAlign: 'center',
-            marginTop: '3rem',
-            paddingTop: '2rem',
-            borderTop: '1px solid #E5E7EB'
-          }}>
-            <p style={{
-              fontSize: '0.875rem',
-              color: '#6B7280'
-            }}>
-              Secure payments powered by Stripe • 30-day money-back guarantee
-            </p>
-          </div>
         </div>
       </main>
 
@@ -431,7 +354,8 @@ export default function Home() {
       <footer style={{
         backgroundColor: '#F9FAFB',
         borderTop: '1px solid #E5E7EB',
-        padding: '2rem 0'
+        padding: '2rem 0',
+        marginTop: '4rem'
       }}>
         <div style={{
           maxWidth: '1200px',

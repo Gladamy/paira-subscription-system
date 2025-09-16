@@ -261,7 +261,7 @@ export default function Home() {
               color: '#475569',
               marginBottom: '3rem',
               fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
-            }}>Experience the professional desktop interface you'll use to automate your Roblox trading</p>
+            }}>Experience the professional desktop interface you&apos;ll use to automate your Roblox trading</p>
 
             {/* Mock Desktop App UI */}
             <div style={{

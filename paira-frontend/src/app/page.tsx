@@ -56,14 +56,15 @@ export default function Home() {
   return (
     <div style={{
       minHeight: '100vh',
-      backgroundColor: '#FFFFFF',
-      fontFamily: "'Inter', 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif",
-      color: '#111827'
+      background: 'linear-gradient(135deg, #FAFAFA 0%, #F5F5F5 100%)',
+      fontFamily: "'Inter', 'SF Pro Display', system-ui, sans-serif",
+      color: '#0F172A'
     }}>
       {/* Header */}
       <header style={{
-        backgroundColor: '#FFFFFF',
-        borderBottom: '1px solid #E5E7EB',
+        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+        backdropFilter: 'blur(10px)',
+        borderBottom: '1px solid rgba(15, 23, 42, 0.1)',
         position: 'sticky',
         top: 0,
         zIndex: 50
@@ -82,32 +83,37 @@ export default function Home() {
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <h1 style={{
                 fontSize: '1.5rem',
-                fontWeight: 600,
-                color: '#111827'
+                fontWeight: 700,
+                color: '#0F172A',
+                letterSpacing: '-0.025em'
               }}>Paira</h1>
               <span style={{
                 marginLeft: '0.5rem',
                 fontSize: '0.875rem',
-                color: '#6B7280'
+                color: '#475569',
+                fontWeight: 500
               }}>Bot</span>
             </div>
             <button
               onClick={isLoggedIn ? () => router.push('/dashboard') : () => setShowAuth(true)}
               style={{
                 backgroundColor: 'transparent',
-                border: '1px solid #E5E7EB',
-                color: '#374151',
+                border: '1px solid rgba(15, 23, 42, 0.2)',
+                color: '#0F172A',
                 padding: '0.5rem 1rem',
                 fontSize: '0.875rem',
                 fontWeight: 500,
                 cursor: 'pointer',
-                transition: 'all 0.2s'
+                transition: 'all 0.2s',
+                borderRadius: '0.375rem'
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#F9FAFB';
+                e.currentTarget.style.backgroundColor = 'rgba(15, 23, 42, 0.05)';
+                e.currentTarget.style.borderColor = 'rgba(15, 23, 42, 0.3)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = 'transparent';
+                e.currentTarget.style.borderColor = 'rgba(15, 23, 42, 0.2)';
               }}
             >
               {isLoggedIn ? 'Dashboard' : 'Get Started'}
@@ -126,42 +132,51 @@ export default function Home() {
         }}>
           <h1 style={{
             fontSize: '3.5rem',
-            fontWeight: 700,
-            color: '#111827',
+            fontWeight: 800,
+            color: '#0F172A',
             marginBottom: '1.5rem',
-            lineHeight: '1.1',
-            fontFamily: "'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif"
+            lineHeight: '1.05',
+            letterSpacing: '-0.025em',
+            fontFamily: "'Inter', 'SF Pro Display', system-ui, sans-serif"
           }}>
             Professional Roblox Trading Automation
           </h1>
           <p style={{
             fontSize: '1.25rem',
-            color: '#6B7280',
+            color: '#475569',
             marginBottom: '2.5rem',
             maxWidth: '600px',
             margin: '0 auto 2.5rem',
             lineHeight: '1.6',
-            fontWeight: '400'
+            fontWeight: '400',
+            fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
           }}>
             Automate your Roblox trading with advanced algorithms, real-time price tracking, and secure HWID-based licensing.
           </p>
           <button
             onClick={() => handleStripeCheckout(STRIPE_PRICES.annual)}
             style={{
-              backgroundColor: '#6366F1',
+              backgroundColor: '#7C3AED',
               color: '#FFFFFF',
               border: 'none',
               padding: '1rem 2rem',
               fontSize: '1.125rem',
               fontWeight: 600,
               cursor: 'pointer',
-              transition: 'all 0.2s'
+              transition: 'all 0.2s',
+              borderRadius: '0.5rem',
+              fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif",
+              letterSpacing: '0.025em'
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#5855EB';
+              e.currentTarget.style.backgroundColor = '#6D28D9';
+              e.currentTarget.style.transform = 'translateY(-1px)';
+              e.currentTarget.style.boxShadow = '0 10px 25px rgba(124, 58, 237, 0.3)';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = '#6366F1';
+              e.currentTarget.style.backgroundColor = '#7C3AED';
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = 'none';
             }}
           >
             {isLoggedIn ? 'Go to Dashboard' : 'Start Free Trial'}
@@ -179,12 +194,14 @@ export default function Home() {
             <h3 style={{
               fontSize: '1.25rem',
               fontWeight: 600,
-              color: '#111827',
-              marginBottom: '1rem'
+              color: '#0F172A',
+              marginBottom: '1rem',
+              fontFamily: "'Inter', 'SF Pro Display', system-ui, sans-serif"
             }}>Advanced Trading Algorithms</h3>
             <p style={{
-              color: '#6B7280',
-              lineHeight: '1.6'
+              color: '#475569',
+              lineHeight: '1.6',
+              fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
             }}>
               Intelligent trade matching with RAP analysis, projected item filtering, and profit optimization.
             </p>
@@ -194,12 +211,14 @@ export default function Home() {
             <h3 style={{
               fontSize: '1.25rem',
               fontWeight: 600,
-              color: '#111827',
-              marginBottom: '1rem'
+              color: '#0F172A',
+              marginBottom: '1rem',
+              fontFamily: "'Inter', 'SF Pro Display', system-ui, sans-serif"
             }}>Real-Time Price Tracking</h3>
             <p style={{
-              color: '#6B7280',
-              lineHeight: '1.6'
+              color: '#475569',
+              lineHeight: '1.6',
+              fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
             }}>
               Live Rolimons API integration with cached pricing and automatic refresh cycles.
             </p>
@@ -209,12 +228,14 @@ export default function Home() {
             <h3 style={{
               fontSize: '1.25rem',
               fontWeight: 600,
-              color: '#111827',
-              marginBottom: '1rem'
+              color: '#0F172A',
+              marginBottom: '1rem',
+              fontFamily: "'Inter', 'SF Pro Display', system-ui, sans-serif"
             }}>Secure HWID Licensing</h3>
             <p style={{
-              color: '#6B7280',
-              lineHeight: '1.6'
+              color: '#475569',
+              lineHeight: '1.6',
+              fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
             }}>
               Device-specific licensing with automatic validation and subscription management.
             </p>
@@ -230,8 +251,9 @@ export default function Home() {
           <h2 style={{
             fontSize: '2rem',
             fontWeight: 700,
-            color: '#111827',
-            marginBottom: '2rem'
+            color: '#0F172A',
+            marginBottom: '2rem',
+            fontFamily: "'Inter', 'SF Pro Display', system-ui, sans-serif"
           }}>Choose Your Plan</h2>
 
           <div style={{
@@ -250,38 +272,43 @@ export default function Home() {
               <h3 style={{
                 fontSize: '1.25rem',
                 fontWeight: 600,
-                color: '#111827',
-                marginBottom: '1rem'
+                color: '#0F172A',
+                marginBottom: '1rem',
+                fontFamily: "'Inter', 'SF Pro Display', system-ui, sans-serif"
               }}>Monthly</h3>
               <div style={{
                 fontSize: '2.5rem',
                 fontWeight: 700,
-                color: '#6366F1',
-                marginBottom: '0.5rem'
+                color: '#7C3AED',
+                marginBottom: '0.5rem',
+                fontFamily: "'Inter', 'SF Pro Display', system-ui, sans-serif"
               }}>$0.60</div>
               <div style={{
-                color: '#6B7280',
+                color: '#475569',
                 fontSize: '0.875rem',
-                marginBottom: '2rem'
+                marginBottom: '2rem',
+                fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
               }}>per month</div>
               <button
                 onClick={() => handleStripeCheckout(STRIPE_PRICES.monthly)}
                 style={{
                   width: '100%',
-                  backgroundColor: '#6366F1',
+                  backgroundColor: '#7C3AED',
                   color: '#FFFFFF',
                   border: 'none',
                   padding: '1rem',
                   fontSize: '1rem',
                   fontWeight: 600,
                   cursor: 'pointer',
-                  transition: 'all 0.2s'
+                  transition: 'all 0.2s',
+                  borderRadius: '0.375rem',
+                  fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#5855EB';
+                  e.currentTarget.style.backgroundColor = '#6D28D9';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = '#6366F1';
+                  e.currentTarget.style.backgroundColor = '#7C3AED';
                 }}
               >
                 Select Monthly
@@ -309,38 +336,43 @@ export default function Home() {
               <h3 style={{
                 fontSize: '1.25rem',
                 fontWeight: 600,
-                color: '#111827',
-                marginBottom: '1rem'
+                color: '#0F172A',
+                marginBottom: '1rem',
+                fontFamily: "'Inter', 'SF Pro Display', system-ui, sans-serif"
               }}>Annual</h3>
               <div style={{
                 fontSize: '2.5rem',
                 fontWeight: 700,
-                color: '#6366F1',
-                marginBottom: '0.5rem'
+                color: '#7C3AED',
+                marginBottom: '0.5rem',
+                fontFamily: "'Inter', 'SF Pro Display', system-ui, sans-serif"
               }}>$54.99</div>
               <div style={{
-                color: '#6B7280',
+                color: '#475569',
                 fontSize: '0.875rem',
-                marginBottom: '2rem'
+                marginBottom: '2rem',
+                fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
               }}>per year</div>
               <button
                 onClick={() => handleStripeCheckout(STRIPE_PRICES.annual)}
                 style={{
                   width: '100%',
-                  backgroundColor: '#6366F1',
+                  backgroundColor: '#7C3AED',
                   color: '#FFFFFF',
                   border: 'none',
                   padding: '1rem',
                   fontSize: '1rem',
                   fontWeight: 600,
                   cursor: 'pointer',
-                  transition: 'all 0.2s'
+                  transition: 'all 0.2s',
+                  borderRadius: '0.375rem',
+                  fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#5855EB';
+                  e.currentTarget.style.backgroundColor = '#6D28D9';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = '#6366F1';
+                  e.currentTarget.style.backgroundColor = '#7C3AED';
                 }}
               >
                 Select Annual
@@ -364,8 +396,9 @@ export default function Home() {
           textAlign: 'center'
         }}>
           <p style={{
-            color: '#6B7280',
-            fontSize: '0.875rem'
+            color: '#475569',
+            fontSize: '0.875rem',
+            fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
           }}>
             © 2025 Paira Bot. All rights reserved.
           </p>

@@ -421,23 +421,22 @@ export default function Home() {
 
             {/* Annual Plan - Premium */}
             <div style={{
-              background: 'linear-gradient(135deg, #7C3AED 0%, #6D28D9 100%)',
-              color: '#FFFFFF',
+              backgroundColor: '#FFFFFF',
+              border: '1px solid rgba(15, 23, 42, 0.1)',
               borderRadius: '20px',
               padding: '2.5rem',
               textAlign: 'center',
-              position: 'relative',
-              transform: 'scale(1.02)',
-              boxShadow: '0 20px 25px -5px rgba(124, 58, 237, 0.3)',
-              transition: 'all 0.3s ease'
+              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+              transition: 'all 0.3s ease',
+              position: 'relative'
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'scale(1.04)';
-              e.currentTarget.style.boxShadow = '0 25px 50px -12px rgba(124, 58, 237, 0.4)';
+              e.currentTarget.style.transform = 'translateY(-4px)';
+              e.currentTarget.style.boxShadow = '0 20px 25px -5px rgba(0, 0, 0, 0.1)';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'scale(1.02)';
-              e.currentTarget.style.boxShadow = '0 20px 25px -5px rgba(124, 58, 237, 0.3)';
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1)';
             }}>
               <div style={{
                 position: 'absolute',
@@ -458,7 +457,7 @@ export default function Home() {
               <h3 style={{
                 fontSize: '1.5rem',
                 fontWeight: 700,
-                color: '#FFFFFF',
+                color: '#0F172A',
                 marginBottom: '1.5rem',
                 fontFamily: "'Inter', 'SF Pro Display', system-ui, sans-serif"
               }}>Annual</h3>
@@ -477,7 +476,7 @@ export default function Home() {
                 }}>$54.99</span>
                 <span style={{
                   fontSize: '1rem',
-                  color: 'rgba(255, 255, 255, 0.8)',
+                  color: '#64748B',
                   marginLeft: '0.5rem',
                   fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
                 }}>per year</span>
@@ -485,12 +484,12 @@ export default function Home() {
 
               <div style={{
                 fontSize: '0.875rem',
-                color: 'rgba(255, 255, 255, 0.9)',
+                color: '#475569',
                 marginBottom: '2rem',
                 fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
               }}>
                 <span style={{
-                  color: '#FFFFFF',
+                  color: '#0F172A',
                   fontWeight: 600
                 }}>2 months free</span> • Best value
               </div>
@@ -506,11 +505,11 @@ export default function Home() {
                   alignItems: 'center',
                   marginBottom: '0.75rem',
                   fontSize: '0.875rem',
-                  color: 'rgba(255, 255, 255, 0.9)',
+                  color: '#475569',
                   fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
                 }}>
                   <span style={{
-                    color: '#FFFFFF',
+                    color: '#10B981',
                     fontWeight: 600,
                     marginRight: '0.5rem',
                     fontSize: '1rem'
@@ -522,11 +521,11 @@ export default function Home() {
                   alignItems: 'center',
                   marginBottom: '0.75rem',
                   fontSize: '0.875rem',
-                  color: 'rgba(255, 255, 255, 0.9)',
+                  color: '#475569',
                   fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
                 }}>
                   <span style={{
-                    color: '#FFFFFF',
+                    color: '#10B981',
                     fontWeight: 600,
                     marginRight: '0.5rem',
                     fontSize: '1rem'
@@ -538,11 +537,11 @@ export default function Home() {
                   alignItems: 'center',
                   marginBottom: '0.75rem',
                   fontSize: '0.875rem',
-                  color: 'rgba(255, 255, 255, 0.9)',
+                  color: '#475569',
                   fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
                 }}>
                   <span style={{
-                    color: '#FFFFFF',
+                    color: '#10B981',
                     fontWeight: 600,
                     marginRight: '0.5rem',
                     fontSize: '1rem'
@@ -553,11 +552,11 @@ export default function Home() {
                   display: 'flex',
                   alignItems: 'center',
                   fontSize: '0.875rem',
-                  color: 'rgba(255, 255, 255, 0.9)',
+                  color: '#475569',
                   fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
                 }}>
                   <span style={{
-                    color: '#FFFFFF',
+                    color: '#10B981',
                     fontWeight: 600,
                     marginRight: '0.5rem',
                     fontSize: '1rem'

@@ -15,6 +15,38 @@
   --border: #F0E9E3;
   --background: #ffffff;
   --soft-shadow: 0 10px 30px rgba(0,0,0,.06);
+
+  /* Modern Glassmorphism Design System */
+  --app-bg: #f8fafc;
+  --glass-card: rgba(255, 255, 255, 0.8);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --sidebar-active-text: #1e293b;
+  --warm-muted: #64748b;
+  --soft-border: #e2e8f0;
+  --gradient-subtle: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+  --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.1);
+
+  /* Custom color palette for shadcn/ui components */
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 84% 4.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222.2 84% 4.9%;
+  --primary: 221.2 83.2% 53.3%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 210 40% 96%;
+  --secondary-foreground: 222.2 84% 4.9%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+  --accent: 210 40% 96%;
+  --accent-foreground: 222.2 84% 4.9%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --ring: 221.2 83.2% 53.3%;
+  --radius: 0.5rem;
 }
 
 @theme inline {
@@ -46,12 +78,10 @@ body {
 button {
   cursor: pointer;
   transition: all 0.2s ease;
-  border-radius: 12px;
 }
 
 input, textarea, select {
   font-family: inherit;
-  border-radius: 12px;
   border: 1px solid var(--border);
   background: var(--background);
 }
@@ -82,17 +112,9 @@ p {
   color: var(--muted);
 }
 
-/* Soft shadows and rounded corners */
+/* Soft shadows */
 .shadow-soft {
   box-shadow: var(--soft-shadow);
-}
-
-.rounded-soft {
-  border-radius: 12px;
-}
-
-.rounded-large {
-  border-radius: 16px;
 }
 
 /* Focus styles */
@@ -120,45 +142,3 @@ textarea:focus {
   color: var(--text-color);
 }
 
-/* Enhanced Neumorphism Shadows */
-.shadow-neumorphism {
-  box-shadow:
-    8px 8px 16px rgba(0, 0, 0, 0.1),
-    -8px -8px 16px rgba(255, 255, 255, 0.9);
-}
-
-.shadow-neumorphism-enhanced {
-  box-shadow:
-    8px 8px 16px rgba(0, 0, 0, 0.1),
-    -8px -8px 16px rgba(255, 255, 255, 0.9),
-    inset 2px 2px 4px rgba(255, 255, 255, 0.5),
-    inset -2px -2px 4px rgba(0, 0, 0, 0.05);
-}
-
-.shadow-neumorphism-sm {
-  box-shadow:
-    4px 4px 8px rgba(0, 0, 0, 0.08),
-    -4px -4px 8px rgba(255, 255, 255, 0.9),
-    inset 1px 1px 2px rgba(255, 255, 255, 0.5),
-    inset -1px -1px 2px rgba(0, 0, 0, 0.03);
-}
-
-.shadow-neumorphism-active {
-  box-shadow:
-    inset 4px 4px 8px rgba(0, 0, 0, 0.1),
-    inset -4px -4px 8px rgba(255, 255, 255, 0.8),
-    2px 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-.shadow-neumorphism-hover {
-  box-shadow:
-    6px 6px 12px rgba(0, 0, 0, 0.12),
-    -6px -6px 12px rgba(255, 255, 255, 0.95),
-    inset 2px 2px 4px rgba(255, 255, 255, 0.6),
-    inset -2px -2px 4px rgba(0, 0, 0, 0.04);
-}
-
-/* Rounded neumorphism elements */
-.rounded-neumorphism {
-  border-radius: 12px;
-}

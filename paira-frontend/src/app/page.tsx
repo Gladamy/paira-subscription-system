@@ -163,19 +163,14 @@ export default function Home() {
                 fontWeight: 600,
                 cursor: 'pointer',
                 transition: 'all 0.2s',
-                borderRadius: '0.5rem',
                 fontFamily: "'Inter', 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif",
                 letterSpacing: '0.025em'
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = '#5855EB';
-                e.currentTarget.style.transform = 'translateY(-1px)';
-                e.currentTarget.style.boxShadow = '0 10px 25px rgba(99, 102, 241, 0.3)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = '#6366F1';
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = 'none';
               }}
             >
               {isLoggedIn ? 'Go to Dashboard' : 'Start Free Trial'}

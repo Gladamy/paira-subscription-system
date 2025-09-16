@@ -109,17 +109,19 @@ export default function Home() {
   return (
     <div style={{
       minHeight: '100vh',
-      backgroundColor: '#FFFFFF',
+      background: 'linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 50%, #E2E8F0 100%)',
       fontFamily: "'Inter', 'SF Pro', sans-serif",
       color: '#111827'
     }}>
       {/* Header */}
       <header style={{
-        backgroundColor: '#FFFFFF',
-        borderBottom: '1px solid #F3F4F6',
+        backgroundColor: 'rgba(255, 255, 255, 0.8)',
+        backdropFilter: 'blur(12px)',
+        borderBottom: '1px solid rgba(229, 231, 235, 0.3)',
         position: 'sticky',
         top: 0,
-        zIndex: 50
+        zIndex: 50,
+        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)'
       }}>
         <div style={{
           maxWidth: '80rem',
@@ -177,7 +179,14 @@ export default function Home() {
         <div style={{
           textAlign: 'center',
           padding: '4rem 0',
-          marginBottom: '4rem'
+          marginBottom: '4rem',
+          backgroundColor: 'rgba(255, 255, 255, 0.6)',
+          backdropFilter: 'blur(12px)',
+          border: '1px solid rgba(229, 231, 235, 0.3)',
+          borderRadius: '1rem',
+          margin: '2rem auto',
+          maxWidth: '80rem',
+          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)'
         }}>
           <h1 style={{
             fontSize: '3.5rem',
@@ -224,11 +233,14 @@ export default function Home() {
 
         {/* Download Section */}
         <div style={{
-          backgroundColor: '#F0F9FF',
-          border: '1px solid #E0F2FE',
+          backgroundColor: 'rgba(240, 249, 255, 0.6)',
+          backdropFilter: 'blur(12px)',
+          border: '1px solid rgba(224, 242, 254, 0.5)',
           padding: '3rem 2rem',
           textAlign: 'center',
-          marginBottom: '4rem'
+          marginBottom: '4rem',
+          borderRadius: '1rem',
+          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)'
         }}>
           <h2 style={{
             fontSize: '2rem',
@@ -315,8 +327,11 @@ export default function Home() {
         }}>
           <div style={{
             padding: '2rem',
-            backgroundColor: '#F9FAFB',
-            border: '1px solid #F3F4F6'
+            backgroundColor: 'rgba(249, 250, 251, 0.6)',
+            backdropFilter: 'blur(12px)',
+            border: '1px solid rgba(243, 244, 246, 0.5)',
+            borderRadius: '0.75rem',
+            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)'
           }}>
             <h3 style={{
               fontSize: '1.25rem',
@@ -331,8 +346,11 @@ export default function Home() {
 
           <div style={{
             padding: '2rem',
-            backgroundColor: '#F9FAFB',
-            border: '1px solid #F3F4F6'
+            backgroundColor: 'rgba(249, 250, 251, 0.6)',
+            backdropFilter: 'blur(12px)',
+            border: '1px solid rgba(243, 244, 246, 0.5)',
+            borderRadius: '0.75rem',
+            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)'
           }}>
             <h3 style={{
               fontSize: '1.25rem',
@@ -347,8 +365,11 @@ export default function Home() {
 
           <div style={{
             padding: '2rem',
-            backgroundColor: '#F9FAFB',
-            border: '1px solid #F3F4F6'
+            backgroundColor: 'rgba(249, 250, 251, 0.6)',
+            backdropFilter: 'blur(12px)',
+            border: '1px solid rgba(243, 244, 246, 0.5)',
+            borderRadius: '0.75rem',
+            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)'
           }}>
             <h3 style={{
               fontSize: '1.25rem',
@@ -364,10 +385,13 @@ export default function Home() {
 
         {/* Pricing Section */}
         <div id="pricing" style={{
-          backgroundColor: '#F9FAFB',
-          border: '1px solid #F3F4F6',
+          backgroundColor: 'rgba(249, 250, 251, 0.6)',
+          backdropFilter: 'blur(12px)',
+          border: '1px solid rgba(243, 244, 246, 0.5)',
           padding: '3rem 2rem',
-          textAlign: 'center'
+          textAlign: 'center',
+          borderRadius: '1rem',
+          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)'
         }}>
           <h2 style={{
             fontSize: '2.25rem',
@@ -535,11 +559,14 @@ export default function Home() {
 
 
           <div style={{
-            backgroundColor: '#FEF2F2',
-            border: '1px solid #FECACA',
+            backgroundColor: 'rgba(254, 242, 242, 0.6)',
+            backdropFilter: 'blur(12px)',
+            border: '1px solid rgba(254, 202, 202, 0.5)',
             padding: '2rem',
             textAlign: 'center',
-            marginTop: '2rem'
+            marginTop: '2rem',
+            borderRadius: '1rem',
+            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)'
           }}>
             <div style={{ marginBottom: '1rem' }}>
               <div style={{
@@ -588,10 +615,12 @@ export default function Home() {
 
       {/* Footer */}
       <footer style={{
-        backgroundColor: '#F9FAFB',
-        borderTop: '1px solid #F3F4F6',
+        backgroundColor: 'rgba(249, 250, 251, 0.6)',
+        backdropFilter: 'blur(12px)',
+        borderTop: '1px solid rgba(243, 244, 246, 0.5)',
         padding: '3rem 0',
-        marginTop: '4rem'
+        marginTop: '4rem',
+        boxShadow: '0 -2px 8px rgba(0, 0, 0, 0.04)'
       }}>
         <div style={{
           maxWidth: '80rem',

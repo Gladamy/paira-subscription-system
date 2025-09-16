@@ -91,8 +91,29 @@ function SuccessPageContent() {
   }
 
   return (
-    <div className="min-h-screen bg-white flex flex-col items-center justify-center px-6 py-12">
-      <div className="w-full max-w-md mx-auto text-center">
+    <div style={{
+      minHeight: '100vh',
+      background: 'linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 50%, #E2E8F0 100%)',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '3rem 1.5rem',
+      fontFamily: "'Inter', 'SF Pro', sans-serif",
+      color: '#111827'
+    }}>
+      <div style={{
+        width: '100%',
+        maxWidth: '28rem',
+        margin: '0 auto',
+        textAlign: 'center',
+        backgroundColor: 'rgba(255, 255, 255, 0.6)',
+        backdropFilter: 'blur(12px)',
+        border: '1px solid rgba(229, 231, 235, 0.3)',
+        borderRadius: '1rem',
+        padding: '2rem',
+        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)'
+      }}>
 
         {/* Success Checkmark */}
         <div className="mb-8">
@@ -127,34 +148,78 @@ function SuccessPageContent() {
         )}
 
         {/* Download Section */}
-        <div className="space-y-6">
-          <h2 className="text-xl font-semibold text-gray-900" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif' }}>
+        <div style={{ marginTop: '2rem' }}>
+          <h2 style={{
+            fontSize: '1.25rem',
+            fontWeight: '600',
+            color: '#111827',
+            marginBottom: '1.5rem',
+            fontFamily: "'Inter', 'SF Pro', sans-serif"
+          }}>
             Download Paira Bot
           </h2>
 
-          <div className="space-y-3">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
             <a
               href="/paira-bot-setup.msi"
               download="paira-bot-setup.msi"
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-4 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-3 shadow-sm"
-              style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif' }}
+              style={{
+                width: '100%',
+                backgroundColor: 'rgba(37, 99, 235, 0.8)',
+                backdropFilter: 'blur(8px)',
+                color: '#FFFFFF',
+                border: '1px solid rgba(37, 99, 235, 0.3)',
+                borderRadius: '0.5rem',
+                padding: '1rem 1.5rem',
+                fontSize: '1rem',
+                fontWeight: '500',
+                cursor: 'pointer',
+                textDecoration: 'none',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.75rem',
+                transition: 'all 0.2s',
+                fontFamily: "'Inter', 'SF Pro', sans-serif",
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = 'rgba(29, 78, 216, 0.8)';
+                e.currentTarget.style.transform = 'translateY(-1px)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = 'rgba(37, 99, 235, 0.8)';
+                e.currentTarget.style.transform = 'translateY(0)';
+              }}
             >
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
-              </svg>
+              <span style={{ fontSize: '1.25rem', fontWeight: 'bold' }}>↓</span>
               <span>Download for Windows</span>
             </a>
 
-            <a
-              href="#"
-              className="w-full bg-gray-600 hover:bg-gray-700 text-white font-medium py-4 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-3 shadow-sm"
-              style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif' }}
+            <button
+              style={{
+                width: '100%',
+                backgroundColor: 'rgba(107, 114, 128, 0.6)',
+                backdropFilter: 'blur(8px)',
+                color: '#FFFFFF',
+                border: '1px solid rgba(107, 114, 128, 0.3)',
+                borderRadius: '0.5rem',
+                padding: '1rem 1.5rem',
+                fontSize: '1rem',
+                fontWeight: '500',
+                cursor: 'not-allowed',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.75rem',
+                fontFamily: "'Inter', 'SF Pro', sans-serif",
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
+                opacity: 0.6
+              }}
             >
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l2-2a1 1 0 11-1.414 1.414L11 8.414V12a1 1 0 11-2 0V8.414L8.707 7.293z" clipRule="evenodd" />
-              </svg>
+              <span style={{ fontSize: '1.25rem', fontWeight: 'bold' }}>M</span>
               <span>Download for macOS</span>
-            </a>
+            </button>
           </div>
 
           <p className="text-sm text-gray-500 mt-6" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif' }}>
@@ -163,11 +228,22 @@ function SuccessPageContent() {
         </div>
 
         {/* Clean Back Link */}
-        <div className="mt-12">
+        <div style={{ marginTop: '3rem' }}>
           <button
             onClick={() => window.location.href = '/dashboard'}
-            className="text-sm text-gray-400 hover:text-gray-600 transition-colors duration-200"
-            style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif' }}
+            style={{
+              fontSize: '0.875rem',
+              color: '#6B7280',
+              backgroundColor: 'transparent',
+              border: 'none',
+              cursor: 'pointer',
+              transition: 'color 0.2s',
+              fontFamily: "'Inter', 'SF Pro', sans-serif",
+              padding: '0.5rem 1rem',
+              borderRadius: '0.5rem'
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.color = '#374151'}
+            onMouseLeave={(e) => e.currentTarget.style.color = '#6B7280'}
           >
             ← Go to Dashboard
           </button>

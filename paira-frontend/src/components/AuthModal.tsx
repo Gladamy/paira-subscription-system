@@ -54,12 +54,19 @@ export default function AuthModal({ onClose, onAuthSuccess }: AuthModalProps) {
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 p-4" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
       <div style={{
-        backgroundColor: '#FFFFFF',
+        backgroundColor: 'rgba(255, 255, 255, 0.8)',
+        backdropFilter: 'blur(12px)',
         maxWidth: '28rem',
         width: '100%',
-        border: '1px solid #E5E7EB'
+        border: '1px solid rgba(229, 231, 235, 0.3)',
+        borderRadius: '1rem',
+        boxShadow: '0 4px 16px rgba(0, 0, 0, 0.1)'
       }}>
-        <div className="p-6" style={{ borderBottom: '1px solid #E5E7EB' }}>
+        <div className="p-6" style={{
+          borderBottom: '1px solid rgba(229, 231, 235, 0.3)',
+          backgroundColor: 'rgba(255, 255, 255, 0.6)',
+          backdropFilter: 'blur(8px)'
+        }}>
           <div className="flex justify-between items-center">
             <h2 className="text-2xl font-medium" style={{ color: '#0f0f0f', fontWeight: 500 }}>
               {isLogin ? 'Sign In' : 'Create Account'}
@@ -72,7 +79,10 @@ export default function AuthModal({ onClose, onAuthSuccess }: AuthModalProps) {
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+        <form onSubmit={handleSubmit} className="p-6 space-y-4" style={{
+          backgroundColor: 'rgba(255, 255, 255, 0.4)',
+          backdropFilter: 'blur(6px)'
+        }}>
           <div>
             <label className="block text-sm font-medium mb-1" style={{ color: '#374151' }}>Email</label>
             <input
@@ -149,7 +159,11 @@ export default function AuthModal({ onClose, onAuthSuccess }: AuthModalProps) {
           </button>
         </form>
 
-        <div className="px-6 pb-6 text-center">
+        <div className="px-6 pb-6 text-center" style={{
+          backgroundColor: 'rgba(255, 255, 255, 0.4)',
+          backdropFilter: 'blur(6px)',
+          borderTop: '1px solid rgba(229, 231, 235, 0.3)'
+        }}>
           <button
             onClick={() => setIsLogin(!isLogin)}
             style={{

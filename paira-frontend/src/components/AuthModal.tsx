@@ -54,19 +54,17 @@ export default function AuthModal({ onClose, onAuthSuccess }: AuthModalProps) {
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 p-4" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
       <div style={{
-        backgroundColor: 'rgba(255, 255, 255, 0.95)',
-        backdropFilter: 'blur(25px)',
+        backgroundColor: '#FFFFFF',
         maxWidth: '28rem',
         width: '100%',
-        border: '2px solid rgba(59, 130, 246, 0.3)',
-        borderRadius: '1.5rem',
-        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)',
+        border: '1px solid rgba(15, 23, 42, 0.1)',
+        borderRadius: '20px',
+        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
         position: 'relative'
       }}>
         <div className="p-6" style={{
-          borderBottom: '1px solid rgba(229, 231, 235, 0.3)',
-          backgroundColor: 'rgba(255, 255, 255, 0.6)',
-          backdropFilter: 'blur(8px)'
+          borderBottom: '1px solid rgba(15, 23, 42, 0.1)',
+          backgroundColor: '#F8FAFC'
         }}>
           <div className="flex justify-between items-center">
             <h2 className="text-2xl font-medium" style={{ color: '#0f0f0f', fontWeight: 500 }}>
@@ -81,8 +79,7 @@ export default function AuthModal({ onClose, onAuthSuccess }: AuthModalProps) {
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-4" style={{
-          backgroundColor: 'rgba(255, 255, 255, 0.4)',
-          backdropFilter: 'blur(6px)'
+          backgroundColor: '#FFFFFF'
         }}>
           <div>
             <label className="block text-sm font-medium mb-1" style={{ color: '#374151' }}>Email</label>
@@ -142,18 +139,20 @@ export default function AuthModal({ onClose, onAuthSuccess }: AuthModalProps) {
             style={{
               width: '100%',
               padding: '1rem',
-              backgroundColor: '#6B46C1',
-              color: '#FFFFFF',
+              backgroundColor: '#FFFFFF',
+              color: '#1F2937',
+              border: '1px solid rgba(15, 23, 42, 0.1)',
               fontSize: '1rem',
-              fontWeight: 500,
+              fontWeight: 700,
               cursor: loading ? 'not-allowed' : 'pointer',
-              opacity: loading ? 0.5 : 1
+              opacity: loading ? 0.5 : 1,
+              letterSpacing: '0.025em'
             }}
             onMouseEnter={(e) => {
-              if (!loading) e.currentTarget.style.backgroundColor = '#553C9A';
+              if (!loading) e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
             }}
             onMouseLeave={(e) => {
-              if (!loading) e.currentTarget.style.backgroundColor = '#6B46C1';
+              if (!loading) e.currentTarget.style.backgroundColor = '#FFFFFF';
             }}
           >
             {loading ? 'Please wait...' : (isLogin ? 'Sign In' : 'Create Account')}
@@ -161,9 +160,8 @@ export default function AuthModal({ onClose, onAuthSuccess }: AuthModalProps) {
         </form>
 
         <div className="px-6 pb-6 text-center" style={{
-          backgroundColor: 'rgba(255, 255, 255, 0.4)',
-          backdropFilter: 'blur(6px)',
-          borderTop: '1px solid rgba(229, 231, 235, 0.3)'
+          backgroundColor: '#F8FAFC',
+          borderTop: '1px solid rgba(15, 23, 42, 0.1)'
         }}>
           <button
             onClick={() => setIsLogin(!isLogin)}

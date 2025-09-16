@@ -242,53 +242,153 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Pricing - Minimal */}
+        {/* Pricing - Enhanced Professional */}
         <div style={{
-          backgroundColor: '#F9FAFB',
-          padding: '3rem 2rem',
+          backgroundColor: '#F8FAFC',
+          padding: '4rem 2rem',
           textAlign: 'center'
         }}>
-          <h2 style={{
-            fontSize: '2rem',
-            fontWeight: 700,
-            color: '#0F172A',
-            marginBottom: '2rem',
-            fontFamily: "'Inter', 'SF Pro Display', system-ui, sans-serif"
-          }}>Choose Your Plan</h2>
+          <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+            <h2 style={{
+              fontSize: '2.5rem',
+              fontWeight: 800,
+              color: '#0F172A',
+              marginBottom: '1rem',
+              letterSpacing: '-0.025em',
+              fontFamily: "'Inter', 'SF Pro Display', system-ui, sans-serif"
+            }}>Choose Your Plan</h2>
+            <p style={{
+              fontSize: '1.125rem',
+              color: '#475569',
+              marginBottom: '3rem',
+              fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
+            }}>Start free, upgrade when you're ready</p>
 
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-            gap: '2rem',
-            maxWidth: '700px',
-            margin: '0 auto'
-          }}>
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+              gap: '2rem',
+              maxWidth: '900px',
+              margin: '0 auto'
+            }}>
             {/* Monthly Plan */}
             <div style={{
               backgroundColor: '#FFFFFF',
-              padding: '2rem',
-              textAlign: 'center'
+              border: '1px solid rgba(15, 23, 42, 0.1)',
+              borderRadius: '12px',
+              padding: '2.5rem',
+              textAlign: 'center',
+              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+              transition: 'all 0.3s ease',
+              position: 'relative'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-4px)';
+              e.currentTarget.style.boxShadow = '0 20px 25px -5px rgba(0, 0, 0, 0.1)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1)';
             }}>
               <h3 style={{
-                fontSize: '1.25rem',
-                fontWeight: 600,
+                fontSize: '1.5rem',
+                fontWeight: 700,
                 color: '#0F172A',
-                marginBottom: '1rem',
+                marginBottom: '1.5rem',
                 fontFamily: "'Inter', 'SF Pro Display', system-ui, sans-serif"
               }}>Monthly</h3>
+
               <div style={{
-                fontSize: '2.5rem',
-                fontWeight: 700,
-                color: '#7C3AED',
-                marginBottom: '0.5rem',
-                fontFamily: "'Inter', 'SF Pro Display', system-ui, sans-serif"
-              }}>$0.60</div>
-              <div style={{
-                color: '#475569',
-                fontSize: '0.875rem',
-                marginBottom: '2rem',
-                fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
-              }}>per month</div>
+                display: 'flex',
+                alignItems: 'baseline',
+                justifyContent: 'center',
+                marginBottom: '1rem'
+              }}>
+                <span style={{
+                  fontSize: '3rem',
+                  fontWeight: 800,
+                  color: '#7C3AED',
+                  fontFamily: "'Inter', 'SF Pro Display', system-ui, sans-serif"
+                }}>$0.60</span>
+                <span style={{
+                  fontSize: '1rem',
+                  color: '#64748B',
+                  marginLeft: '0.5rem',
+                  fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
+                }}>per month</span>
+              </div>
+
+              <ul style={{
+                listStyle: 'none',
+                padding: 0,
+                margin: '2rem 0',
+                textAlign: 'left'
+              }}>
+                <li style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  marginBottom: '0.75rem',
+                  fontSize: '0.875rem',
+                  color: '#475569',
+                  fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
+                }}>
+                  <span style={{
+                    color: '#10B981',
+                    fontWeight: 600,
+                    marginRight: '0.5rem',
+                    fontSize: '1rem'
+                  }}>✓</span>
+                  Full bot functionality
+                </li>
+                <li style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  marginBottom: '0.75rem',
+                  fontSize: '0.875rem',
+                  color: '#475569',
+                  fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
+                }}>
+                  <span style={{
+                    color: '#10B981',
+                    fontWeight: 600,
+                    marginRight: '0.5rem',
+                    fontSize: '1rem'
+                  }}>✓</span>
+                  HWID-based licensing
+                </li>
+                <li style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  marginBottom: '0.75rem',
+                  fontSize: '0.875rem',
+                  color: '#475569',
+                  fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
+                }}>
+                  <span style={{
+                    color: '#10B981',
+                    fontWeight: 600,
+                    marginRight: '0.5rem',
+                    fontSize: '1rem'
+                  }}>✓</span>
+                  Priority support
+                </li>
+                <li style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  fontSize: '0.875rem',
+                  color: '#475569',
+                  fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
+                }}>
+                  <span style={{
+                    color: '#10B981',
+                    fontWeight: 600,
+                    marginRight: '0.5rem',
+                    fontSize: '1rem'
+                  }}>✓</span>
+                  Cancel anytime
+                </li>
+              </ul>
+
               <button
                 onClick={() => handleStripeCheckout(STRIPE_PRICES.monthly)}
                 style={{
@@ -296,89 +396,208 @@ export default function Home() {
                   backgroundColor: '#7C3AED',
                   color: '#FFFFFF',
                   border: 'none',
-                  padding: '1rem',
+                  padding: '1rem 2rem',
                   fontSize: '1rem',
                   fontWeight: 600,
                   cursor: 'pointer',
                   transition: 'all 0.2s',
-                  borderRadius: '0.375rem',
+                  borderRadius: '8px',
                   fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.backgroundColor = '#6D28D9';
+                  e.currentTarget.style.transform = 'translateY(-1px)';
+                  e.currentTarget.style.boxShadow = '0 10px 25px rgba(124, 58, 237, 0.3)';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.backgroundColor = '#7C3AED';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = 'none';
                 }}
               >
                 Select Monthly
               </button>
             </div>
 
-            {/* Annual Plan */}
+            {/* Annual Plan - Premium */}
             <div style={{
-              backgroundColor: '#FFFFFF',
-              padding: '2rem',
+              background: 'linear-gradient(135deg, #7C3AED 0%, #6D28D9 100%)',
+              color: '#FFFFFF',
+              borderRadius: '12px',
+              padding: '2.5rem',
               textAlign: 'center',
-              position: 'relative'
+              position: 'relative',
+              transform: 'scale(1.02)',
+              boxShadow: '0 20px 25px -5px rgba(124, 58, 237, 0.3)',
+              transition: 'all 0.3s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'scale(1.04)';
+              e.currentTarget.style.boxShadow = '0 25px 50px -12px rgba(124, 58, 237, 0.4)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'scale(1.02)';
+              e.currentTarget.style.boxShadow = '0 20px 25px -5px rgba(124, 58, 237, 0.3)';
             }}>
               <div style={{
                 position: 'absolute',
-                top: '-10px',
+                top: '-12px',
                 left: '50%',
                 transform: 'translateX(-50%)',
                 backgroundColor: '#10B981',
                 color: '#FFFFFF',
-                padding: '2px 8px',
+                padding: '6px 16px',
+                borderRadius: '20px',
                 fontSize: '0.75rem',
-                fontWeight: 600
+                fontWeight: 700,
+                letterSpacing: '0.025em',
+                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
               }}>Save 25%</div>
+
               <h3 style={{
-                fontSize: '1.25rem',
-                fontWeight: 600,
-                color: '#0F172A',
-                marginBottom: '1rem',
+                fontSize: '1.5rem',
+                fontWeight: 700,
+                color: '#FFFFFF',
+                marginBottom: '1.5rem',
                 fontFamily: "'Inter', 'SF Pro Display', system-ui, sans-serif"
               }}>Annual</h3>
+
               <div style={{
-                fontSize: '2.5rem',
-                fontWeight: 700,
-                color: '#7C3AED',
-                marginBottom: '0.5rem',
-                fontFamily: "'Inter', 'SF Pro Display', system-ui, sans-serif"
-              }}>$54.99</div>
+                display: 'flex',
+                alignItems: 'baseline',
+                justifyContent: 'center',
+                marginBottom: '1rem'
+              }}>
+                <span style={{
+                  fontSize: '3rem',
+                  fontWeight: 800,
+                  color: '#FFFFFF',
+                  fontFamily: "'Inter', 'SF Pro Display', system-ui, sans-serif"
+                }}>$54.99</span>
+                <span style={{
+                  fontSize: '1rem',
+                  color: 'rgba(255, 255, 255, 0.8)',
+                  marginLeft: '0.5rem',
+                  fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
+                }}>per year</span>
+              </div>
+
               <div style={{
-                color: '#475569',
                 fontSize: '0.875rem',
+                color: 'rgba(255, 255, 255, 0.9)',
                 marginBottom: '2rem',
                 fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
-              }}>per year</div>
+              }}>
+                <span style={{
+                  color: '#FFFFFF',
+                  fontWeight: 600
+                }}>2 months free</span> • Best value
+              </div>
+
+              <ul style={{
+                listStyle: 'none',
+                padding: 0,
+                margin: '2rem 0',
+                textAlign: 'left'
+              }}>
+                <li style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  marginBottom: '0.75rem',
+                  fontSize: '0.875rem',
+                  color: 'rgba(255, 255, 255, 0.9)',
+                  fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
+                }}>
+                  <span style={{
+                    color: '#FFFFFF',
+                    fontWeight: 600,
+                    marginRight: '0.5rem',
+                    fontSize: '1rem'
+                  }}>✓</span>
+                  All Monthly features
+                </li>
+                <li style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  marginBottom: '0.75rem',
+                  fontSize: '0.875rem',
+                  color: 'rgba(255, 255, 255, 0.9)',
+                  fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
+                }}>
+                  <span style={{
+                    color: '#FFFFFF',
+                    fontWeight: 600,
+                    marginRight: '0.5rem',
+                    fontSize: '1rem'
+                  }}>✓</span>
+                  2 months free
+                </li>
+                <li style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  marginBottom: '0.75rem',
+                  fontSize: '0.875rem',
+                  color: 'rgba(255, 255, 255, 0.9)',
+                  fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
+                }}>
+                  <span style={{
+                    color: '#FFFFFF',
+                    fontWeight: 600,
+                    marginRight: '0.5rem',
+                    fontSize: '1rem'
+                  }}>✓</span>
+                  Exclusive beta access
+                </li>
+                <li style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  fontSize: '0.875rem',
+                  color: 'rgba(255, 255, 255, 0.9)',
+                  fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
+                }}>
+                  <span style={{
+                    color: '#FFFFFF',
+                    fontWeight: 600,
+                    marginRight: '0.5rem',
+                    fontSize: '1rem'
+                  }}>✓</span>
+                  Premium support
+                </li>
+              </ul>
+
               <button
                 onClick={() => handleStripeCheckout(STRIPE_PRICES.annual)}
                 style={{
                   width: '100%',
-                  backgroundColor: '#7C3AED',
-                  color: '#FFFFFF',
+                  backgroundColor: '#FFFFFF',
+                  color: '#7C3AED',
                   border: 'none',
-                  padding: '1rem',
+                  padding: '1rem 2rem',
                   fontSize: '1rem',
-                  fontWeight: 600,
+                  fontWeight: 700,
                   cursor: 'pointer',
                   transition: 'all 0.2s',
-                  borderRadius: '0.375rem',
-                  fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
+                  borderRadius: '8px',
+                  fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif",
+                  letterSpacing: '0.025em'
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#6D28D9';
+                  e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+                  e.currentTarget.style.transform = 'translateY(-1px)';
+                  e.currentTarget.style.boxShadow = '0 10px 25px rgba(0, 0, 0, 0.1)';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = '#7C3AED';
+                  e.currentTarget.style.backgroundColor = '#FFFFFF';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = 'none';
                 }}
               >
                 Select Annual
               </button>
             </div>
           </div>
+        </div>
         </div>
       </main>
 

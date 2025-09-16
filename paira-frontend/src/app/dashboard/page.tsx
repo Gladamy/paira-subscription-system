@@ -176,49 +176,55 @@ export default function Dashboard() {
       <div className="max-w-6xl mx-auto p-8">
         {/* Welcome Section */}
         <div className="mb-8">
-          <h1 className="text-2xl font-semibold text-gray-900 mb-2">
-            Welcome back, {user?.email}!
-          </h1>
-          <p className="text-gray-600">
-            Manage your subscription and download the latest version of Paira Bot.
-          </p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-xl font-semibold text-gray-900 mb-1">
+                Welcome back!
+              </h1>
+              <p className="text-sm text-gray-500">
+                {user?.email}
+              </p>
+            </div>
+            <div className="text-right">
+              <p className="text-sm text-gray-600">
+                Manage your subscription and download the latest version of Paira Bot.
+              </p>
+            </div>
+          </div>
         </div>
 
         {/* Subscription Status Card */}
         <div className="bg-white rounded-xl border border-gray-200 p-6 mb-8">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-semibold text-gray-900">Subscription Status</h3>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-semibold text-gray-900">Subscription Status</h2>
+            <div className={`flex items-center px-3 py-1 rounded-full text-sm font-medium ${
+              subscription?.status === 'active'
+                ? 'bg-green-50 text-green-700'
+                : 'bg-yellow-50 text-yellow-700'
+            }`}>
+              <CheckCircle size={14} className="mr-1" />
+              {subscription?.status === 'active' ? 'Active' : 'Inactive'}
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Plan */}
-            <div>
-              <div className="text-sm text-gray-500 mb-2">Plan</div>
-              <div className="text-xl font-semibold text-gray-900">{subscription?.plan || 'N/A'}</div>
-            </div>
-
-            {/* Status */}
-            <div>
-              <div className="text-sm text-gray-500 mb-2">Status</div>
-              <div className="flex items-center">
-                <div className={`flex items-center px-3 py-1 rounded-full text-sm font-medium ${
-                  subscription?.status === 'active'
-                    ? 'bg-green-50 text-green-700'
-                    : 'bg-yellow-50 text-yellow-700'
-                }`}>
-                  <CheckCircle size={14} className="mr-1" />
-                  {subscription?.status || 'Inactive'}
-                </div>
-              </div>
+            <div className="space-y-1">
+              <div className="text-sm font-medium text-gray-700">Current Plan</div>
+              <div className="text-2xl font-bold text-gray-900">{subscription?.plan || 'N/A'}</div>
             </div>
 
             {/* Expires */}
-            <div>
-              <div className="text-sm text-gray-500 mb-2">Expires</div>
-              <div className="flex items-center text-xl font-semibold text-gray-900">
-                <Calendar size={18} className="mr-2 text-gray-400" />
+            <div className="space-y-1">
+              <div className="text-sm font-medium text-gray-700">Expires On</div>
+              <div className="flex items-center text-lg font-semibold text-gray-900">
+                <Calendar size={16} className="mr-2 text-gray-400" />
                 {subscription?.current_period_end
-                  ? new Date(subscription.current_period_end).toLocaleDateString()
+                  ? new Date(subscription.current_period_end).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'short',
+                      day: 'numeric'
+                    })
                   : 'N/A'
                 }
               </div>
@@ -231,8 +237,8 @@ export default function Dashboard() {
           <div className="bg-white rounded-xl border border-gray-200 p-6">
             <div className="flex items-center justify-between mb-6">
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">Download Paira Bot</h3>
-                <p className="text-gray-600">Get the latest version of Paira Bot Desktop App.</p>
+                <h2 className="text-lg font-semibold text-gray-900 mb-1">Download Paira Bot</h2>
+                <p className="text-sm text-gray-600">Get the latest version of Paira Bot Desktop App.</p>
               </div>
               <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center">
                 <Download size={20} className="text-blue-500" />
@@ -286,16 +292,16 @@ export default function Dashboard() {
         ) : (
           <div className="bg-white rounded-xl border border-gray-200 p-6">
             <div className="text-center">
-              <div className="text-red-500 mb-3">
-                <svg className="w-10 h-10 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">No Active Subscription</h3>
-              <p className="text-gray-600 mb-4">You need an active subscription to download Paira Bot.</p>
+              <h2 className="text-lg font-semibold text-gray-900 mb-2">No Active Subscription</h2>
+              <p className="text-sm text-gray-600 mb-6">You need an active subscription to download Paira Bot.</p>
               <button
                 onClick={() => router.push('/')}
-                className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition-colors duration-200"
+                className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-8 rounded-lg transition-colors duration-200"
               >
                 Subscribe Now
               </button>

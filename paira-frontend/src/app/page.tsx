@@ -60,7 +60,7 @@ export default function Home() {
     <div style={{
       minHeight: '100vh',
       backgroundColor: '#FFFFFF',
-      fontFamily: "'Inter', 'SF Pro', sans-serif",
+      fontFamily: "'Inter', 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif",
       color: '#111827'
     }}>
       {/* Header */}
@@ -120,53 +120,74 @@ export default function Home() {
       </header>
 
       {/* Main Content */}
-      <main style={{ padding: '4rem 1rem', maxWidth: '1200px', margin: '0 auto' }}>
+      <main style={{ padding: '6rem 1rem', maxWidth: '1400px', margin: '0 auto' }}>
         {/* Hero Section */}
         <div style={{
           textAlign: 'center',
-          padding: '4rem 0',
-          marginBottom: '4rem'
+          padding: '6rem 0 8rem',
+          marginBottom: '6rem'
         }}>
           <h1 style={{
-            fontSize: '3.5rem',
-            fontWeight: 700,
+            fontSize: '4.5rem',
+            fontWeight: 800,
             color: '#111827',
-            marginBottom: '1.5rem',
-            lineHeight: '1.1'
+            marginBottom: '2rem',
+            lineHeight: '1.05',
+            letterSpacing: '-0.025em',
+            fontFamily: "'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif"
           }}>
-            Professional Roblox Trading Automation
+            Professional Roblox<br/>
+            Trading Automation
           </h1>
           <p style={{
-            fontSize: '1.25rem',
-            color: '#6B7280',
-            marginBottom: '2.5rem',
-            maxWidth: '600px',
-            margin: '0 auto 2.5rem',
-            lineHeight: '1.6'
+            fontSize: '1.5rem',
+            color: '#4B5563',
+            marginBottom: '3.5rem',
+            maxWidth: '700px',
+            margin: '0 auto 3.5rem',
+            lineHeight: '1.6',
+            fontWeight: '400',
+            fontFamily: "'Inter', 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif"
           }}>
-            Automate your Roblox trading with advanced algorithms, real-time price tracking, and secure HWID-based licensing.
+            Automate your Roblox trading with advanced algorithms, real-time price tracking, and secure HWID-based licensing. Available as a desktop app for the best performance.
           </p>
-          <button
-            onClick={() => handleStripeCheckout(STRIPE_PRICES.annual)}
-            style={{
-              backgroundColor: '#6366F1',
-              color: '#FFFFFF',
-              border: 'none',
-              padding: '1rem 2rem',
-              fontSize: '1.125rem',
-              fontWeight: 600,
-              cursor: 'pointer',
-              transition: 'all 0.2s'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#5855EB';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = '#6366F1';
-            }}
-          >
-            {isLoggedIn ? 'Go to Dashboard' : 'Start Free Trial'}
-          </button>
+          <div style={{ marginBottom: '2rem' }}>
+            <button
+              onClick={() => handleStripeCheckout(STRIPE_PRICES.annual)}
+              style={{
+                backgroundColor: '#6366F1',
+                color: '#FFFFFF',
+                border: 'none',
+                padding: '1.25rem 3rem',
+                fontSize: '1.25rem',
+                fontWeight: 600,
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+                borderRadius: '0.5rem',
+                fontFamily: "'Inter', 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif",
+                letterSpacing: '0.025em'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#5855EB';
+                e.currentTarget.style.transform = 'translateY(-1px)';
+                e.currentTarget.style.boxShadow = '0 10px 25px rgba(99, 102, 241, 0.3)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = '#6366F1';
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = 'none';
+              }}
+            >
+              {isLoggedIn ? 'Go to Dashboard' : 'Start Free Trial'}
+            </button>
+          </div>
+          <p style={{
+            fontSize: '1rem',
+            color: '#9CA3AF',
+            fontFamily: "'Inter', 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif"
+          }}>
+            ✓ No credit card required • ✓ Cancel anytime • ✓ 30-day guarantee
+          </p>
         </div>
 
         {/* Features Section */}

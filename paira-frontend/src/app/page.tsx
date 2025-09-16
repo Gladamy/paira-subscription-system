@@ -241,6 +241,294 @@ export default function Home() {
           </div>
         </div>
 
+        {/* App Preview Section - Show Desktop App UI */}
+        <div style={{
+          backgroundColor: '#F8FAFC',
+          padding: '4rem 2rem',
+          textAlign: 'center'
+        }}>
+          <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+            <h2 style={{
+              fontSize: '2.5rem',
+              fontWeight: 800,
+              color: '#0F172A',
+              marginBottom: '1rem',
+              letterSpacing: '-0.025em',
+              fontFamily: "'Inter', 'SF Pro Display', system-ui, sans-serif"
+            }}>See Paira Bot in Action</h2>
+            <p style={{
+              fontSize: '1.125rem',
+              color: '#475569',
+              marginBottom: '3rem',
+              fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
+            }}>Experience the professional interface you'll use to automate your Roblox trading</p>
+
+            {/* Mock Desktop App UI */}
+            <div style={{
+              backgroundColor: '#FFFFFF',
+              border: '1px solid rgba(15, 23, 42, 0.1)',
+              borderRadius: '12px',
+              padding: '2rem',
+              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+              margin: '0 auto',
+              maxWidth: '900px'
+            }}>
+              {/* Mock Window Header */}
+              <div style={{
+                backgroundColor: '#F8FAFC',
+                borderRadius: '8px 8px 0 0',
+                padding: '0.75rem 1rem',
+                borderBottom: '1px solid rgba(15, 23, 42, 0.1)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <div style={{
+                    width: '12px',
+                    height: '12px',
+                    backgroundColor: '#1F2937',
+                    borderRadius: '50%'
+                  }}></div>
+                  <span style={{
+                    fontSize: '0.875rem',
+                    fontWeight: '600',
+                    color: '#0F172A'
+                  }}>Paira Bot Dashboard</span>
+                </div>
+                <div style={{ display: 'flex', gap: '0.25rem' }}>
+                  <div style={{ width: '12px', height: '12px', backgroundColor: '#E5E7EB', borderRadius: '50%' }}></div>
+                  <div style={{ width: '12px', height: '12px', backgroundColor: '#E5E7EB', borderRadius: '50%' }}></div>
+                  <div style={{ width: '12px', height: '12px', backgroundColor: '#EF4444', borderRadius: '50%' }}></div>
+                </div>
+              </div>
+
+              {/* Mock App Content */}
+              <div style={{ padding: '2rem' }}>
+                {/* Top Stats Bar */}
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+                  gap: '1rem',
+                  marginBottom: '2rem'
+                }}>
+                  <div style={{
+                    backgroundColor: '#F8FAFC',
+                    padding: '1rem',
+                    borderRadius: '8px',
+                    textAlign: 'center'
+                  }}>
+                    <div style={{
+                      fontSize: '1.5rem',
+                      fontWeight: '700',
+                      color: '#0F172A',
+                      marginBottom: '0.25rem'
+                    }}>247</div>
+                    <div style={{
+                      fontSize: '0.75rem',
+                      color: '#6B7280',
+                      fontWeight: '500'
+                    }}>Active Trades</div>
+                  </div>
+                  <div style={{
+                    backgroundColor: '#F8FAFC',
+                    padding: '1rem',
+                    borderRadius: '8px',
+                    textAlign: 'center'
+                  }}>
+                    <div style={{
+                      fontSize: '1.5rem',
+                      fontWeight: '700',
+                      color: '#10B981',
+                      marginBottom: '0.25rem'
+                    }}>$1,247</div>
+                    <div style={{
+                      fontSize: '0.75rem',
+                      color: '#6B7280',
+                      fontWeight: '500'
+                    }}>Profit Today</div>
+                  </div>
+                  <div style={{
+                    backgroundColor: '#F8FAFC',
+                    padding: '1rem',
+                    borderRadius: '8px',
+                    textAlign: 'center'
+                  }}>
+                    <div style={{
+                      fontSize: '1.5rem',
+                      fontWeight: '700',
+                      color: '#0F172A',
+                      marginBottom: '0.25rem'
+                    }}>98.2%</div>
+                    <div style={{
+                      fontSize: '0.75rem',
+                      color: '#6B7280',
+                      fontWeight: '500'
+                    }}>Success Rate</div>
+                  </div>
+                </div>
+
+                {/* Main Content Area */}
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: '2fr 1fr',
+                  gap: '2rem',
+                  alignItems: 'start'
+                }}>
+                  {/* Trading Table Mock */}
+                  <div style={{
+                    backgroundColor: '#F8FAFC',
+                    borderRadius: '8px',
+                    padding: '1.5rem'
+                  }}>
+                    <h3 style={{
+                      fontSize: '1rem',
+                      fontWeight: '600',
+                      color: '#0F172A',
+                      marginBottom: '1rem'
+                    }}>Recent Trades</h3>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                      {/* Mock Trade Rows */}
+                      <div style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        padding: '0.75rem',
+                        backgroundColor: '#FFFFFF',
+                        borderRadius: '6px',
+                        border: '1px solid rgba(15, 23, 42, 0.1)'
+                      }}>
+                        <div>
+                          <div style={{ fontSize: '0.875rem', fontWeight: '600', color: '#0F172A' }}>Limited Item #123</div>
+                          <div style={{ fontSize: '0.75rem', color: '#6B7280' }}>2 minutes ago</div>
+                        </div>
+                        <div style={{
+                          fontSize: '0.875rem',
+                          fontWeight: '600',
+                          color: '#10B981'
+                        }}>+R$ 1,250</div>
+                      </div>
+                      <div style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        padding: '0.75rem',
+                        backgroundColor: '#FFFFFF',
+                        borderRadius: '6px',
+                        border: '1px solid rgba(15, 23, 42, 0.1)'
+                      }}>
+                        <div>
+                          <div style={{ fontSize: '0.875rem', fontWeight: '600', color: '#0F172A' }}>Rare Collectible</div>
+                          <div style={{ fontSize: '0.75rem', color: '#6B7280' }}>5 minutes ago</div>
+                        </div>
+                        <div style={{
+                          fontSize: '0.875rem',
+                          fontWeight: '600',
+                          color: '#10B981'
+                        }}>+R$ 850</div>
+                      </div>
+                      <div style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        padding: '0.75rem',
+                        backgroundColor: '#FFFFFF',
+                        borderRadius: '6px',
+                        border: '1px solid rgba(15, 23, 42, 0.1)'
+                      }}>
+                        <div>
+                          <div style={{ fontSize: '0.875rem', fontWeight: '600', color: '#0F172A' }}>Premium Hat</div>
+                          <div style={{ fontSize: '0.75rem', color: '#6B7280' }}>8 minutes ago</div>
+                        </div>
+                        <div style={{
+                          fontSize: '0.875rem',
+                          fontWeight: '600',
+                          color: '#10B981'
+                        }}>+R$ 2,100</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Side Panel */}
+                  <div style={{
+                    backgroundColor: '#F8FAFC',
+                    borderRadius: '8px',
+                    padding: '1.5rem'
+                  }}>
+                    <h3 style={{
+                      fontSize: '1rem',
+                      fontWeight: '600',
+                      color: '#0F172A',
+                      marginBottom: '1rem'
+                    }}>Quick Actions</h3>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                      <button style={{
+                        backgroundColor: '#1F2937',
+                        color: '#FFFFFF',
+                        border: 'none',
+                        padding: '0.75rem 1rem',
+                        borderRadius: '6px',
+                        fontSize: '0.875rem',
+                        fontWeight: '600',
+                        cursor: 'pointer',
+                        textAlign: 'left'
+                      }}>
+                        Start New Trade
+                      </button>
+                      <button style={{
+                        backgroundColor: '#FFFFFF',
+                        color: '#1F2937',
+                        border: '1px solid rgba(15, 23, 42, 0.1)',
+                        padding: '0.75rem 1rem',
+                        borderRadius: '6px',
+                        fontSize: '0.875rem',
+                        fontWeight: '600',
+                        cursor: 'pointer',
+                        textAlign: 'left'
+                      }}>
+                        View Analytics
+                      </button>
+                      <button style={{
+                        backgroundColor: '#FFFFFF',
+                        color: '#1F2937',
+                        border: '1px solid rgba(15, 23, 42, 0.1)',
+                        padding: '0.75rem 1rem',
+                        borderRadius: '6px',
+                        fontSize: '0.875rem',
+                        fontWeight: '600',
+                        cursor: 'pointer',
+                        textAlign: 'left'
+                      }}>
+                        Settings
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div style={{ marginTop: '2rem' }}>
+              <button
+                onClick={isLoggedIn ? () => router.push('/dashboard') : () => router.push('/auth/signup')}
+                style={{
+                  backgroundColor: '#1F2937',
+                  color: '#FFFFFF',
+                  border: 'none',
+                  padding: '1rem 2rem',
+                  fontSize: '1.125rem',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  borderRadius: '0.5rem',
+                  fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif",
+                  letterSpacing: '0.025em'
+                }}
+              >
+                {isLoggedIn ? 'Go to Dashboard' : 'Get Started Now'}
+              </button>
+            </div>
+          </div>
+        </div>
+
         {/* Pricing - Enhanced Professional */}
         <div style={{
           backgroundColor: '#F8FAFC',

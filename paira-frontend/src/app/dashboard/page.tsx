@@ -84,13 +84,18 @@ const Header = ({ user, onLogout }: { user: UserProfile | null; onLogout: () => 
             <div style={{
               width: '2.25rem',
               height: '2.25rem',
-              backgroundColor: '#F3F4F6',
+              backgroundColor: 'rgba(243, 244, 246, 0.8)',
               borderRadius: '50%',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center'
+              justifyContent: 'center',
+              border: '1px solid rgba(229, 231, 235, 0.5)'
             }}>
-              <span style={{ fontSize: '1.125rem' }}>👤</span>
+              <span style={{
+                fontSize: '1.125rem',
+                color: '#6B7280',
+                fontWeight: 'bold'
+              }}>U</span>
             </div>
             <span style={{
               fontSize: '0.875rem',
@@ -153,7 +158,11 @@ const Header = ({ user, onLogout }: { user: UserProfile | null; onLogout: () => 
                 onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#F9FAFB'}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
               >
-                <span style={{ marginRight: '0.75rem' }}>⚙️</span>
+                <span style={{
+                  marginRight: '0.75rem',
+                  fontSize: '1rem',
+                  color: '#6B7280'
+                }}>⚙</span>
                 Account Settings
               </button>
               <button
@@ -173,7 +182,11 @@ const Header = ({ user, onLogout }: { user: UserProfile | null; onLogout: () => 
                 onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#FEF2F2'}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
               >
-                <span style={{ marginRight: '0.75rem' }}>🚪</span>
+                <span style={{
+                  marginRight: '0.75rem',
+                  fontSize: '1rem',
+                  color: '#DC2626'
+                }}>→</span>
                 Sign Out
               </button>
             </div>
@@ -287,13 +300,13 @@ export default function Dashboard() {
       <div style={{ maxWidth: '80rem', margin: '0 auto', padding: '2rem' }}>
         {/* Welcome Section */}
         <div style={{
-          backgroundColor: 'rgba(255, 255, 255, 0.8)',
-          backdropFilter: 'blur(8px)',
-          border: '1px solid rgba(229, 231, 235, 0.6)',
+          backgroundColor: 'rgba(255, 255, 255, 0.6)',
+          backdropFilter: 'blur(12px)',
+          border: '1px solid rgba(229, 231, 235, 0.3)',
           borderRadius: '1rem',
           padding: '2rem',
           marginBottom: '2rem',
-          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)'
+          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)'
         }}>
           <div style={{
             display: 'flex',
@@ -327,13 +340,13 @@ export default function Dashboard() {
 
         {/* Subscription Status */}
         <div style={{
-          backgroundColor: 'rgba(255, 255, 255, 0.8)',
-          backdropFilter: 'blur(8px)',
-          border: '1px solid rgba(229, 231, 235, 0.6)',
+          backgroundColor: 'rgba(255, 255, 255, 0.6)',
+          backdropFilter: 'blur(12px)',
+          border: '1px solid rgba(229, 231, 235, 0.3)',
           borderRadius: '1rem',
           padding: '2rem',
           marginBottom: '2rem',
-          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)'
+          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)'
         }}>
           <h2 style={{
             fontSize: '1.5rem',
@@ -405,12 +418,12 @@ export default function Dashboard() {
         {/* Download Section */}
         {subscription?.status === 'active' ? (
           <div style={{
-            backgroundColor: 'rgba(255, 255, 255, 0.8)',
-            backdropFilter: 'blur(8px)',
-            border: '1px solid rgba(229, 231, 235, 0.6)',
+            backgroundColor: 'rgba(255, 255, 255, 0.6)',
+            backdropFilter: 'blur(12px)',
+            border: '1px solid rgba(229, 231, 235, 0.3)',
             borderRadius: '1rem',
             padding: '2rem',
-            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)'
+            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)'
           }}>
             <div style={{ marginBottom: '1.5rem' }}>
               <h2 style={{
@@ -424,11 +437,12 @@ export default function Dashboard() {
 
             {/* Windows Download */}
             <div style={{
-              background: 'linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%)',
-              border: '1px solid #E2E8F0',
+              background: 'linear-gradient(135deg, rgba(248, 250, 252, 0.8) 0%, rgba(241, 245, 249, 0.8) 100%)',
+              border: '1px solid rgba(226, 232, 240, 0.5)',
               borderRadius: '0.75rem',
               padding: '1.5rem',
-              marginBottom: '1.5rem'
+              marginBottom: '1.5rem',
+              backdropFilter: 'blur(8px)'
             }}>
               <div style={{
                 display: 'flex',
@@ -445,7 +459,11 @@ export default function Dashboard() {
                     alignItems: 'center',
                     justifyContent: 'center'
                   }}>
-                    <span style={{ fontSize: '1.25rem', color: '#FFFFFF' }}>🪟</span>
+                    <span style={{
+                      fontSize: '1.25rem',
+                      color: '#FFFFFF',
+                      fontWeight: 'bold'
+                    }}>W</span>
                   </div>
                   <div>
                     <h3 style={{
@@ -485,7 +503,11 @@ export default function Dashboard() {
                   onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#1D4ED8'}
                   onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#2563EB'}
                 >
-                  <span>⬇️</span>
+                  <span style={{
+                    fontSize: '1rem',
+                    marginRight: '0.5rem',
+                    fontWeight: 'bold'
+                  }}>↓</span>
                   Download Now
                 </a>
               </div>
@@ -509,12 +531,17 @@ export default function Dashboard() {
                   alignItems: 'center',
                   gap: '0.75rem',
                   padding: '1rem',
-                  background: 'linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%)',
-                  border: '1px solid #E2E8F0',
+                  background: 'linear-gradient(135deg, rgba(248, 250, 252, 0.6) 0%, rgba(241, 245, 249, 0.6) 100%)',
+                  border: '1px solid rgba(226, 232, 240, 0.4)',
                   borderRadius: '0.5rem',
-                  opacity: 0.6
+                  opacity: 0.6,
+                  backdropFilter: 'blur(6px)'
                 }}>
-                  <span style={{ fontSize: '1.25rem' }}>📱</span>
+                  <span style={{
+                    fontSize: '1.25rem',
+                    color: '#6B7280',
+                    fontWeight: 'bold'
+                  }}>M</span>
                   <div>
                     <p style={{
                       fontSize: '0.875rem',
@@ -555,25 +582,30 @@ export default function Dashboard() {
           </div>
         ) : (
           <div style={{
-            backgroundColor: 'rgba(255, 255, 255, 0.8)',
-            backdropFilter: 'blur(8px)',
-            border: '1px solid rgba(229, 231, 235, 0.6)',
+            backgroundColor: 'rgba(255, 255, 255, 0.6)',
+            backdropFilter: 'blur(12px)',
+            border: '1px solid rgba(229, 231, 235, 0.3)',
             borderRadius: '1rem',
             padding: '2rem',
-            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
+            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
             textAlign: 'center'
           }}>
             <div style={{
               width: '5rem',
               height: '5rem',
-              backgroundColor: '#FEF2F2',
+              backgroundColor: 'rgba(254, 242, 242, 0.8)',
               borderRadius: '1rem',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              margin: '0 auto 1.5rem'
+              margin: '0 auto 1.5rem',
+              border: '2px solid rgba(252, 165, 165, 0.3)'
             }}>
-              <span style={{ fontSize: '2rem' }}>⚠️</span>
+              <span style={{
+                fontSize: '2rem',
+                color: '#DC2626',
+                fontWeight: 'bold'
+              }}>!</span>
             </div>
             <h2 style={{
               fontSize: '1.5rem',

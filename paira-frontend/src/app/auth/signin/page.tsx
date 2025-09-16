@@ -230,7 +230,7 @@ export default function SignIn() {
             fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif",
             marginBottom: '1rem'
           }}>
-            Don't have an account?{' '}
+            Don&apos;t have an account?{' '}
             <Link href="/auth/signup" style={{
               color: '#6B46C1',
               textDecoration: 'underline',

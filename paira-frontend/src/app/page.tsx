@@ -16,33 +16,11 @@ export default function Home() {
   const router = useRouter();
   const [showAuth, setShowAuth] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [subscriptionStatus, setSubscriptionStatus] = useState<'checking' | 'active' | 'inactive' | null>(null);
 
   useEffect(() => {
     const token = localStorage.getItem('paira_auth_token');
     setIsLoggedIn(!!token);
-
-    // Check subscription status if logged in
-    if (token) {
-      checkSubscriptionStatus();
-    }
-
-    // Handle anchor links
-    if (typeof window !== 'undefined' && window.location.hash === '#pricing') {
-      setTimeout(() => {
-        const pricingElement = document.getElementById('pricing');
-        if (pricingElement) {
-          pricingElement.scrollIntoView({ behavior: 'smooth' });
-        }
-      }, 100);
-    }
   }, []);
-
-  const handleAuthSuccess = () => {
-    setIsLoggedIn(true);
-    // Check subscription status after successful authentication
-    checkSubscriptionStatus();
-  };
 
   const handleStripeCheckout = async (priceId: string) => {
     try {
@@ -78,53 +56,23 @@ export default function Home() {
     }
   };
 
-  const checkSubscriptionStatus = async () => {
-    const token = localStorage.getItem('paira_auth_token');
-    if (!token) return;
-
-    setSubscriptionStatus('checking');
-    try {
-      const response = await fetch(`${API_BASE}/api/subscriptions/status`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        if (data.subscription && data.subscription.status === 'active') {
-          setSubscriptionStatus('active');
-        } else {
-          setSubscriptionStatus('inactive');
-        }
-      } else {
-        setSubscriptionStatus('inactive');
-      }
-    } catch {
-      setSubscriptionStatus('inactive');
-    }
-  };
-
-
   return (
     <div style={{
       minHeight: '100vh',
-      background: 'linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 50%, #E2E8F0 100%)',
+      backgroundColor: '#FFFFFF',
       fontFamily: "'Inter', 'SF Pro', sans-serif",
       color: '#111827'
     }}>
       {/* Header */}
       <header style={{
-        backgroundColor: 'rgba(255, 255, 255, 0.95)',
-        backdropFilter: 'blur(20px)',
-        borderBottom: '1px solid rgba(229, 231, 235, 0.5)',
+        backgroundColor: '#FFFFFF',
+        borderBottom: '1px solid #E5E7EB',
         position: 'sticky',
         top: 0,
-        zIndex: 50,
-        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)'
+        zIndex: 50
       }}>
         <div style={{
-          maxWidth: '80rem',
+          maxWidth: '1200px',
           margin: '0 auto',
           padding: '0 1rem'
         }}>
@@ -138,8 +86,7 @@ export default function Home() {
               <h1 style={{
                 fontSize: '1.5rem',
                 fontWeight: 600,
-                color: '#111827',
-                lineHeight: '2rem'
+                color: '#111827'
               }}>Paira</h1>
               <span style={{
                 marginLeft: '0.5rem',
@@ -150,10 +97,9 @@ export default function Home() {
             <button
               onClick={isLoggedIn ? () => router.push('/dashboard') : () => setShowAuth(true)}
               style={{
-                backgroundColor: '#F9FAFB',
+                backgroundColor: 'transparent',
                 border: '1px solid #E5E7EB',
                 color: '#374151',
-                borderRadius: '6px',
                 padding: '0.5rem 1rem',
                 fontSize: '0.875rem',
                 fontWeight: 500,
@@ -161,10 +107,10 @@ export default function Home() {
                 transition: 'all 0.2s'
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#F3F4F6';
+                e.currentTarget.style.backgroundColor = '#F9FAFB';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#F9FAFB';
+                e.currentTarget.style.backgroundColor = 'transparent';
               }}
             >
               {isLoggedIn ? 'Dashboard' : 'Get Started'}
@@ -174,20 +120,12 @@ export default function Home() {
       </header>
 
       {/* Main Content */}
-      <main style={{ padding: '4rem 1rem', maxWidth: '80rem', margin: '0 auto' }}>
+      <main style={{ padding: '4rem 1rem', maxWidth: '1200px', margin: '0 auto' }}>
         {/* Hero Section */}
         <div style={{
           textAlign: 'center',
           padding: '4rem 0',
-          marginBottom: '4rem',
-          backgroundColor: 'rgba(255, 255, 255, 0.9)',
-          backdropFilter: 'blur(25px)',
-          border: '2px solid rgba(59, 130, 246, 0.2)',
-          borderRadius: '1.5rem',
-          margin: '2rem auto',
-          maxWidth: '80rem',
-          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12)',
-          position: 'relative'
+          marginBottom: '4rem'
         }}>
           <h1 style={{
             fontSize: '3.5rem',
@@ -206,7 +144,7 @@ export default function Home() {
             margin: '0 auto 2.5rem',
             lineHeight: '1.6'
           }}>
-            Automate your Roblox trading with advanced algorithms, real-time price tracking, and secure HWID-based licensing. Available as a desktop app for the best performance.
+            Automate your Roblox trading with advanced algorithms, real-time price tracking, and secure HWID-based licensing.
           </p>
           <button
             onClick={() => handleStripeCheckout(STRIPE_PRICES.annual)}
@@ -214,7 +152,6 @@ export default function Home() {
               backgroundColor: '#6366F1',
               color: '#FFFFFF',
               border: 'none',
-              borderRadius: '6px',
               padding: '1rem 2rem',
               fontSize: '1.125rem',
               fontWeight: 600,
@@ -232,109 +169,16 @@ export default function Home() {
           </button>
         </div>
 
-        {/* Download Section */}
-        <div style={{
-          backgroundColor: 'rgba(240, 249, 255, 0.85)',
-          backdropFilter: 'blur(20px)',
-          border: '2px solid rgba(59, 130, 246, 0.3)',
-          padding: '3rem 2rem',
-          textAlign: 'center',
-          marginBottom: '4rem',
-          borderRadius: '1.5rem',
-          boxShadow: '0 8px 32px rgba(59, 130, 246, 0.15)',
-          position: 'relative'
-        }}>
-          <h2 style={{
-            fontSize: '2rem',
-            fontWeight: 700,
-            color: '#0C4A6E',
-            marginBottom: '1rem'
-          }}>Download Paira Bot Desktop App</h2>
-          <p style={{
-            fontSize: '1.125rem',
-            color: '#374151',
-            marginBottom: '2rem',
-            maxWidth: '600px',
-            margin: '0 auto 2rem'
-          }}>
-            Get the full desktop experience with automatic updates, enhanced performance, and seamless trading automation.
-          </p>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-            <a
-              href="/paira-bot-setup.msi"
-              download="paira-bot-setup.msi"
-              style={{
-                backgroundColor: '#0284C7',
-                color: '#FFFFFF',
-                border: 'none',
-                borderRadius: '6px',
-                padding: '1rem 2rem',
-                fontSize: '1.125rem',
-                fontWeight: 600,
-                cursor: 'pointer',
-                textDecoration: 'none',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                transition: 'all 0.2s'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#0369A1';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#0284C7';
-              }}
-            >
-              <span>⬇️</span>
-              Download for Windows
-            </a>
-            <button
-              onClick={() => handleStripeCheckout(STRIPE_PRICES.monthly)}
-              style={{
-                backgroundColor: '#FFFFFF',
-                color: '#374151',
-                border: '1px solid #D1D5DB',
-                borderRadius: '6px',
-                padding: '1rem 2rem',
-                fontSize: '1.125rem',
-                fontWeight: 600,
-                cursor: 'pointer',
-                transition: 'all 0.2s'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#F9FAFB';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#FFFFFF';
-              }}
-            >
-              {isLoggedIn ? 'Go to Dashboard' : 'Use Web Version'}
-            </button>
-          </div>
-          <p style={{
-            fontSize: '0.875rem',
-            color: '#6B7280',
-            marginTop: '1.5rem'
-          }}>
-            Windows 10/11 • MSI Installer • ~50MB download
-          </p>
-        </div>
-
         {/* Features Section */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
           gap: '2rem',
           marginBottom: '4rem'
         }}>
           <div style={{
             padding: '2rem',
-            backgroundColor: 'rgba(249, 250, 251, 0.9)',
-            backdropFilter: 'blur(18px)',
-            border: '2px solid rgba(156, 163, 175, 0.3)',
-            borderRadius: '1rem',
-            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
-            transition: 'all 0.3s ease'
+            textAlign: 'center'
           }}>
             <h3 style={{
               fontSize: '1.25rem',
@@ -342,18 +186,17 @@ export default function Home() {
               color: '#111827',
               marginBottom: '1rem'
             }}>Advanced Trading Algorithms</h3>
-            <p style={{ color: '#6B7280', lineHeight: '1.6' }}>
+            <p style={{
+              color: '#6B7280',
+              lineHeight: '1.6'
+            }}>
               Intelligent trade matching with RAP analysis, projected item filtering, and profit optimization.
             </p>
           </div>
 
           <div style={{
             padding: '2rem',
-            backgroundColor: 'rgba(249, 250, 251, 0.6)',
-            backdropFilter: 'blur(12px)',
-            border: '1px solid rgba(243, 244, 246, 0.5)',
-            borderRadius: '0.75rem',
-            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)'
+            textAlign: 'center'
           }}>
             <h3 style={{
               fontSize: '1.25rem',
@@ -361,18 +204,17 @@ export default function Home() {
               color: '#111827',
               marginBottom: '1rem'
             }}>Real-Time Price Tracking</h3>
-            <p style={{ color: '#6B7280', lineHeight: '1.6' }}>
+            <p style={{
+              color: '#6B7280',
+              lineHeight: '1.6'
+            }}>
               Live Rolimons API integration with cached pricing and automatic refresh cycles.
             </p>
           </div>
 
           <div style={{
             padding: '2rem',
-            backgroundColor: 'rgba(249, 250, 251, 0.6)',
-            backdropFilter: 'blur(12px)',
-            border: '1px solid rgba(243, 244, 246, 0.5)',
-            borderRadius: '0.75rem',
-            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)'
+            textAlign: 'center'
           }}>
             <h3 style={{
               fontSize: '1.25rem',
@@ -380,78 +222,73 @@ export default function Home() {
               color: '#111827',
               marginBottom: '1rem'
             }}>Secure HWID Licensing</h3>
-            <p style={{ color: '#6B7280', lineHeight: '1.6' }}>
+            <p style={{
+              color: '#6B7280',
+              lineHeight: '1.6'
+            }}>
               Device-specific licensing with automatic validation and subscription management.
             </p>
           </div>
         </div>
 
         {/* Pricing Section */}
-        <div id="pricing" style={{
-          backgroundColor: 'rgba(249, 250, 251, 0.9)',
-          backdropFilter: 'blur(20px)',
-          border: '2px solid rgba(99, 102, 241, 0.2)',
+        <div style={{
+          backgroundColor: '#F9FAFB',
+          border: '1px solid #E5E7EB',
           padding: '3rem 2rem',
-          textAlign: 'center',
-          borderRadius: '1.5rem',
-          boxShadow: '0 8px 32px rgba(99, 102, 241, 0.1)',
-          position: 'relative'
+          marginBottom: '4rem'
         }}>
-          <h2 style={{
-            fontSize: '2.25rem',
-            fontWeight: 700,
-            color: '#111827',
-            marginBottom: '3rem'
-          }}>Choose Your Plan</h2>
+          <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+            <h2 style={{
+              fontSize: '2.25rem',
+              fontWeight: 700,
+              color: '#111827',
+              marginBottom: '1rem'
+            }}>Choose Your Plan</h2>
+            <p style={{
+              fontSize: '1rem',
+              color: '#6B7280'
+            }}>
+              Start free, upgrade when you're ready
+            </p>
+          </div>
 
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
             gap: '2rem',
-            marginBottom: '3rem',
             maxWidth: '800px',
-            margin: '0 auto 3rem'
+            margin: '0 auto'
           }}>
             {/* Monthly Plan */}
             <div style={{
               backgroundColor: '#FFFFFF',
               border: '1px solid #E5E7EB',
               padding: '2rem',
-              cursor: 'pointer',
-              transition: 'all 0.2s'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = '#6366F1';
-              e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = '#E5E7EB';
-              e.currentTarget.style.boxShadow = 'none';
-            }}
-            onClick={() => handleStripeCheckout(STRIPE_PRICES.monthly)}
-            >
-              <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
-                <h3 style={{
-                  fontSize: '1.25rem',
-                  fontWeight: 600,
-                  color: '#111827',
-                  marginBottom: '1rem'
-                }}>Monthly</h3>
-                <div style={{
-                  fontSize: '2.5rem',
-                  fontWeight: 700,
-                  color: '#6366F1',
-                  marginBottom: '0.5rem'
-                }}>$0.60</div>
-                <div style={{
-                  color: '#6B7280',
-                  fontSize: '0.875rem'
-                }}>per month</div>
-              </div>
+              textAlign: 'center'
+            }}>
+              <h3 style={{
+                fontSize: '1.25rem',
+                fontWeight: 600,
+                color: '#111827',
+                marginBottom: '1rem'
+              }}>Monthly</h3>
+              <div style={{
+                fontSize: '2.5rem',
+                fontWeight: 700,
+                color: '#6366F1',
+                marginBottom: '0.5rem'
+              }}>$0.60</div>
+              <div style={{
+                color: '#6B7280',
+                fontSize: '0.875rem',
+                marginBottom: '2rem'
+              }}>per month</div>
               <ul style={{
                 textAlign: 'left',
                 listStyle: 'none',
                 padding: 0,
+                marginBottom: '2rem',
                 fontSize: '0.875rem',
                 color: '#374151'
               }}>
@@ -460,6 +297,28 @@ export default function Home() {
                 <li style={{ marginBottom: '0.5rem' }}>✓ Priority support</li>
                 <li>✓ Cancel anytime</li>
               </ul>
+              <button
+                onClick={() => handleStripeCheckout(STRIPE_PRICES.monthly)}
+                style={{
+                  width: '100%',
+                  backgroundColor: '#6366F1',
+                  color: '#FFFFFF',
+                  border: 'none',
+                  padding: '1rem',
+                  fontSize: '1rem',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  transition: 'all 0.2s'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#5855EB';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#6366F1';
+                }}
+              >
+                Select Monthly
+              </button>
             </div>
 
             {/* Annual Plan */}
@@ -467,52 +326,42 @@ export default function Home() {
               backgroundColor: '#FFFFFF',
               border: '2px solid #6366F1',
               padding: '2rem',
-              position: 'relative',
-              cursor: 'pointer',
-              transition: 'all 0.2s'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.boxShadow = 'none';
-            }}
-            onClick={isLoggedIn ? () => router.push('/dashboard') : () => setShowAuth(true)}
-            >
+              textAlign: 'center',
+              position: 'relative'
+            }}>
               <div style={{
                 position: 'absolute',
-                top: '-12px',
+                top: '-10px',
                 left: '50%',
                 transform: 'translateX(-50%)',
-                backgroundColor: '#6366F1',
+                backgroundColor: '#10B981',
                 color: '#FFFFFF',
-                padding: '4px 12px',
-                borderRadius: '12px',
+                padding: '2px 8px',
                 fontSize: '0.75rem',
                 fontWeight: 600
               }}>Save 25%</div>
-              <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
-                <h3 style={{
-                  fontSize: '1.25rem',
-                  fontWeight: 600,
-                  color: '#111827',
-                  marginBottom: '1rem'
-                }}>Annual</h3>
-                <div style={{
-                  fontSize: '2.5rem',
-                  fontWeight: 700,
-                  color: '#6366F1',
-                  marginBottom: '0.5rem'
-                }}>$54.99</div>
-                <div style={{
-                  color: '#6B7280',
-                  fontSize: '0.875rem'
-                }}>per year</div>
-              </div>
+              <h3 style={{
+                fontSize: '1.25rem',
+                fontWeight: 600,
+                color: '#111827',
+                marginBottom: '1rem'
+              }}>Annual</h3>
+              <div style={{
+                fontSize: '2.5rem',
+                fontWeight: 700,
+                color: '#6366F1',
+                marginBottom: '0.5rem'
+              }}>$54.99</div>
+              <div style={{
+                color: '#6B7280',
+                fontSize: '0.875rem',
+                marginBottom: '2rem'
+              }}>per year</div>
               <ul style={{
                 textAlign: 'left',
                 listStyle: 'none',
                 padding: 0,
+                marginBottom: '2rem',
                 fontSize: '0.875rem',
                 color: '#374151'
               }}>
@@ -521,162 +370,70 @@ export default function Home() {
                 <li style={{ marginBottom: '0.5rem' }}>✓ Exclusive beta access</li>
                 <li>✓ Premium support</li>
               </ul>
+              <button
+                onClick={() => handleStripeCheckout(STRIPE_PRICES.annual)}
+                style={{
+                  width: '100%',
+                  backgroundColor: '#6366F1',
+                  color: '#FFFFFF',
+                  border: 'none',
+                  padding: '1rem',
+                  fontSize: '1rem',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  transition: 'all 0.2s'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#5855EB';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#6366F1';
+                }}
+              >
+                Select Annual
+              </button>
             </div>
           </div>
 
-          <div style={{ textAlign: 'center' }}>
-            <button
-              onClick={() => handleStripeCheckout(STRIPE_PRICES.annual)}
-              style={{
-                backgroundColor: '#6366F1',
-                color: '#FFFFFF',
-                border: 'none',
-                borderRadius: '6px',
-                padding: '0.875rem 2rem',
-                fontSize: '1rem',
-                fontWeight: 600,
-                cursor: 'pointer',
-                marginRight: '1rem',
-                transition: 'all 0.2s'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#5855EB';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#6366F1';
-              }}
-            >
-              {isLoggedIn ? (subscriptionStatus === 'active' ? 'Go to Dashboard' : 'Subscribe Now') : 'Get Started'}
-            </button>
-
-
+          <div style={{
+            textAlign: 'center',
+            marginTop: '3rem',
+            paddingTop: '2rem',
+            borderTop: '1px solid #E5E7EB'
+          }}>
             <p style={{
               fontSize: '0.875rem',
-              color: '#6B7280',
-              marginTop: '2rem'
+              color: '#6B7280'
             }}>
-              Secure payment powered by Stripe • 30-day money-back guarantee
+              Secure payments powered by Stripe • 30-day money-back guarantee
             </p>
           </div>
         </div>
-
-
-
-          <div style={{
-            backgroundColor: 'rgba(254, 242, 242, 0.6)',
-            backdropFilter: 'blur(12px)',
-            border: '1px solid rgba(254, 202, 202, 0.5)',
-            padding: '2rem',
-            textAlign: 'center',
-            marginTop: '2rem',
-            borderRadius: '1rem',
-            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)'
-          }}>
-            <div style={{ marginBottom: '1rem' }}>
-              <div style={{
-                width: '3rem',
-                height: '3rem',
-                backgroundColor: '#F87171',
-                borderRadius: '50%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                margin: '0 auto 1rem'
-              }}>
-                <svg style={{ width: '1.5rem', height: '1.5rem', color: '#FFFFFF' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </div>
-              <h3 style={{ color: '#DC2626', fontWeight: 600, marginBottom: '0.5rem' }}>No Active Subscription</h3>
-              <p style={{ color: '#B91C1C', fontSize: '0.875rem', marginBottom: '1rem' }}>
-                You don&apos;t have an active subscription. Subscribe below to access Paira Bot Desktop App.
-              </p>
-            </div>
-            <button
-              onClick={() => handleStripeCheckout(STRIPE_PRICES.monthly)}
-              style={{
-                backgroundColor: '#DC2626',
-                color: '#FFFFFF',
-                border: 'none',
-                borderRadius: '6px',
-                padding: '1rem 2rem',
-                fontSize: '1.125rem',
-                fontWeight: 600,
-                cursor: 'pointer',
-                transition: 'all 0.2s'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#B91C1C';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#DC2626';
-              }}
-            >
-              Subscribe Now
-            </button>
-          </div>
       </main>
 
       {/* Footer */}
       <footer style={{
-        backgroundColor: 'rgba(249, 250, 251, 0.9)',
-        backdropFilter: 'blur(20px)',
-        borderTop: '2px solid rgba(156, 163, 175, 0.3)',
-        padding: '3rem 0',
-        marginTop: '4rem',
-        boxShadow: '0 -4px 20px rgba(0, 0, 0, 0.08)'
+        backgroundColor: '#F9FAFB',
+        borderTop: '1px solid #E5E7EB',
+        padding: '2rem 0'
       }}>
         <div style={{
-          maxWidth: '80rem',
+          maxWidth: '1200px',
           margin: '0 auto',
           padding: '0 1rem',
           textAlign: 'center'
         }}>
-          <h3 style={{
-            fontSize: '1.25rem',
-            fontWeight: 600,
-            color: '#111827',
-            marginBottom: '1rem'
-          }}>Ready to automate your trading?</h3>
           <p style={{
             color: '#6B7280',
-            marginBottom: '2rem'
-          }}>Join thousands of traders using Paira Bot</p>
-          <button
-            onClick={isLoggedIn ? () => router.push('/dashboard') : () => setShowAuth(true)}
-            style={{
-              backgroundColor: '#6366F1',
-              color: '#FFFFFF',
-              border: 'none',
-              borderRadius: '6px',
-              padding: '0.875rem 2rem',
-              fontSize: '1.125rem',
-              fontWeight: 600,
-              cursor: 'pointer',
-              transition: 'all 0.2s'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#5855EB';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = '#6366F1';
-            }}
-          >
-            {isLoggedIn ? 'Go to Dashboard' : 'Start Free Trial'}
-          </button>
-          <div style={{
-            marginTop: '2rem',
-            paddingTop: '2rem',
-            borderTop: '1px solid #E5E7EB',
-            color: '#6B7280'
+            fontSize: '0.875rem'
           }}>
-            <p>&copy; 2025 Paira Bot. All rights reserved.</p>
-          </div>
+            © 2025 Paira Bot. All rights reserved.
+          </p>
         </div>
       </footer>
 
       {/* Auth Modal */}
-      {showAuth && <AuthModal onClose={() => setShowAuth(false)} onAuthSuccess={handleAuthSuccess} />}
+      {showAuth && <AuthModal onClose={() => setShowAuth(false)} />}
     </div>
   );
 }

@@ -115,13 +115,13 @@ export default function Home() {
     }}>
       {/* Header */}
       <header style={{
-        backgroundColor: 'rgba(255, 255, 255, 0.8)',
-        backdropFilter: 'blur(12px)',
-        borderBottom: '1px solid rgba(229, 231, 235, 0.3)',
+        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+        backdropFilter: 'blur(20px)',
+        borderBottom: '1px solid rgba(229, 231, 235, 0.5)',
         position: 'sticky',
         top: 0,
         zIndex: 50,
-        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)'
+        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)'
       }}>
         <div style={{
           maxWidth: '80rem',
@@ -180,13 +180,14 @@ export default function Home() {
           textAlign: 'center',
           padding: '4rem 0',
           marginBottom: '4rem',
-          backgroundColor: 'rgba(255, 255, 255, 0.6)',
-          backdropFilter: 'blur(12px)',
-          border: '1px solid rgba(229, 231, 235, 0.3)',
-          borderRadius: '1rem',
+          backgroundColor: 'rgba(255, 255, 255, 0.9)',
+          backdropFilter: 'blur(25px)',
+          border: '2px solid rgba(59, 130, 246, 0.2)',
+          borderRadius: '1.5rem',
           margin: '2rem auto',
           maxWidth: '80rem',
-          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)'
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12)',
+          position: 'relative'
         }}>
           <h1 style={{
             fontSize: '3.5rem',
@@ -233,14 +234,15 @@ export default function Home() {
 
         {/* Download Section */}
         <div style={{
-          backgroundColor: 'rgba(240, 249, 255, 0.6)',
-          backdropFilter: 'blur(12px)',
-          border: '1px solid rgba(224, 242, 254, 0.5)',
+          backgroundColor: 'rgba(240, 249, 255, 0.85)',
+          backdropFilter: 'blur(20px)',
+          border: '2px solid rgba(59, 130, 246, 0.3)',
           padding: '3rem 2rem',
           textAlign: 'center',
           marginBottom: '4rem',
-          borderRadius: '1rem',
-          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)'
+          borderRadius: '1.5rem',
+          boxShadow: '0 8px 32px rgba(59, 130, 246, 0.15)',
+          position: 'relative'
         }}>
           <h2 style={{
             fontSize: '2rem',
@@ -327,11 +329,12 @@ export default function Home() {
         }}>
           <div style={{
             padding: '2rem',
-            backgroundColor: 'rgba(249, 250, 251, 0.6)',
-            backdropFilter: 'blur(12px)',
-            border: '1px solid rgba(243, 244, 246, 0.5)',
-            borderRadius: '0.75rem',
-            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)'
+            backgroundColor: 'rgba(249, 250, 251, 0.9)',
+            backdropFilter: 'blur(18px)',
+            border: '2px solid rgba(156, 163, 175, 0.3)',
+            borderRadius: '1rem',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+            transition: 'all 0.3s ease'
           }}>
             <h3 style={{
               fontSize: '1.25rem',
@@ -385,13 +388,14 @@ export default function Home() {
 
         {/* Pricing Section */}
         <div id="pricing" style={{
-          backgroundColor: 'rgba(249, 250, 251, 0.6)',
-          backdropFilter: 'blur(12px)',
-          border: '1px solid rgba(243, 244, 246, 0.5)',
+          backgroundColor: 'rgba(249, 250, 251, 0.9)',
+          backdropFilter: 'blur(20px)',
+          border: '2px solid rgba(99, 102, 241, 0.2)',
           padding: '3rem 2rem',
           textAlign: 'center',
-          borderRadius: '1rem',
-          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)'
+          borderRadius: '1.5rem',
+          boxShadow: '0 8px 32px rgba(99, 102, 241, 0.1)',
+          position: 'relative'
         }}>
           <h2 style={{
             fontSize: '2.25rem',
@@ -615,12 +619,12 @@ export default function Home() {
 
       {/* Footer */}
       <footer style={{
-        backgroundColor: 'rgba(249, 250, 251, 0.6)',
-        backdropFilter: 'blur(12px)',
-        borderTop: '1px solid rgba(243, 244, 246, 0.5)',
+        backgroundColor: 'rgba(249, 250, 251, 0.9)',
+        backdropFilter: 'blur(20px)',
+        borderTop: '2px solid rgba(156, 163, 175, 0.3)',
         padding: '3rem 0',
         marginTop: '4rem',
-        boxShadow: '0 -2px 8px rgba(0, 0, 0, 0.04)'
+        boxShadow: '0 -4px 20px rgba(0, 0, 0, 0.08)'
       }}>
         <div style={{
           maxWidth: '80rem',

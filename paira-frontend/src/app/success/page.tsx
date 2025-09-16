@@ -107,12 +107,13 @@ function SuccessPageContent() {
         maxWidth: '28rem',
         margin: '0 auto',
         textAlign: 'center',
-        backgroundColor: 'rgba(255, 255, 255, 0.6)',
-        backdropFilter: 'blur(12px)',
-        border: '1px solid rgba(229, 231, 235, 0.3)',
-        borderRadius: '1rem',
+        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+        backdropFilter: 'blur(25px)',
+        border: '2px solid rgba(34, 197, 94, 0.3)',
+        borderRadius: '1.5rem',
         padding: '2rem',
-        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)'
+        boxShadow: '0 8px 32px rgba(34, 197, 94, 0.15)',
+        position: 'relative'
       }}>
 
         {/* Success Checkmark */}

@@ -54,13 +54,14 @@ export default function AuthModal({ onClose, onAuthSuccess }: AuthModalProps) {
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 p-4" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
       <div style={{
-        backgroundColor: 'rgba(255, 255, 255, 0.8)',
-        backdropFilter: 'blur(12px)',
+        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+        backdropFilter: 'blur(25px)',
         maxWidth: '28rem',
         width: '100%',
-        border: '1px solid rgba(229, 231, 235, 0.3)',
-        borderRadius: '1rem',
-        boxShadow: '0 4px 16px rgba(0, 0, 0, 0.1)'
+        border: '2px solid rgba(59, 130, 246, 0.3)',
+        borderRadius: '1.5rem',
+        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)',
+        position: 'relative'
       }}>
         <div className="p-6" style={{
           borderBottom: '1px solid rgba(229, 231, 235, 0.3)',

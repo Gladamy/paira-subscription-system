@@ -67,7 +67,14 @@ export default function AuthModal({ onClose, onAuthSuccess }: AuthModalProps) {
           backgroundColor: '#F8FAFC'
         }}>
           <div className="flex justify-between items-center">
-            <h2 className="text-2xl font-medium" style={{ color: '#0f0f0f', fontWeight: 500 }}>
+            <h2 style={{
+              fontSize: '1.875rem',
+              fontWeight: 700,
+              color: '#0F172A',
+              fontFamily: "'Inter', 'SF Pro Display', system-ui, sans-serif",
+              letterSpacing: '-0.025em',
+              marginBottom: '0.5rem'
+            }}>
               {isLogin ? 'Sign In' : 'Create Account'}
             </h2>
             <button onClick={onClose} style={{ color: '#6B7280' }}>
@@ -82,40 +89,68 @@ export default function AuthModal({ onClose, onAuthSuccess }: AuthModalProps) {
           backgroundColor: '#FFFFFF'
         }}>
           <div>
-            <label className="block text-sm font-medium mb-1" style={{ color: '#374151' }}>Email</label>
+            <label className="block text-sm font-medium mb-2" style={{
+              color: '#475569',
+              fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif",
+              fontWeight: 600
+            }}>Email</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               style={{
                 width: '100%',
-                padding: '1rem 0.75rem',
-                border: '1px solid #E5E7EB',
+                padding: '1rem 1.5rem',
+                border: '1px solid rgba(15, 23, 42, 0.1)',
                 backgroundColor: '#FFFFFF',
-                color: '#000000',
-                fontFamily: "'Inter', 'SF Pro', sans-serif",
+                color: '#0F172A',
+                fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif",
                 fontSize: '1rem',
-                outline: 'none'
+                borderRadius: '12px',
+                outline: 'none',
+                transition: 'all 0.2s'
+              }}
+              onFocus={(e) => {
+                e.currentTarget.style.borderColor = 'rgba(15, 23, 42, 0.3)';
+                e.currentTarget.style.boxShadow = '0 0 0 3px rgba(15, 23, 42, 0.1)';
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.borderColor = 'rgba(15, 23, 42, 0.1)';
+                e.currentTarget.style.boxShadow = 'none';
               }}
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1" style={{ color: '#374151' }}>Password</label>
+            <label className="block text-sm font-medium mb-2" style={{
+              color: '#475569',
+              fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif",
+              fontWeight: 600
+            }}>Password</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               style={{
                 width: '100%',
-                padding: '1rem 0.75rem',
-                border: '1px solid #E5E7EB',
+                padding: '1rem 1.5rem',
+                border: '1px solid rgba(15, 23, 42, 0.1)',
                 backgroundColor: '#FFFFFF',
-                color: '#000000',
-                fontFamily: "'Inter', 'SF Pro', sans-serif",
+                color: '#0F172A',
+                fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif",
                 fontSize: '1rem',
-                outline: 'none'
+                borderRadius: '12px',
+                outline: 'none',
+                transition: 'all 0.2s'
+              }}
+              onFocus={(e) => {
+                e.currentTarget.style.borderColor = 'rgba(15, 23, 42, 0.3)';
+                e.currentTarget.style.boxShadow = '0 0 0 3px rgba(15, 23, 42, 0.1)';
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.borderColor = 'rgba(15, 23, 42, 0.1)';
+                e.currentTarget.style.boxShadow = 'none';
               }}
               required
             />
@@ -123,11 +158,14 @@ export default function AuthModal({ onClose, onAuthSuccess }: AuthModalProps) {
 
           {error && (
             <div style={{
-              padding: '0.75rem',
+              padding: '1rem 1.5rem',
               backgroundColor: '#FEF2F2',
               border: '1px solid #FECACA',
               color: '#DC2626',
-              fontSize: '14px'
+              fontSize: '0.875rem',
+              borderRadius: '12px',
+              fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif",
+              fontWeight: 500
             }}>
               {error}
             </div>
@@ -138,7 +176,7 @@ export default function AuthModal({ onClose, onAuthSuccess }: AuthModalProps) {
             disabled={loading}
             style={{
               width: '100%',
-              padding: '1rem',
+              padding: '1rem 2rem',
               backgroundColor: '#FFFFFF',
               color: '#1F2937',
               border: '1px solid rgba(15, 23, 42, 0.1)',
@@ -146,13 +184,24 @@ export default function AuthModal({ onClose, onAuthSuccess }: AuthModalProps) {
               fontWeight: 700,
               cursor: loading ? 'not-allowed' : 'pointer',
               opacity: loading ? 0.5 : 1,
-              letterSpacing: '0.025em'
+              letterSpacing: '0.025em',
+              borderRadius: '12px',
+              fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif",
+              transition: 'all 0.2s'
             }}
             onMouseEnter={(e) => {
-              if (!loading) e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+              if (!loading) {
+                e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+                e.currentTarget.style.transform = 'translateY(-1px)';
+                e.currentTarget.style.boxShadow = '0 10px 25px rgba(0, 0, 0, 0.1)';
+              }
             }}
             onMouseLeave={(e) => {
-              if (!loading) e.currentTarget.style.backgroundColor = '#FFFFFF';
+              if (!loading) {
+                e.currentTarget.style.backgroundColor = '#FFFFFF';
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = 'none';
+              }
             }}
           >
             {loading ? 'Please wait...' : (isLogin ? 'Sign In' : 'Create Account')}

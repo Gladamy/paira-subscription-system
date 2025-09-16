@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { CheckCircle, Calendar, Download, Monitor, Smartphone, User, Settings, LogOut, ChevronDown } from 'lucide-react';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'https://api.paira.live';
 
@@ -19,6 +20,64 @@ interface Subscription {
   current_period_end: string;
 }
 
+// Header Component
+const Header = ({ user, onLogout }: { user: User | null; onLogout: () => void }) => {
+  const [showProfileDropdown, setShowProfileDropdown] = useState(false);
+
+  return (
+    <div className="bg-white border-b border-gray-200 px-8 py-4">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center">
+          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center mr-3">
+            <span className="text-white font-bold text-sm">P</span>
+          </div>
+          <span className="text-lg font-semibold text-gray-900">Paira Bot</span>
+        </div>
+
+        {/* Profile Dropdown */}
+        <div className="relative">
+          <button
+            className="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50 transition-colors"
+            onMouseEnter={() => setShowProfileDropdown(true)}
+            onMouseLeave={() => setShowProfileDropdown(false)}
+          >
+            <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
+              <User size={16} className="text-gray-600" />
+            </div>
+            <span className="text-sm font-medium text-gray-700">{user?.email}</span>
+            <ChevronDown size={16} className="text-gray-400" />
+          </button>
+
+          {showProfileDropdown && (
+            <div
+              className="absolute right-0 top-full mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50"
+              onMouseEnter={() => setShowProfileDropdown(true)}
+              onMouseLeave={() => setShowProfileDropdown(false)}
+            >
+              <div className="px-4 py-2 border-b border-gray-100">
+                <p className="text-sm font-medium text-gray-900">{user?.email}</p>
+                <p className="text-xs text-gray-500">Monthly Plan</p>
+              </div>
+              <button className="w-full flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                <Settings size={16} className="mr-3" />
+                Account Settings
+              </button>
+              <button
+                onClick={onLogout}
+                className="w-full flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+              >
+                <LogOut size={16} className="mr-3" />
+                Sign Out
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Main Dashboard Component
 export default function Dashboard() {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
@@ -79,25 +138,10 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <div style={{
-        minHeight: '100vh',
-        backgroundColor: '#FFFFFF',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontFamily: "'Inter', 'SF Pro', sans-serif"
-      }}>
-        <div style={{ textAlign: 'center' }}>
-          <div style={{
-            width: '3rem',
-            height: '3rem',
-            border: '2px solid #E5E7EB',
-            borderTop: '2px solid #6366F1',
-            borderRadius: '50%',
-            animation: 'spin 1s linear infinite',
-            margin: '0 auto 1rem'
-          }}></div>
-          <p style={{ color: '#6B7280' }}>Loading dashboard...</p>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-3"></div>
+          <p className="text-sm text-gray-600">Loading dashboard...</p>
         </div>
       </div>
     );
@@ -105,37 +149,18 @@ export default function Dashboard() {
 
   if (error) {
     return (
-      <div style={{
-        minHeight: '100vh',
-        backgroundColor: '#FFFFFF',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontFamily: "'Inter', 'SF Pro', sans-serif",
-        padding: '1rem'
-      }}>
-        <div style={{
-          backgroundColor: '#FEF2F2',
-          border: '1px solid #FECACA',
-          padding: '2rem',
-          borderRadius: '6px',
-          textAlign: 'center',
-          maxWidth: '28rem'
-        }}>
-          <h2 style={{ color: '#DC2626', fontWeight: 600, marginBottom: '0.5rem' }}>Error</h2>
-          <p style={{ color: '#B91C1C', marginBottom: '1rem' }}>{error}</p>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+        <div className="border border-red-200 rounded-xl p-6 shadow-sm bg-white max-w-sm w-full text-center">
+          <div className="text-red-500 mb-3">
+            <svg className="w-10 h-10 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <h1 className="text-lg font-semibold text-gray-900 mb-3">Error</h1>
+          <p className="text-sm text-gray-600 mb-4">{error}</p>
           <button
             onClick={() => router.push('/')}
-            style={{
-              backgroundColor: '#DC2626',
-              color: '#FFFFFF',
-              border: 'none',
-              borderRadius: '6px',
-              padding: '0.5rem 1rem',
-              fontSize: '0.875rem',
-              fontWeight: 500,
-              cursor: 'pointer'
-            }}
+            className="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200"
           >
             Return to Home
           </button>
@@ -145,248 +170,139 @@ export default function Dashboard() {
   }
 
   return (
-    <div style={{
-      minHeight: '100vh',
-      backgroundColor: '#FFFFFF',
-      fontFamily: "'Inter', 'SF Pro', sans-serif",
-      color: '#111827'
-    }}>
-      {/* Header */}
-      <header style={{
-        backgroundColor: '#FFFFFF',
-        borderBottom: '1px solid #F3F4F6',
-        position: 'sticky',
-        top: 0,
-        zIndex: 50
-      }}>
-        <div style={{
-          maxWidth: '80rem',
-          margin: '0 auto',
-          padding: '0 1rem'
-        }}>
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            height: '4rem'
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <h1 style={{
-                fontSize: '1.5rem',
-                fontWeight: 600,
-                color: '#111827',
-                lineHeight: '2rem'
-              }}>Paira</h1>
-              <span style={{
-                marginLeft: '0.5rem',
-                fontSize: '0.875rem',
-                color: '#6B7280'
-              }}>Dashboard</span>
-            </div>
-            <button
-              onClick={handleLogout}
-              style={{
-                backgroundColor: '#F9FAFB',
-                border: '1px solid #E5E7EB',
-                color: '#374151',
-                borderRadius: '6px',
-                padding: '0.5rem 1rem',
-                fontSize: '0.875rem',
-                fontWeight: 500,
-                cursor: 'pointer',
-                transition: 'all 0.2s'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#F3F4F6';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#F9FAFB';
-              }}
-            >
-              Logout
-            </button>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-gray-50">
+      <Header user={user} onLogout={handleLogout} />
 
-      {/* Main Content */}
-      <main style={{ padding: '2rem 1rem', maxWidth: '80rem', margin: '0 auto' }}>
+      <div className="max-w-6xl mx-auto p-8">
         {/* Welcome Section */}
-        <div style={{
-          backgroundColor: '#F9FAFB',
-          border: '1px solid #F3F4F6',
-          padding: '2rem',
-          borderRadius: '8px',
-          marginBottom: '2rem'
-        }}>
-          <h2 style={{
-            fontSize: '1.875rem',
-            fontWeight: 700,
-            color: '#111827',
-            marginBottom: '0.5rem'
-          }}>
+        <div className="mb-8">
+          <h1 className="text-2xl font-semibold text-gray-900 mb-2">
             Welcome back, {user?.email}!
-          </h2>
-          <p style={{ color: '#6B7280' }}>
+          </h1>
+          <p className="text-gray-600">
             Manage your subscription and download the latest version of Paira Bot.
           </p>
         </div>
 
-        {/* Subscription Status */}
-        <div style={{
-          backgroundColor: '#FFFFFF',
-          border: '1px solid #E5E7EB',
-          padding: '2rem',
-          borderRadius: '8px',
-          marginBottom: '2rem'
-        }}>
-          <h3 style={{
-            fontSize: '1.25rem',
-            fontWeight: 600,
-            color: '#111827',
-            marginBottom: '1rem'
-          }}>
-            Subscription Status
-          </h3>
+        {/* Subscription Status Card */}
+        <div className="bg-white rounded-xl border border-gray-200 p-6 mb-8">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-lg font-semibold text-gray-900">Subscription Status</h3>
+          </div>
 
-          {subscription ? (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
-              <div>
-                <p style={{ fontSize: '0.875rem', color: '#6B7280', marginBottom: '0.25rem' }}>Plan</p>
-                <p style={{ fontWeight: 600, color: '#111827' }}>{subscription.plan}</p>
-              </div>
-              <div>
-                <p style={{ fontSize: '0.875rem', color: '#6B7280', marginBottom: '0.25rem' }}>Status</p>
-                <span style={{
-                  padding: '0.25rem 0.5rem',
-                  borderRadius: '4px',
-                  fontSize: '0.75rem',
-                  fontWeight: 500,
-                  backgroundColor: subscription.status === 'active' ? '#D1FAE5' : '#FEF3C7',
-                  color: subscription.status === 'active' ? '#065F46' : '#92400E'
-                }}>
-                  {subscription.status}
-                </span>
-              </div>
-              <div>
-                <p style={{ fontSize: '0.875rem', color: '#6B7280', marginBottom: '0.25rem' }}>Expires</p>
-                <p style={{ fontWeight: 600, color: '#111827' }}>
-                  {new Date(subscription.current_period_end).toLocaleDateString()}
-                </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Plan */}
+            <div>
+              <div className="text-sm text-gray-500 mb-2">Plan</div>
+              <div className="text-xl font-semibold text-gray-900">{subscription?.plan || 'N/A'}</div>
+            </div>
+
+            {/* Status */}
+            <div>
+              <div className="text-sm text-gray-500 mb-2">Status</div>
+              <div className="flex items-center">
+                <div className={`flex items-center px-3 py-1 rounded-full text-sm font-medium ${
+                  subscription?.status === 'active'
+                    ? 'bg-green-50 text-green-700'
+                    : 'bg-yellow-50 text-yellow-700'
+                }`}>
+                  <CheckCircle size={14} className="mr-1" />
+                  {subscription?.status || 'Inactive'}
+                </div>
               </div>
             </div>
-          ) : (
-            <div style={{
-              backgroundColor: '#FEF2F2',
-              border: '1px solid #FECACA',
-              padding: '1rem',
-              borderRadius: '6px'
-            }}>
-              <p style={{ color: '#B91C1C', marginBottom: '1rem' }}>
-                No active subscription found.
-              </p>
+
+            {/* Expires */}
+            <div>
+              <div className="text-sm text-gray-500 mb-2">Expires</div>
+              <div className="flex items-center text-xl font-semibold text-gray-900">
+                <Calendar size={18} className="mr-2 text-gray-400" />
+                {subscription?.current_period_end
+                  ? new Date(subscription.current_period_end).toLocaleDateString()
+                  : 'N/A'
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Download Section */}
+        {subscription?.status === 'active' ? (
+          <div className="bg-white rounded-xl border border-gray-200 p-6">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">Download Paira Bot</h3>
+                <p className="text-gray-600">Get the latest version of Paira Bot Desktop App.</p>
+              </div>
+              <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center">
+                <Download size={20} className="text-blue-500" />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Windows Download */}
+              <div className="border border-gray-200 rounded-xl p-6 hover:border-blue-200 hover:bg-blue-50/30 transition-all duration-200">
+                <div className="flex items-center mb-4">
+                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
+                    <Monitor size={18} className="text-blue-600" />
+                  </div>
+                  <div>
+                    <div className="font-medium text-gray-900">Download for Windows</div>
+                    <div className="text-sm text-gray-500">Windows 10/11</div>
+                  </div>
+                </div>
+                <div className="text-xs text-gray-500 mb-4">MSI Installer • ~70MB download</div>
+                <a
+                  href="/paira-bot-setup.msi"
+                  download="paira-bot-setup.msi"
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center"
+                >
+                  <Download size={16} className="mr-2" />
+                  Download
+                </a>
+              </div>
+
+              {/* Other Platforms */}
+              <div className="border border-gray-200 rounded-xl p-6 hover:border-gray-300 transition-all duration-200">
+                <div className="flex items-center mb-4">
+                  <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center mr-3">
+                    <Smartphone size={18} className="text-gray-600" />
+                  </div>
+                  <div>
+                    <div className="font-medium text-gray-900">Other Platforms</div>
+                    <div className="text-sm text-gray-500">macOS, Linux, Mobile</div>
+                  </div>
+                </div>
+                <div className="text-xs text-gray-500 mb-4">Coming soon</div>
+                <button
+                  onClick={() => window.open('https://paira.live/download', '_blank')}
+                  className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-3 px-4 rounded-lg transition-colors duration-200"
+                >
+                  View Options
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="bg-white rounded-xl border border-gray-200 p-6">
+            <div className="text-center">
+              <div className="text-red-500 mb-3">
+                <svg className="w-10 h-10 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">No Active Subscription</h3>
+              <p className="text-gray-600 mb-4">You need an active subscription to download Paira Bot.</p>
               <button
-                onClick={() => router.push('/#pricing')}
-                style={{
-                  backgroundColor: '#DC2626',
-                  color: '#FFFFFF',
-                  border: 'none',
-                  borderRadius: '6px',
-                  padding: '0.5rem 1rem',
-                  fontSize: '0.875rem',
-                  fontWeight: 500,
-                  cursor: 'pointer'
-                }}
+                onClick={() => router.push('/')}
+                className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition-colors duration-200"
               >
                 Subscribe Now
               </button>
             </div>
-          )}
-        </div>
-
-        {/* Download Section */}
-        {subscription?.status === 'active' && (
-          <div style={{
-            backgroundColor: '#FFFFFF',
-            border: '1px solid #E5E7EB',
-            padding: '2rem',
-            borderRadius: '8px'
-          }}>
-            <h3 style={{
-              fontSize: '1.25rem',
-              fontWeight: 600,
-              color: '#111827',
-              marginBottom: '1rem'
-            }}>
-              Download Paira Bot
-            </h3>
-            <p style={{ color: '#6B7280', marginBottom: '1.5rem' }}>
-              Get the latest version of Paira Bot Desktop App.
-            </p>
-
-            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-              <a
-                href="/paira-bot-setup.msi"
-                download="paira-bot-setup.msi"
-                style={{
-                  backgroundColor: '#0284C7',
-                  color: '#FFFFFF',
-                  border: 'none',
-                  borderRadius: '6px',
-                  padding: '1rem 2rem',
-                  fontSize: '1rem',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  textDecoration: 'none',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '0.5rem',
-                  transition: 'all 0.2s'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#0369A1';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = '#0284C7';
-                }}
-              >
-                <span>⬇️</span>
-                Download for Windows
-              </a>
-              <button
-                onClick={() => window.open('https://paira.live/download', '_blank')}
-                style={{
-                  backgroundColor: '#FFFFFF',
-                  color: '#374151',
-                  border: '1px solid #D1D5DB',
-                  borderRadius: '6px',
-                  padding: '1rem 2rem',
-                  fontSize: '1rem',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  transition: 'all 0.2s'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#F9FAFB';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = '#FFFFFF';
-                }}
-              >
-                Other Platforms
-              </button>
-            </div>
-
-            <p style={{
-              fontSize: '0.875rem',
-              color: '#6B7280',
-              marginTop: '1rem'
-            }}>
-              Windows 10/11 • MSI Installer • ~50MB download
-            </p>
           </div>
         )}
-      </main>
+      </div>
     </div>
   );
 }

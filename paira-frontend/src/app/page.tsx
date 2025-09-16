@@ -56,11 +56,11 @@ export default function Home() {
       minHeight: '100vh',
       background: 'linear-gradient(135deg, #FAFAFA 0%, #F5F5F5 100%)',
       fontFamily: "'Inter', 'SF Pro Display', system-ui, sans-serif",
-      color: '#0F172A'
+      color: '#111827'
     }}>
       {/* Header */}
       <header style={{
-        backgroundColor: '#F8FAFC',
+        backgroundColor: '#F6F7F9',
         position: 'sticky',
         top: 0,
         zIndex: 50
@@ -80,13 +80,13 @@ export default function Home() {
               <h1 style={{
                 fontSize: '1.5rem',
                 fontWeight: 700,
-                color: '#0F172A',
+                color: '#111827',
                 letterSpacing: '-0.025em'
               }}>Paira</h1>
               <span style={{
                 marginLeft: '0.5rem',
                 fontSize: '0.875rem',
-                color: '#475569',
+                color: '#6B7280',
                 fontWeight: 500
               }}>Bot</span>
             </div>
@@ -95,7 +95,7 @@ export default function Home() {
               style={{
                 backgroundColor: 'transparent',
                 border: '1px solid rgba(15, 23, 42, 0.2)',
-                color: '#0F172A',
+                color: '#111827',
                 padding: '0.5rem 1rem',
                 fontSize: '0.875rem',
                 fontWeight: 500,
@@ -122,7 +122,7 @@ export default function Home() {
       <main style={{ padding: '4rem 1rem', maxWidth: '1200px', margin: '0 auto' }}>
         {/* Hero Section - Ultra Clean */}
         <div style={{
-          backgroundColor: '#F8FAFC',
+          backgroundColor: '#F6F7F9',
           textAlign: 'center',
           padding: '4rem 2rem',
           marginBottom: '4rem'
@@ -130,7 +130,7 @@ export default function Home() {
           <h1 style={{
             fontSize: '3.5rem',
             fontWeight: 800,
-            color: '#0F172A',
+            color: '#111827',
             marginBottom: '1.5rem',
             lineHeight: '1.05',
             letterSpacing: '-0.025em',
@@ -140,7 +140,7 @@ export default function Home() {
           </h1>
           <p style={{
             fontSize: '1.25rem',
-            color: '#475569',
+            color: '#6B7280',
             marginBottom: '2.5rem',
             maxWidth: '600px',
             margin: '0 auto 2.5rem',
@@ -182,7 +182,7 @@ export default function Home() {
 
         {/* Features - Clean Grid */}
         <div style={{
-          backgroundColor: '#F8FAFC',
+          backgroundColor: '#F6F7F9',
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
           gap: '3rem',
@@ -193,12 +193,12 @@ export default function Home() {
             <h3 style={{
               fontSize: '1.25rem',
               fontWeight: 600,
-              color: '#0F172A',
+              color: '#111827',
               marginBottom: '1rem',
               fontFamily: "'Inter', 'SF Pro Display', system-ui, sans-serif"
             }}>Advanced Trading Algorithms</h3>
             <p style={{
-              color: '#475569',
+              color: '#6B7280',
               lineHeight: '1.6',
               fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
             }}>
@@ -210,12 +210,12 @@ export default function Home() {
             <h3 style={{
               fontSize: '1.25rem',
               fontWeight: 600,
-              color: '#0F172A',
+              color: '#111827',
               marginBottom: '1rem',
               fontFamily: "'Inter', 'SF Pro Display', system-ui, sans-serif"
             }}>Real-Time Price Tracking</h3>
             <p style={{
-              color: '#475569',
+              color: '#6B7280',
               lineHeight: '1.6',
               fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
             }}>
@@ -227,12 +227,12 @@ export default function Home() {
             <h3 style={{
               fontSize: '1.25rem',
               fontWeight: 600,
-              color: '#0F172A',
+              color: '#111827',
               marginBottom: '1rem',
               fontFamily: "'Inter', 'SF Pro Display', system-ui, sans-serif"
             }}>Secure HWID Licensing</h3>
             <p style={{
-              color: '#475569',
+              color: '#6B7280',
               lineHeight: '1.6',
               fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
             }}>
@@ -243,7 +243,7 @@ export default function Home() {
 
         {/* App Preview Section - Show Desktop App UI */}
         <div style={{
-          backgroundColor: '#F8FAFC',
+          backgroundColor: '#F6F7F9',
           padding: '4rem 2rem',
           textAlign: 'center'
         }}>
@@ -251,14 +251,14 @@ export default function Home() {
             <h2 style={{
               fontSize: '2.5rem',
               fontWeight: 800,
-              color: '#0F172A',
+              color: '#111827',
               marginBottom: '1rem',
               letterSpacing: '-0.025em',
               fontFamily: "'Inter', 'SF Pro Display', system-ui, sans-serif"
             }}>See Paira Bot in Action</h2>
             <p style={{
               fontSize: '1.125rem',
-              color: '#475569',
+              color: '#6B7280',
               marginBottom: '3rem',
               fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
             }}>Experience the professional desktop interface you&apos;ll use to automate your Roblox trading</p>
@@ -266,16 +266,16 @@ export default function Home() {
             {/* Mock Desktop App UI */}
             <div style={{
               backgroundColor: '#FFFFFF',
-              border: '1px solid rgba(15, 23, 42, 0.1)',
+              border: '1px solid #E5E7EB',
               borderRadius: '12px',
-              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+              boxShadow: '0 1px 2px rgba(16,24,40,0.06), 0 0 0 1px rgba(16,24,40,0.04)',
               margin: '0 auto',
               maxWidth: '1000px',
               overflow: 'hidden'
             }}>
               {/* Custom Title Bar */}
               <div style={{
-                backgroundColor: '#F8FAFC',
+                backgroundColor: '#F6F7F9',
                 padding: '0.75rem 1rem',
                 borderBottom: '1px solid rgba(15, 23, 42, 0.1)',
                 display: 'flex',
@@ -292,7 +292,7 @@ export default function Home() {
                   <span style={{
                     fontSize: '0.875rem',
                     fontWeight: '600',
-                    color: '#0F172A'
+                    color: '#111827'
                   }}>Paira Bot</span>
                 </div>
                 <div style={{ display: 'flex', gap: '0.25rem' }}>
@@ -328,7 +328,7 @@ export default function Home() {
                 {/* Sidebar */}
                 <div style={{
                   width: '200px',
-                  backgroundColor: '#F8FAFC',
+                  backgroundColor: '#F6F7F9',
                   borderRight: '1px solid rgba(15, 23, 42, 0.1)',
                   display: 'flex',
                   flexDirection: 'column'
@@ -341,7 +341,7 @@ export default function Home() {
                     <h3 style={{
                       fontSize: '1rem',
                       fontWeight: '600',
-                      color: '#0F172A',
+                      color: '#111827',
                       marginBottom: '0.5rem'
                     }}>Bot</h3>
                   </div>
@@ -364,7 +364,7 @@ export default function Home() {
                       }}></div>
                       <span style={{
                         fontSize: '0.75rem',
-                        color: '#0F172A',
+                        color: '#111827',
                         fontWeight: '500'
                       }}>Running</span>
                     </div>
@@ -378,10 +378,10 @@ export default function Home() {
                       alignItems: 'center',
                       gap: '0.5rem',
                       padding: '0.75rem',
-                      backgroundColor: '#1F2937',
+                      backgroundColor: '#374151',
                       color: '#FFFFFF',
                       border: 'none',
-                      borderRadius: '6px',
+                      borderRadius: '12px',
                       fontSize: '0.875rem',
                       fontWeight: '600',
                       cursor: 'pointer',
@@ -397,9 +397,9 @@ export default function Home() {
                       gap: '0.5rem',
                       padding: '0.75rem',
                       backgroundColor: 'transparent',
-                      color: '#0F172A',
-                      border: '1px solid rgba(15, 23, 42, 0.1)',
-                      borderRadius: '6px',
+                      color: '#111827',
+                      border: '1px solid #E5E7EB',
+                      borderRadius: '12px',
                       fontSize: '0.875rem',
                       fontWeight: '600',
                       cursor: 'pointer',
@@ -415,9 +415,9 @@ export default function Home() {
                       gap: '0.5rem',
                       padding: '0.75rem',
                       backgroundColor: 'transparent',
-                      color: '#0F172A',
-                      border: '1px solid rgba(15, 23, 42, 0.1)',
-                      borderRadius: '6px',
+                      color: '#111827',
+                      border: '1px solid #E5E7EB',
+                      borderRadius: '12px',
                       fontSize: '0.875rem',
                       fontWeight: '600',
                       cursor: 'pointer'
@@ -458,7 +458,7 @@ export default function Home() {
                         <div style={{
                           fontSize: '0.75rem',
                           fontWeight: '600',
-                          color: '#0F172A'
+                          color: '#111827'
                         }}>user@email.com</div>
                         <div style={{
                           fontSize: '0.625rem',
@@ -495,7 +495,7 @@ export default function Home() {
                     <h1 style={{
                       fontSize: '1.5rem',
                       fontWeight: '600',
-                      color: '#0F172A',
+                      color: '#111827',
                       marginBottom: '0.25rem'
                     }}>Dashboard</h1>
                     <p style={{
@@ -512,15 +512,15 @@ export default function Home() {
                     marginBottom: '1.5rem'
                   }}>
                     <div style={{
-                      backgroundColor: '#F8FAFC',
+                      backgroundColor: '#F6F7F9',
                       padding: '1rem',
                       borderRadius: '8px',
-                      border: '1px solid rgba(15, 23, 42, 0.1)'
+                      border: '1px solid #E5E7EB'
                     }}>
                       <h3 style={{
                         fontSize: '0.875rem',
                         fontWeight: '600',
-                        color: '#0F172A',
+                        color: '#111827',
                         marginBottom: '0.5rem'
                       }}>Bot Status</h3>
                       <p style={{
@@ -530,21 +530,21 @@ export default function Home() {
                       }}>Running</p>
                     </div>
                     <div style={{
-                      backgroundColor: '#F8FAFC',
+                      backgroundColor: '#F6F7F9',
                       padding: '1rem',
                       borderRadius: '8px',
-                      border: '1px solid rgba(15, 23, 42, 0.1)'
+                      border: '1px solid #E5E7EB'
                     }}>
                       <h3 style={{
                         fontSize: '0.875rem',
                         fontWeight: '600',
-                        color: '#0F172A',
+                        color: '#111827',
                         marginBottom: '0.5rem'
                       }}>Trades Sent</h3>
                       <p style={{
                         fontSize: '1rem',
                         fontWeight: '600',
-                        color: '#0F172A'
+                        color: '#111827'
                       }}>247</p>
                     </div>
                   </div>
@@ -556,11 +556,11 @@ export default function Home() {
                     marginBottom: '1.5rem'
                   }}>
                     <button style={{
-                      backgroundColor: '#1F2937',
+                      backgroundColor: '#374151',
                       color: '#FFFFFF',
                       border: 'none',
                       padding: '0.75rem 1.5rem',
-                      borderRadius: '6px',
+                      borderRadius: '12px',
                       fontSize: '0.875rem',
                       fontWeight: '600',
                       cursor: 'pointer'
@@ -569,10 +569,10 @@ export default function Home() {
                     </button>
                     <button style={{
                       backgroundColor: '#FFFFFF',
-                      color: '#0F172A',
-                      border: '1px solid rgba(15, 23, 42, 0.1)',
+                      color: '#111827',
+                      border: '1px solid #E5E7EB',
                       padding: '0.75rem 1.5rem',
-                      borderRadius: '6px',
+                      borderRadius: '12px',
                       fontSize: '0.875rem',
                       fontWeight: '600',
                       cursor: 'pointer'
@@ -584,8 +584,8 @@ export default function Home() {
                   {/* Activity Logs */}
                   <div style={{
                     flex: 1,
-                    backgroundColor: '#F8FAFC',
-                    border: '1px solid rgba(15, 23, 42, 0.1)',
+                    backgroundColor: '#F6F7F9',
+                    border: '1px solid #E5E7EB',
                     borderRadius: '8px',
                     display: 'flex',
                     flexDirection: 'column'
@@ -597,7 +597,7 @@ export default function Home() {
                       <h3 style={{
                         fontSize: '0.875rem',
                         fontWeight: '600',
-                        color: '#0F172A'
+                        color: '#111827'
                       }}>Activity Logs</h3>
                     </div>
                     <div style={{
@@ -623,7 +623,7 @@ export default function Home() {
               <button
                 onClick={isLoggedIn ? () => router.push('/dashboard') : () => router.push('/auth/signup')}
                 style={{
-                  backgroundColor: '#1F2937',
+                  backgroundColor: '#374151',
                   color: '#FFFFFF',
                   border: 'none',
                   padding: '1rem 2rem',
@@ -643,7 +643,7 @@ export default function Home() {
 
         {/* Pricing - Enhanced Professional */}
         <div style={{
-          backgroundColor: '#F8FAFC',
+          backgroundColor: '#F6F7F9',
           padding: '4rem 2rem',
           textAlign: 'center'
         }}>
@@ -651,14 +651,14 @@ export default function Home() {
             <h2 style={{
               fontSize: '2.5rem',
               fontWeight: 800,
-              color: '#0F172A',
+              color: '#111827',
               marginBottom: '1rem',
               letterSpacing: '-0.025em',
               fontFamily: "'Inter', 'SF Pro Display', system-ui, sans-serif"
             }}>Choose Your Plan</h2>
             <p style={{
               fontSize: '1.125rem',
-              color: '#475569',
+              color: '#6B7280',
               marginBottom: '3rem',
               fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
             }}>Start free, upgrade when you&apos;re ready</p>
@@ -673,11 +673,11 @@ export default function Home() {
             {/* Monthly Plan */}
             <div style={{
               backgroundColor: '#FFFFFF',
-              border: '1px solid rgba(15, 23, 42, 0.1)',
+              border: '1px solid #E5E7EB',
               borderRadius: '20px',
               padding: '2.5rem',
               textAlign: 'center',
-              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+              boxShadow: '0 1px 2px rgba(16,24,40,0.06), 0 0 0 1px rgba(16,24,40,0.04)',
               transition: 'all 0.3s ease',
               position: 'relative'
             }}
@@ -692,7 +692,7 @@ export default function Home() {
               <h3 style={{
                 fontSize: '1.5rem',
                 fontWeight: 700,
-                color: '#0F172A',
+                color: '#111827',
                 marginBottom: '1.5rem',
                 fontFamily: "'Inter', 'SF Pro Display', system-ui, sans-serif"
               }}>Monthly</h3>
@@ -728,7 +728,7 @@ export default function Home() {
                   alignItems: 'center',
                   marginBottom: '0.75rem',
                   fontSize: '0.875rem',
-                  color: '#475569',
+                  color: '#6B7280',
                   fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
                 }}>
                   <span style={{
@@ -744,7 +744,7 @@ export default function Home() {
                   alignItems: 'center',
                   marginBottom: '0.75rem',
                   fontSize: '0.875rem',
-                  color: '#475569',
+                  color: '#6B7280',
                   fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
                 }}>
                   <span style={{
@@ -760,7 +760,7 @@ export default function Home() {
                   alignItems: 'center',
                   marginBottom: '0.75rem',
                   fontSize: '0.875rem',
-                  color: '#475569',
+                  color: '#6B7280',
                   fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
                 }}>
                   <span style={{
@@ -775,7 +775,7 @@ export default function Home() {
                   display: 'flex',
                   alignItems: 'center',
                   fontSize: '0.875rem',
-                  color: '#475569',
+                  color: '#6B7280',
                   fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
                 }}>
                   <span style={{
@@ -822,11 +822,11 @@ export default function Home() {
             {/* Annual Plan - Premium */}
             <div style={{
               backgroundColor: '#FFFFFF',
-              border: '1px solid rgba(15, 23, 42, 0.1)',
+              border: '1px solid #E5E7EB',
               borderRadius: '20px',
               padding: '2.5rem',
               textAlign: 'center',
-              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+              boxShadow: '0 1px 2px rgba(16,24,40,0.06), 0 0 0 1px rgba(16,24,40,0.04)',
               transition: 'all 0.3s ease',
               position: 'relative'
             }}
@@ -850,14 +850,14 @@ export default function Home() {
                 fontSize: '0.75rem',
                 fontWeight: 700,
                 letterSpacing: '0.025em',
-                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                boxShadow: '0 1px 2px rgba(16,24,40,0.06), 0 0 0 1px rgba(16,24,40,0.04)',
                 fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
               }}>Save 25%</div>
 
               <h3 style={{
                 fontSize: '1.5rem',
                 fontWeight: 700,
-                color: '#0F172A',
+                color: '#111827',
                 marginBottom: '1.5rem',
                 fontFamily: "'Inter', 'SF Pro Display', system-ui, sans-serif"
               }}>Annual</h3>
@@ -884,12 +884,12 @@ export default function Home() {
 
               <div style={{
                 fontSize: '0.875rem',
-                color: '#475569',
+                color: '#6B7280',
                 marginBottom: '2rem',
                 fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
               }}>
                 <span style={{
-                  color: '#0F172A',
+                  color: '#111827',
                   fontWeight: 600
                 }}>2 months free</span> • Best value
               </div>
@@ -905,7 +905,7 @@ export default function Home() {
                   alignItems: 'center',
                   marginBottom: '0.75rem',
                   fontSize: '0.875rem',
-                  color: '#475569',
+                  color: '#6B7280',
                   fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
                 }}>
                   <span style={{
@@ -921,7 +921,7 @@ export default function Home() {
                   alignItems: 'center',
                   marginBottom: '0.75rem',
                   fontSize: '0.875rem',
-                  color: '#475569',
+                  color: '#6B7280',
                   fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
                 }}>
                   <span style={{
@@ -937,7 +937,7 @@ export default function Home() {
                   alignItems: 'center',
                   marginBottom: '0.75rem',
                   fontSize: '0.875rem',
-                  color: '#475569',
+                  color: '#6B7280',
                   fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
                 }}>
                   <span style={{
@@ -952,7 +952,7 @@ export default function Home() {
                   display: 'flex',
                   alignItems: 'center',
                   fontSize: '0.875rem',
-                  color: '#475569',
+                  color: '#6B7280',
                   fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
                 }}>
                   <span style={{
@@ -1014,7 +1014,7 @@ export default function Home() {
           textAlign: 'center'
         }}>
           <p style={{
-            color: '#475569',
+            color: '#6B7280',
             fontSize: '0.875rem',
             fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
           }}>

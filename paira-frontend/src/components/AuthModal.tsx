@@ -63,8 +63,9 @@ export default function AuthModal({ onClose, onAuthSuccess }: AuthModalProps) {
         position: 'relative'
       }}>
         <div className="p-6" style={{
-          borderBottom: '1px solid rgba(15, 23, 42, 0.1)',
-          backgroundColor: '#F8FAFC'
+          backgroundColor: '#F8FAFC',
+          borderTopLeftRadius: '20px',
+          borderTopRightRadius: '20px'
         }}>
           <div className="flex justify-between items-center">
             <h2 style={{
@@ -210,7 +211,8 @@ export default function AuthModal({ onClose, onAuthSuccess }: AuthModalProps) {
 
         <div className="px-6 pb-6 text-center" style={{
           backgroundColor: '#F8FAFC',
-          borderTop: '1px solid rgba(15, 23, 42, 0.1)'
+          borderBottomLeftRadius: '20px',
+          borderBottomRightRadius: '20px'
         }}>
           <button
             onClick={() => setIsLogin(!isLogin)}

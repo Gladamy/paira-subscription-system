@@ -261,246 +261,358 @@ export default function Home() {
               color: '#475569',
               marginBottom: '3rem',
               fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
-            }}>Experience the professional interface you'll use to automate your Roblox trading</p>
+            }}>Experience the professional desktop interface you'll use to automate your Roblox trading</p>
 
             {/* Mock Desktop App UI */}
             <div style={{
               backgroundColor: '#FFFFFF',
               border: '1px solid rgba(15, 23, 42, 0.1)',
               borderRadius: '12px',
-              padding: '2rem',
               boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
               margin: '0 auto',
-              maxWidth: '900px'
+              maxWidth: '1000px',
+              overflow: 'hidden'
             }}>
-              {/* Mock Window Header */}
+              {/* Custom Title Bar */}
               <div style={{
                 backgroundColor: '#F8FAFC',
-                borderRadius: '8px 8px 0 0',
                 padding: '0.75rem 1rem',
                 borderBottom: '1px solid rgba(15, 23, 42, 0.1)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between'
               }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <div style={{
-                    width: '12px',
-                    height: '12px',
-                    backgroundColor: '#1F2937',
-                    borderRadius: '50%'
-                  }}></div>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  flex: 1,
+                  cursor: 'move'
+                }}>
                   <span style={{
                     fontSize: '0.875rem',
                     fontWeight: '600',
                     color: '#0F172A'
-                  }}>Paira Bot Dashboard</span>
+                  }}>Paira Bot</span>
                 </div>
                 <div style={{ display: 'flex', gap: '0.25rem' }}>
-                  <div style={{ width: '12px', height: '12px', backgroundColor: '#E5E7EB', borderRadius: '50%' }}></div>
-                  <div style={{ width: '12px', height: '12px', backgroundColor: '#E5E7EB', borderRadius: '50%' }}></div>
-                  <div style={{ width: '12px', height: '12px', backgroundColor: '#EF4444', borderRadius: '50%' }}></div>
+                  <button style={{
+                    width: '12px',
+                    height: '12px',
+                    borderRadius: '50%',
+                    backgroundColor: '#E5E7EB',
+                    border: 'none',
+                    cursor: 'pointer'
+                  }}></button>
+                  <button style={{
+                    width: '12px',
+                    height: '12px',
+                    borderRadius: '50%',
+                    backgroundColor: '#E5E7EB',
+                    border: 'none',
+                    cursor: 'pointer'
+                  }}></button>
+                  <button style={{
+                    width: '12px',
+                    height: '12px',
+                    borderRadius: '50%',
+                    backgroundColor: '#EF4444',
+                    border: 'none',
+                    cursor: 'pointer'
+                  }}></button>
                 </div>
               </div>
 
-              {/* Mock App Content */}
-              <div style={{ padding: '2rem' }}>
-                {/* Top Stats Bar */}
+              {/* Main App Layout */}
+              <div style={{ display: 'flex', height: '500px' }}>
+                {/* Sidebar */}
                 <div style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
-                  gap: '1rem',
-                  marginBottom: '2rem'
+                  width: '200px',
+                  backgroundColor: '#F8FAFC',
+                  borderRight: '1px solid rgba(15, 23, 42, 0.1)',
+                  display: 'flex',
+                  flexDirection: 'column'
                 }}>
+                  {/* Header */}
                   <div style={{
-                    backgroundColor: '#F8FAFC',
                     padding: '1rem',
-                    borderRadius: '8px',
-                    textAlign: 'center'
-                  }}>
-                    <div style={{
-                      fontSize: '1.5rem',
-                      fontWeight: '700',
-                      color: '#0F172A',
-                      marginBottom: '0.25rem'
-                    }}>247</div>
-                    <div style={{
-                      fontSize: '0.75rem',
-                      color: '#6B7280',
-                      fontWeight: '500'
-                    }}>Active Trades</div>
-                  </div>
-                  <div style={{
-                    backgroundColor: '#F8FAFC',
-                    padding: '1rem',
-                    borderRadius: '8px',
-                    textAlign: 'center'
-                  }}>
-                    <div style={{
-                      fontSize: '1.5rem',
-                      fontWeight: '700',
-                      color: '#10B981',
-                      marginBottom: '0.25rem'
-                    }}>$1,247</div>
-                    <div style={{
-                      fontSize: '0.75rem',
-                      color: '#6B7280',
-                      fontWeight: '500'
-                    }}>Profit Today</div>
-                  </div>
-                  <div style={{
-                    backgroundColor: '#F8FAFC',
-                    padding: '1rem',
-                    borderRadius: '8px',
-                    textAlign: 'center'
-                  }}>
-                    <div style={{
-                      fontSize: '1.5rem',
-                      fontWeight: '700',
-                      color: '#0F172A',
-                      marginBottom: '0.25rem'
-                    }}>98.2%</div>
-                    <div style={{
-                      fontSize: '0.75rem',
-                      color: '#6B7280',
-                      fontWeight: '500'
-                    }}>Success Rate</div>
-                  </div>
-                </div>
-
-                {/* Main Content Area */}
-                <div style={{
-                  display: 'grid',
-                  gridTemplateColumns: '2fr 1fr',
-                  gap: '2rem',
-                  alignItems: 'start'
-                }}>
-                  {/* Trading Table Mock */}
-                  <div style={{
-                    backgroundColor: '#F8FAFC',
-                    borderRadius: '8px',
-                    padding: '1.5rem'
+                    borderBottom: '1px solid rgba(15, 23, 42, 0.1)'
                   }}>
                     <h3 style={{
                       fontSize: '1rem',
                       fontWeight: '600',
                       color: '#0F172A',
-                      marginBottom: '1rem'
-                    }}>Recent Trades</h3>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                      {/* Mock Trade Rows */}
+                      marginBottom: '0.5rem'
+                    }}>Bot</h3>
+                  </div>
+
+                  {/* Status */}
+                  <div style={{
+                    padding: '0.75rem 1rem',
+                    borderBottom: '1px solid rgba(15, 23, 42, 0.1)'
+                  }}>
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem'
+                    }}>
                       <div style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        padding: '0.75rem',
-                        backgroundColor: '#FFFFFF',
-                        borderRadius: '6px',
-                        border: '1px solid rgba(15, 23, 42, 0.1)'
-                      }}>
-                        <div>
-                          <div style={{ fontSize: '0.875rem', fontWeight: '600', color: '#0F172A' }}>Limited Item #123</div>
-                          <div style={{ fontSize: '0.75rem', color: '#6B7280' }}>2 minutes ago</div>
-                        </div>
-                        <div style={{
-                          fontSize: '0.875rem',
-                          fontWeight: '600',
-                          color: '#10B981'
-                        }}>+R$ 1,250</div>
-                      </div>
-                      <div style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        padding: '0.75rem',
-                        backgroundColor: '#FFFFFF',
-                        borderRadius: '6px',
-                        border: '1px solid rgba(15, 23, 42, 0.1)'
-                      }}>
-                        <div>
-                          <div style={{ fontSize: '0.875rem', fontWeight: '600', color: '#0F172A' }}>Rare Collectible</div>
-                          <div style={{ fontSize: '0.75rem', color: '#6B7280' }}>5 minutes ago</div>
-                        </div>
-                        <div style={{
-                          fontSize: '0.875rem',
-                          fontWeight: '600',
-                          color: '#10B981'
-                        }}>+R$ 850</div>
-                      </div>
-                      <div style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        padding: '0.75rem',
-                        backgroundColor: '#FFFFFF',
-                        borderRadius: '6px',
-                        border: '1px solid rgba(15, 23, 42, 0.1)'
-                      }}>
-                        <div>
-                          <div style={{ fontSize: '0.875rem', fontWeight: '600', color: '#0F172A' }}>Premium Hat</div>
-                          <div style={{ fontSize: '0.75rem', color: '#6B7280' }}>8 minutes ago</div>
-                        </div>
-                        <div style={{
-                          fontSize: '0.875rem',
-                          fontWeight: '600',
-                          color: '#10B981'
-                        }}>+R$ 2,100</div>
-                      </div>
+                        width: '8px',
+                        height: '8px',
+                        borderRadius: '50%',
+                        backgroundColor: '#10B981'
+                      }}></div>
+                      <span style={{
+                        fontSize: '0.75rem',
+                        color: '#0F172A',
+                        fontWeight: '500'
+                      }}>Running</span>
                     </div>
                   </div>
 
-                  {/* Side Panel */}
+                  {/* Navigation */}
+                  <div style={{ padding: '0.5rem' }}>
+                    <button style={{
+                      width: '100%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      padding: '0.75rem',
+                      backgroundColor: '#1F2937',
+                      color: '#FFFFFF',
+                      border: 'none',
+                      borderRadius: '6px',
+                      fontSize: '0.875rem',
+                      fontWeight: '600',
+                      cursor: 'pointer',
+                      marginBottom: '0.25rem'
+                    }}>
+                      <span>📊</span>
+                      Dashboard
+                    </button>
+                    <button style={{
+                      width: '100%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      padding: '0.75rem',
+                      backgroundColor: 'transparent',
+                      color: '#0F172A',
+                      border: '1px solid rgba(15, 23, 42, 0.1)',
+                      borderRadius: '6px',
+                      fontSize: '0.875rem',
+                      fontWeight: '600',
+                      cursor: 'pointer',
+                      marginBottom: '0.25rem'
+                    }}>
+                      <span>⚙️</span>
+                      Settings
+                    </button>
+                    <button style={{
+                      width: '100%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      padding: '0.75rem',
+                      backgroundColor: 'transparent',
+                      color: '#0F172A',
+                      border: '1px solid rgba(15, 23, 42, 0.1)',
+                      borderRadius: '6px',
+                      fontSize: '0.875rem',
+                      fontWeight: '600',
+                      cursor: 'pointer'
+                    }}>
+                      <span>⬇️</span>
+                      Updates
+                    </button>
+                  </div>
+
+                  {/* Spacer */}
+                  <div style={{ flex: 1 }}></div>
+
+                  {/* Profile Section */}
                   <div style={{
-                    backgroundColor: '#F8FAFC',
-                    borderRadius: '8px',
-                    padding: '1.5rem'
+                    padding: '1rem',
+                    borderTop: '1px solid rgba(15, 23, 42, 0.1)',
+                    backgroundColor: '#FFFFFF'
                   }}>
-                    <h3 style={{
-                      fontSize: '1rem',
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      marginBottom: '0.5rem'
+                    }}>
+                      <div style={{
+                        width: '24px',
+                        height: '24px',
+                        borderRadius: '50%',
+                        backgroundColor: '#E5E7EB',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '0.75rem',
+                        fontWeight: '600',
+                        color: '#6B7280'
+                      }}>U</div>
+                      <div>
+                        <div style={{
+                          fontSize: '0.75rem',
+                          fontWeight: '600',
+                          color: '#0F172A'
+                        }}>user@email.com</div>
+                        <div style={{
+                          fontSize: '0.625rem',
+                          color: '#10B981',
+                          fontWeight: '500'
+                        }}>Monthly Active</div>
+                      </div>
+                    </div>
+                    <button style={{
+                      width: '100%',
+                      padding: '0.5rem',
+                      backgroundColor: 'transparent',
+                      color: '#DC2626',
+                      border: '1px solid rgba(220, 38, 38, 0.2)',
+                      borderRadius: '4px',
+                      fontSize: '0.75rem',
+                      fontWeight: '600',
+                      cursor: 'pointer'
+                    }}>
+                      Sign Out
+                    </button>
+                  </div>
+                </div>
+
+                {/* Main Content */}
+                <div style={{
+                  flex: 1,
+                  padding: '1.5rem',
+                  display: 'flex',
+                  flexDirection: 'column'
+                }}>
+                  {/* Header */}
+                  <div style={{ marginBottom: '1.5rem' }}>
+                    <h1 style={{
+                      fontSize: '1.5rem',
                       fontWeight: '600',
                       color: '#0F172A',
-                      marginBottom: '1rem'
-                    }}>Quick Actions</h3>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                      <button style={{
-                        backgroundColor: '#1F2937',
-                        color: '#FFFFFF',
-                        border: 'none',
-                        padding: '0.75rem 1rem',
-                        borderRadius: '6px',
+                      marginBottom: '0.25rem'
+                    }}>Dashboard</h1>
+                    <p style={{
+                      fontSize: '0.875rem',
+                      color: '#6B7280'
+                    }}>Your license expires in 15 days</p>
+                  </div>
+
+                  {/* Stats Cards */}
+                  <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+                    gap: '1rem',
+                    marginBottom: '1.5rem'
+                  }}>
+                    <div style={{
+                      backgroundColor: '#F8FAFC',
+                      padding: '1rem',
+                      borderRadius: '8px',
+                      border: '1px solid rgba(15, 23, 42, 0.1)'
+                    }}>
+                      <h3 style={{
                         fontSize: '0.875rem',
                         fontWeight: '600',
-                        cursor: 'pointer',
-                        textAlign: 'left'
-                      }}>
-                        Start New Trade
-                      </button>
-                      <button style={{
-                        backgroundColor: '#FFFFFF',
-                        color: '#1F2937',
-                        border: '1px solid rgba(15, 23, 42, 0.1)',
-                        padding: '0.75rem 1rem',
-                        borderRadius: '6px',
+                        color: '#0F172A',
+                        marginBottom: '0.5rem'
+                      }}>Bot Status</h3>
+                      <p style={{
+                        fontSize: '1rem',
+                        fontWeight: '600',
+                        color: '#10B981'
+                      }}>Running</p>
+                    </div>
+                    <div style={{
+                      backgroundColor: '#F8FAFC',
+                      padding: '1rem',
+                      borderRadius: '8px',
+                      border: '1px solid rgba(15, 23, 42, 0.1)'
+                    }}>
+                      <h3 style={{
                         fontSize: '0.875rem',
                         fontWeight: '600',
-                        cursor: 'pointer',
-                        textAlign: 'left'
-                      }}>
-                        View Analytics
-                      </button>
-                      <button style={{
-                        backgroundColor: '#FFFFFF',
-                        color: '#1F2937',
-                        border: '1px solid rgba(15, 23, 42, 0.1)',
-                        padding: '0.75rem 1rem',
-                        borderRadius: '6px',
+                        color: '#0F172A',
+                        marginBottom: '0.5rem'
+                      }}>Trades Sent</h3>
+                      <p style={{
+                        fontSize: '1rem',
+                        fontWeight: '600',
+                        color: '#0F172A'
+                      }}>247</p>
+                    </div>
+                  </div>
+
+                  {/* Control Buttons */}
+                  <div style={{
+                    display: 'flex',
+                    gap: '1rem',
+                    marginBottom: '1.5rem'
+                  }}>
+                    <button style={{
+                      backgroundColor: '#1F2937',
+                      color: '#FFFFFF',
+                      border: 'none',
+                      padding: '0.75rem 1.5rem',
+                      borderRadius: '6px',
+                      fontSize: '0.875rem',
+                      fontWeight: '600',
+                      cursor: 'pointer'
+                    }}>
+                      Start Bot
+                    </button>
+                    <button style={{
+                      backgroundColor: '#FFFFFF',
+                      color: '#0F172A',
+                      border: '1px solid rgba(15, 23, 42, 0.1)',
+                      padding: '0.75rem 1.5rem',
+                      borderRadius: '6px',
+                      fontSize: '0.875rem',
+                      fontWeight: '600',
+                      cursor: 'pointer'
+                    }}>
+                      Stop Bot
+                    </button>
+                  </div>
+
+                  {/* Activity Logs */}
+                  <div style={{
+                    flex: 1,
+                    backgroundColor: '#F8FAFC',
+                    border: '1px solid rgba(15, 23, 42, 0.1)',
+                    borderRadius: '8px',
+                    display: 'flex',
+                    flexDirection: 'column'
+                  }}>
+                    <div style={{
+                      padding: '0.75rem 1rem',
+                      borderBottom: '1px solid rgba(15, 23, 42, 0.1)'
+                    }}>
+                      <h3 style={{
                         fontSize: '0.875rem',
                         fontWeight: '600',
-                        cursor: 'pointer',
-                        textAlign: 'left'
-                      }}>
-                        Settings
-                      </button>
+                        color: '#0F172A'
+                      }}>Activity Logs</h3>
+                    </div>
+                    <div style={{
+                      flex: 1,
+                      padding: '1rem',
+                      fontSize: '0.75rem',
+                      color: '#6B7280',
+                      fontFamily: 'monospace'
+                    }}>
+                      [2025-01-16 10:30:15] Bot started successfully<br/>
+                      [2025-01-16 10:30:16] Connected to Roblox API<br/>
+                      [2025-01-16 10:31:22] Trade executed: +R$ 1,250<br/>
+                      [2025-01-16 10:32:45] Trade executed: +R$ 850<br/>
+                      [2025-01-16 10:33:12] Trade executed: +R$ 2,100<br/>
+                      [2025-01-16 10:34:33] Daily profit: $4,200<br/>
                     </div>
                   </div>
                 </div>

@@ -62,9 +62,7 @@ export default function Home() {
     }}>
       {/* Header */}
       <header style={{
-        backgroundColor: 'rgba(255, 255, 255, 0.9)',
-        backdropFilter: 'blur(10px)',
-        borderBottom: '1px solid rgba(15, 23, 42, 0.1)',
+        backgroundColor: '#F8FAFC',
         position: 'sticky',
         top: 0,
         zIndex: 50
@@ -393,24 +391,25 @@ export default function Home() {
                 onClick={() => handleStripeCheckout(STRIPE_PRICES.monthly)}
                 style={{
                   width: '100%',
-                  backgroundColor: '#1F2937',
-                  color: '#FFFFFF',
+                  backgroundColor: '#FFFFFF',
+                  color: '#1F2937',
                   border: 'none',
                   padding: '1rem 2rem',
                   fontSize: '1rem',
-                  fontWeight: 600,
+                  fontWeight: 700,
                   cursor: 'pointer',
                   transition: 'all 0.2s',
                   borderRadius: '12px',
-                  fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
+                  fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif",
+                  letterSpacing: '0.025em'
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#111827';
+                  e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
                   e.currentTarget.style.transform = 'translateY(-1px)';
-                  e.currentTarget.style.boxShadow = '0 10px 25px rgba(31, 41, 55, 0.3)';
+                  e.currentTarget.style.boxShadow = '0 10px 25px rgba(0, 0, 0, 0.1)';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = '#1F2937';
+                  e.currentTarget.style.backgroundColor = '#FFFFFF';
                   e.currentTarget.style.transform = 'translateY(0)';
                   e.currentTarget.style.boxShadow = 'none';
                 }}

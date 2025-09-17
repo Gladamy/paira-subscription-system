@@ -267,13 +267,27 @@ async fn start_bot(app: tauri::AppHandle, state: State<'_, BotState>) -> Result<
         return Err("Bot is already running".to_string());
     }
 
-    // Get the resource directory where the bot executable is located
-    let resource_dir = app
-        .path()
-        .resource_dir()
-        .map_err(|e| format!("Failed to get resource directory: {}", e))?;
+    // First, try to find the bot in the desktop folder (where MSI installer puts it)
+    let desktop_path = dirs::desktop_dir()
+        .ok_or("Could not find desktop directory")?;
+    let paira_folder = desktop_path.join("Paira Bot");
+    let desktop_bot_path = paira_folder.join("bot.dist").join("bot-x86_64-pc-windows-msvc.exe");
 
-    let bot_exe_path = resource_dir.join("bot.dist").join("bot-x86_64-pc-windows-msvc.exe");
+    let bot_exe_path = if desktop_bot_path.exists() {
+        println!("Found bot executable in desktop folder: {:?}", desktop_bot_path);
+        desktop_bot_path
+    } else {
+        // Fallback to resource directory
+        println!("Bot not found in desktop folder, trying resource directory");
+        let resource_dir = app
+            .path()
+            .resource_dir()
+            .map_err(|e| format!("Failed to get resource directory: {}", e))?;
+
+        let resource_bot_path = resource_dir.join("bot.dist").join("bot-x86_64-pc-windows-msvc.exe");
+        println!("Looking for bot in resource directory: {:?}", resource_bot_path);
+        resource_bot_path
+    };
 
     // Verify the executable exists
     if !bot_exe_path.exists() {
@@ -338,6 +352,17 @@ fn get_bot_status(state: State<'_, BotState>) -> String {
 
 #[tauri::command]
 fn get_config(app: tauri::AppHandle) -> Result<String, String> {
+    // First try desktop folder
+    let desktop_path = dirs::desktop_dir()
+        .ok_or("Could not find desktop directory")?;
+    let paira_folder = desktop_path.join("Paira Bot");
+    let desktop_config_path = paira_folder.join("config.json");
+
+    if desktop_config_path.exists() {
+        return fs::read_to_string(desktop_config_path).map_err(|e| format!("Failed to read config: {}", e));
+    }
+
+    // Fallback to resource directory
     let resource_dir = app
         .path()
         .resource_dir()
@@ -349,6 +374,17 @@ fn get_config(app: tauri::AppHandle) -> Result<String, String> {
 
 #[tauri::command]
 fn save_config(app: tauri::AppHandle, config: String) -> Result<(), String> {
+    // First try desktop folder
+    let desktop_path = dirs::desktop_dir()
+        .ok_or("Could not find desktop directory")?;
+    let paira_folder = desktop_path.join("Paira Bot");
+    let desktop_config_path = paira_folder.join("config.json");
+
+    if desktop_config_path.exists() {
+        return fs::write(desktop_config_path, config).map_err(|e| format!("Failed to save config: {}", e));
+    }
+
+    // Fallback to resource directory
     let resource_dir = app
         .path()
         .resource_dir()

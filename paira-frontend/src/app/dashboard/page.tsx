@@ -211,6 +211,7 @@ const Header = ({ user, onLogout }: { user: UserProfile | null; onLogout: () => 
         </div>
       </div>
     </div>
+    </header>
   );
 };
 

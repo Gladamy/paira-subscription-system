@@ -21,7 +21,7 @@ interface Subscription {
 }
 
 // Header Component
-const Header = ({ user, onLogout }: { user: UserProfile | null; onLogout: () => void }) => {
+const Header = ({ onLogout }: { onLogout: () => void }) => {
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const dropdownTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -332,7 +332,7 @@ export default function Dashboard() {
       backgroundColor: '#F8FAFC',
       fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
     }}>
-      <Header user={user} onLogout={handleLogout} />
+      <Header onLogout={handleLogout} />
 
       <div style={{ maxWidth: '80rem', margin: '0 auto', padding: '1.5rem' }}>
         {/* Welcome Section */}
@@ -682,7 +682,7 @@ export default function Dashboard() {
                       fontSize: '0.625rem',
                       color: '#6B7280',
                       margin: '0.25rem 0 0 0'
-                    }}>App creates "Paira Bot" folder on desktop</p>
+                    }}>App creates &quot;Paira Bot&quot; folder on desktop</p>
                   </div>
 
                   <div style={{

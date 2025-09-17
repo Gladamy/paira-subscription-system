@@ -25,43 +25,60 @@ const Header = ({ user, onLogout }: { user: UserProfile | null; onLogout: () => 
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
 
   return (
-    <div style={{
-      backgroundColor: 'rgba(255, 255, 255, 0.8)',
-      backdropFilter: 'blur(8px)',
-      borderBottom: '1px solid rgba(229, 231, 235, 0.6)',
-      padding: '1.25rem 2rem',
+    <header style={{
+      background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(246, 247, 249, 0.95) 100%)',
+      backdropFilter: 'blur(20px)',
+      borderBottom: '1px solid rgba(229, 231, 235, 0.3)',
       position: 'sticky',
       top: 0,
-      zIndex: 50
+      zIndex: 50,
+      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)'
     }}>
       <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        maxWidth: '80rem',
-        margin: '0 auto'
+        maxWidth: '1200px',
+        margin: '0 auto',
+        padding: '0 1rem'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
+        <div style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          height: '5rem'
+        }}>
+          {/* Logo Section */}
           <div style={{
-            width: '2.25rem',
-            height: '2.25rem',
-            backgroundColor: '#1F2937',
-            borderRadius: '0.75rem',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
-            marginRight: '1rem',
-            boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'
+            gap: '0.75rem'
           }}>
-            <span style={{ color: '#FFFFFF', fontWeight: 'bold', fontSize: '0.875rem' }}>P</span>
+            <div style={{
+              width: '2.5rem',
+              height: '2.5rem',
+              background: 'linear-gradient(135deg, #9CA3AF 0%, #6B7280 100%)',
+              borderRadius: '0.75rem',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: '0 4px 6px rgba(156, 163, 175, 0.2)'
+            }}>
+              <span style={{
+                fontSize: '1.125rem',
+                fontWeight: '700',
+                color: '#FFFFFF'
+              }}>P</span>
+            </div>
+            <div>
+              <h1 style={{
+                fontSize: '1.75rem',
+                fontWeight: 400,
+                color: '#9CA3AF',
+                letterSpacing: '-0.025em',
+                margin: 0,
+                lineHeight: '1.2',
+                fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
+              }}>paira</h1>
+            </div>
           </div>
-          <span style={{
-            fontSize: '1.25rem',
-            fontWeight: 'bold',
-            color: '#111827',
-            letterSpacing: '-0.025em'
-          }}>Paira Bot</span>
-        </div>
 
         {/* Profile Dropdown */}
         <div style={{ position: 'relative' }}>

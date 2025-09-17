@@ -128,13 +128,21 @@ export default function Home() {
                   fontSize: '0.875rem',
                   fontWeight: '600',
                   transition: 'color 0.2s',
-                  padding: '0.5rem 0'
+                  padding: '0.5rem 0',
+                  cursor: 'pointer'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.color = '#111827';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.color = '#6B7280';
+                }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  const featuresSection = document.querySelector('#features-section');
+                  if (featuresSection) {
+                    featuresSection.scrollIntoView({ behavior: 'smooth' });
+                  }
                 }}
               >
                 Features
@@ -147,13 +155,21 @@ export default function Home() {
                   fontSize: '0.875rem',
                   fontWeight: '600',
                   transition: 'color 0.2s',
-                  padding: '0.5rem 0'
+                  padding: '0.5rem 0',
+                  cursor: 'pointer'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.color = '#111827';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.color = '#6B7280';
+                }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  const pricingSection = document.querySelector('#pricing-section');
+                  if (pricingSection) {
+                    pricingSection.scrollIntoView({ behavior: 'smooth' });
+                  }
                 }}
               >
                 Pricing
@@ -252,7 +268,7 @@ export default function Home() {
         </div>
 
         {/* Features - Clean Grid */}
-        <div style={{
+        <div id="features-section" style={{
           backgroundColor: '#F6F7F9',
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
@@ -713,7 +729,7 @@ export default function Home() {
         </div>
 
         {/* Pricing - Enhanced Professional */}
-        <div style={{
+        <div id="pricing-section" style={{
           backgroundColor: '#F6F7F9',
           padding: '4rem 2rem',
           textAlign: 'center'

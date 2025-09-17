@@ -459,91 +459,258 @@ export default function Dashboard() {
             backdropFilter: 'blur(12px)',
             border: '1px solid rgba(229, 231, 235, 0.3)',
             borderRadius: '1rem',
-            padding: '1.5rem',
+            padding: '2rem',
             boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)'
           }}>
-            <div style={{ marginBottom: '1.5rem' }}>
+            <div style={{ marginBottom: '2rem' }}>
               <h2 style={{
-                fontSize: '1.5rem',
-                fontWeight: '600',
+                fontSize: '1.75rem',
+                fontWeight: '700',
                 color: '#1F2937',
-                marginBottom: '0.5rem'
-              }}>Download Paira Bot</h2>
-              <p style={{ color: '#6B7280' }}>Get the latest version of Paira Bot Desktop App.</p>
+                marginBottom: '0.5rem',
+                fontFamily: "'Inter', 'SF Pro Display', system-ui, sans-serif"
+              }}>Download Paira Bot Desktop</h2>
+              <p style={{
+                color: '#6B7280',
+                fontSize: '1rem',
+                fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
+              }}>Get the complete desktop application with automatic setup and standalone operation</p>
             </div>
 
-            {/* Windows Download */}
+            {/* Windows Download Card */}
             <div style={{
-              background: 'linear-gradient(135deg, rgba(248, 250, 252, 0.8) 0%, rgba(241, 245, 249, 0.8) 100%)',
-              border: '1px solid rgba(226, 232, 240, 0.5)',
-              borderRadius: '0.75rem',
-              padding: '1.5rem',
-              marginBottom: '1.5rem',
-              backdropFilter: 'blur(8px)'
+              backgroundColor: '#F6F7F9',
+              border: '1px solid #E5E7EB',
+              borderRadius: '16px',
+              padding: '2rem',
+              marginBottom: '2rem'
             }}>
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'space-between'
+                justifyContent: 'space-between',
+                marginBottom: '1.5rem',
+                flexWrap: 'wrap',
+                gap: '1rem'
               }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                {/* Windows Icon */}
+                <div style={{
+                  width: '64px',
+                  height: '64px',
+                  backgroundColor: '#0078D4',
+                  borderRadius: '12px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  boxShadow: '0 8px 25px rgba(0, 120, 212, 0.2)'
+                }}>
+                  <svg
+                    width="32"
+                    height="32"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#FFFFFF"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                    <line x1="8" y1="21" x2="16" y2="21"></line>
+                    <line x1="12" y1="17" x2="12" y2="21"></line>
+                  </svg>
+                </div>
+
+                {/* Download Info */}
+                <div style={{ flex: 1, minWidth: '200px' }}>
+                  <h3 style={{
+                    fontSize: '1.25rem',
+                    fontWeight: '700',
+                    color: '#1F2937',
+                    marginBottom: '0.5rem',
+                    fontFamily: "'Inter', 'SF Pro Display', system-ui, sans-serif"
+                  }}>Windows Installer</h3>
+                  <p style={{
+                    fontSize: '0.875rem',
+                    color: '#6B7280',
+                    marginBottom: '0.5rem',
+                    fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
+                  }}>Complete setup with automatic folder creation</p>
                   <div style={{
-                    width: '3rem',
-                    height: '3rem',
-                    backgroundColor: '#1F2937',
-                    borderRadius: '0.5rem',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center'
+                    gap: '1rem',
+                    fontSize: '0.75rem',
+                    color: '#6B7280'
                   }}>
-                    <span style={{
-                      fontSize: '1.25rem',
-                      color: '#FFFFFF',
-                      fontWeight: 'bold'
-                    }}>W</span>
-                  </div>
-                  <div>
-                    <h3 style={{
-                      fontSize: '1.125rem',
-                      fontWeight: '600',
-                      color: '#1F2937'
-                    }}>Download for Windows</h3>
-                    <p style={{
-                      fontSize: '0.875rem',
-                      color: '#6B7280'
-                    }}>Windows 10/11</p>
-                    <p style={{
-                      fontSize: '0.75rem',
-                      color: '#9CA3AF',
-                      marginTop: '0.25rem'
-                    }}>MSI Installer • ~70MB download</p>
+                    <span>📦 45.2 MB</span>
+                    <span>🖥️ Windows 10/11</span>
+                    <span>🔒 HWID Protected</span>
                   </div>
                 </div>
+
+                {/* Download Button */}
                 <a
-                  href="/paira-bot-setup.msi"
-                  download="paira-bot-setup.msi"
+                  href="https://github.com/Gladamy/paira-subscription-system/releases/download/v1.0.0/paira-bot-setup.exe"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   style={{
-                    backgroundColor: '#1F2937',
+                    backgroundColor: '#6B7280',
                     color: '#FFFFFF',
                     border: 'none',
-                    borderRadius: '0.5rem',
-                    padding: '0.75rem 1.5rem',
-                    fontSize: '0.875rem',
-                    fontWeight: '600',
+                    borderRadius: '12px',
+                    padding: '1rem 2rem',
+                    fontSize: '1rem',
+                    fontWeight: 600,
                     cursor: 'pointer',
                     textDecoration: 'none',
                     display: 'inline-flex',
                     alignItems: 'center',
-                    gap: '0.5rem'
+                    gap: '0.5rem',
+                    fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif",
+                    letterSpacing: '0.025em',
+                    transition: 'all 0.2s',
+                    boxShadow: '0 4px 12px rgba(107, 114, 128, 0.2)'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = '#4B5563';
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                    e.currentTarget.style.boxShadow = '0 8px 25px rgba(107, 114, 128, 0.3)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = '#6B7280';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(107, 114, 128, 0.2)';
                   }}
                 >
-                  <span style={{
-                    fontSize: '1rem',
-                    marginRight: '0.5rem',
-                    fontWeight: 'bold'
-                  }}>↓</span>
-                  Download Now
+                  <span>⬇️</span>
+                  Download for Windows
                 </a>
+              </div>
+
+              {/* Installation Instructions */}
+              <div style={{
+                backgroundColor: '#FFFFFF',
+                border: '1px solid #E5E7EB',
+                borderRadius: '12px',
+                padding: '1.5rem'
+              }}>
+                <h4 style={{
+                  fontSize: '1rem',
+                  fontWeight: '600',
+                  color: '#1F2937',
+                  marginBottom: '1rem',
+                  fontFamily: "'Inter', 'SF Pro Display', system-ui, sans-serif"
+                }}>Installation Process:</h4>
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'auto 1fr',
+                  gap: '0.75rem',
+                  alignItems: 'flex-start'
+                }}>
+                  <div style={{
+                    width: '20px',
+                    height: '20px',
+                    backgroundColor: '#10B981',
+                    color: '#FFFFFF',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '0.625rem',
+                    fontWeight: '700'
+                  }}>1</div>
+                  <div>
+                    <p style={{
+                      fontSize: '0.75rem',
+                      color: '#374151',
+                      margin: 0,
+                      fontWeight: '600'
+                    }}>Download the installer</p>
+                    <p style={{
+                      fontSize: '0.625rem',
+                      color: '#6B7280',
+                      margin: '0.25rem 0 0 0'
+                    }}>Click the download button above</p>
+                  </div>
+
+                  <div style={{
+                    width: '20px',
+                    height: '20px',
+                    backgroundColor: '#10B981',
+                    color: '#FFFFFF',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '0.625rem',
+                    fontWeight: '700'
+                  }}>2</div>
+                  <div>
+                    <p style={{
+                      fontSize: '0.75rem',
+                      color: '#374151',
+                      margin: 0,
+                      fontWeight: '600'
+                    }}>Run the installer</p>
+                    <p style={{
+                      fontSize: '0.625rem',
+                      color: '#6B7280',
+                      margin: '0.25rem 0 0 0'
+                    }}>Follow the setup wizard</p>
+                  </div>
+
+                  <div style={{
+                    width: '20px',
+                    height: '20px',
+                    backgroundColor: '#10B981',
+                    color: '#FFFFFF',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '0.625rem',
+                    fontWeight: '700'
+                  }}>3</div>
+                  <div>
+                    <p style={{
+                      fontSize: '0.75rem',
+                      color: '#374151',
+                      margin: 0,
+                      fontWeight: '600'
+                    }}>Automatic setup</p>
+                    <p style={{
+                      fontSize: '0.625rem',
+                      color: '#6B7280',
+                      margin: '0.25rem 0 0 0'
+                    }}>App creates "Paira Bot" folder on desktop</p>
+                  </div>
+
+                  <div style={{
+                    width: '20px',
+                    height: '20px',
+                    backgroundColor: '#10B981',
+                    color: '#FFFFFF',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '0.625rem',
+                    fontWeight: '700'
+                  }}>4</div>
+                  <div>
+                    <p style={{
+                      fontSize: '0.75rem',
+                      color: '#374151',
+                      margin: 0,
+                      fontWeight: '600'
+                    }}>Launch and trade</p>
+                    <p style={{
+                      fontSize: '0.625rem',
+                      color: '#6B7280',
+                      margin: '0.25rem 0 0 0'
+                    }}>Use the desktop shortcuts to start trading</p>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -551,37 +718,47 @@ export default function Dashboard() {
             <div>
               <h3 style={{
                 fontSize: '1.125rem',
-                fontWeight: '500',
+                fontWeight: '600',
                 color: '#1F2937',
-                marginBottom: '1rem'
+                marginBottom: '1rem',
+                fontFamily: "'Inter', 'SF Pro Display', system-ui, sans-serif"
               }}>Other Platforms</h3>
               <div style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
                 gap: '1rem'
               }}>
                 <div style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '0.75rem',
-                  padding: '1rem',
-                  background: 'linear-gradient(135deg, rgba(248, 250, 252, 0.6) 0%, rgba(241, 245, 249, 0.6) 100%)',
-                  border: '1px solid rgba(226, 232, 240, 0.4)',
-                  borderRadius: '0.5rem',
-                  opacity: 0.6,
-                  backdropFilter: 'blur(6px)'
+                  gap: '1rem',
+                  padding: '1.25rem',
+                  backgroundColor: '#FFFFFF',
+                  border: '1px solid #E5E7EB',
+                  borderRadius: '12px',
+                  opacity: 0.7
                 }}>
-                  <span style={{
-                    fontSize: '1.25rem',
-                    color: '#6B7280',
-                    fontWeight: 'bold'
-                  }}>M</span>
+                  <div style={{
+                    width: '40px',
+                    height: '40px',
+                    backgroundColor: '#000000',
+                    borderRadius: '8px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}>
+                    <span style={{
+                      fontSize: '1rem',
+                      color: '#FFFFFF',
+                      fontWeight: 'bold'
+                    }}></span>
+                  </div>
                   <div>
                     <p style={{
                       fontSize: '0.875rem',
-                      fontWeight: '500',
+                      fontWeight: '600',
                       color: '#1F2937'
-                    }}>macOS, Linux, Mobile</p>
+                    }}>macOS</p>
                     <p style={{
                       fontSize: '0.75rem',
                       color: '#6B7280'
@@ -591,25 +768,39 @@ export default function Dashboard() {
                 <div style={{
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: '1rem'
+                  gap: '1rem',
+                  padding: '1.25rem',
+                  backgroundColor: '#FFFFFF',
+                  border: '1px solid #E5E7EB',
+                  borderRadius: '12px',
+                  opacity: 0.7
                 }}>
-                  <button
-                    style={{
-                      backgroundColor: '#F3F4F6',
-                      color: '#6B7280',
-                      border: '1px solid #D1D5DB',
-                      borderRadius: '0.5rem',
-                      padding: '0.75rem 1.5rem',
+                  <div style={{
+                    width: '40px',
+                    height: '40px',
+                    backgroundColor: '#FCC624',
+                    borderRadius: '8px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}>
+                    <span style={{
+                      fontSize: '1rem',
+                      color: '#000000',
+                      fontWeight: 'bold'
+                    }}>🐧</span>
+                  </div>
+                  <div>
+                    <p style={{
                       fontSize: '0.875rem',
                       fontWeight: '600',
-                      cursor: 'not-allowed',
-                      opacity: 0.6
-                    }}
-                    disabled
-                  >
-                    View Options
-                  </button>
+                      color: '#1F2937'
+                    }}>Linux</p>
+                    <p style={{
+                      fontSize: '0.75rem',
+                      color: '#6B7280'
+                    }}>Coming soon</p>
+                  </div>
                 </div>
               </div>
             </div>

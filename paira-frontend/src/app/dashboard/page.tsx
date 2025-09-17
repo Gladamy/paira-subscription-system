@@ -86,9 +86,9 @@ const Header = ({ user, onLogout }: { user: UserProfile | null; onLogout: () => 
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '1rem',
-              padding: '0.75rem',
-              borderRadius: '0.75rem',
+              gap: '0.5rem',
+              padding: '0.5rem',
+              borderRadius: '0.5rem',
               transition: 'all 0.2s',
               border: 'none',
               backgroundColor: 'transparent',
@@ -99,31 +99,45 @@ const Header = ({ user, onLogout }: { user: UserProfile | null; onLogout: () => 
             onClick={() => setShowProfileDropdown(!showProfileDropdown)}
           >
             <div style={{
-              width: '2.25rem',
-              height: '2.25rem',
-              backgroundColor: 'rgba(243, 244, 246, 0.8)',
+              width: '2rem',
+              height: '2rem',
+              backgroundColor: '#E5E7EB',
               borderRadius: '50%',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              border: '1px solid rgba(229, 231, 235, 0.5)'
+              border: '2px solid #D1D5DB'
             }}>
-              <span style={{
-                fontSize: '1.125rem',
-                color: '#6B7280',
-                fontWeight: 'bold'
-              }}>U</span>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#6B7280"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
             </div>
-            <span style={{
-              fontSize: '0.875rem',
-              fontWeight: '600',
-              color: '#374151'
-            }}>{user?.email}</span>
-            <span style={{
-              fontSize: '0.75rem',
-              color: '#9CA3AF',
-              transition: 'transform 0.2s'
-            }}>▼</span>
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#6B7280"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              style={{
+                transition: 'transform 0.2s',
+                transform: showProfileDropdown ? 'rotate(180deg)' : 'rotate(0deg)'
+              }}
+            >
+              <polyline points="6,9 12,15 18,9"></polyline>
+            </svg>
           </button>
 
           {showProfileDropdown && (
@@ -132,78 +146,69 @@ const Header = ({ user, onLogout }: { user: UserProfile | null; onLogout: () => 
                 position: 'absolute',
                 right: 0,
                 top: '100%',
-                marginTop: '0.75rem',
-                width: '16rem',
+                marginTop: '0.5rem',
+                width: '12rem',
                 backgroundColor: '#FFFFFF',
-                borderRadius: '1rem',
+                borderRadius: '0.75rem',
                 boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)',
-                border: '1px solid rgba(229, 231, 235, 0.6)',
-                padding: '0.75rem 0',
+                border: '1px solid rgba(229, 231, 235, 0.8)',
+                padding: '0.5rem 0',
                 zIndex: 50
               }}
               onMouseEnter={() => setShowProfileDropdown(true)}
               onMouseLeave={() => setShowProfileDropdown(false)}
             >
-              <div style={{
-                padding: '0.75rem 1.25rem',
-                borderBottom: '1px solid #F3F4F6'
-              }}>
-                <p style={{
-                  fontSize: '0.875rem',
-                  fontWeight: '600',
-                  color: '#111827'
-                }}>{user?.email}</p>
-                <p style={{
-                  fontSize: '0.75rem',
-                  color: '#6B7280',
-                  fontWeight: '500'
-                }}>Monthly Plan</p>
-              </div>
               <button
                 style={{
                   width: '100%',
                   display: 'flex',
                   alignItems: 'center',
-                  padding: '0.75rem 1.25rem',
+                  padding: '0.75rem 1rem',
                   fontSize: '0.875rem',
                   color: '#374151',
                   backgroundColor: 'transparent',
                   border: 'none',
                   cursor: 'pointer',
-                  transition: 'background-color 0.2s'
+                  transition: 'background-color 0.2s',
+                  fontWeight: '500'
                 }}
                 onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#F9FAFB'}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setShowProfileDropdown(false);
+                  // Could add navigation to account settings if needed
+                }}
               >
-                <span style={{
-                  marginRight: '0.75rem',
-                  fontSize: '1rem',
-                  color: '#6B7280'
-                }}>⚙</span>
                 Account Settings
               </button>
+              <div style={{
+                height: '1px',
+                backgroundColor: '#E5E7EB',
+                margin: '0.25rem 0'
+              }}></div>
               <button
-                onClick={onLogout}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setShowProfileDropdown(false);
+                  onLogout();
+                }}
                 style={{
                   width: '100%',
                   display: 'flex',
                   alignItems: 'center',
-                  padding: '0.75rem 1.25rem',
+                  padding: '0.75rem 1rem',
                   fontSize: '0.875rem',
                   color: '#DC2626',
                   backgroundColor: 'transparent',
                   border: 'none',
                   cursor: 'pointer',
-                  transition: 'background-color 0.2s'
+                  transition: 'background-color 0.2s',
+                  fontWeight: '500'
                 }}
                 onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#FEF2F2'}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
               >
-                <span style={{
-                  marginRight: '0.75rem',
-                  fontSize: '1rem',
-                  color: '#DC2626'
-                }}>→</span>
                 Sign Out
               </button>
             </div>

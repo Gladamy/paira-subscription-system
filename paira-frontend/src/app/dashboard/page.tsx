@@ -1,7 +1,7 @@
 'use client';
 
 // Dashboard component for user account management
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'https://api.paira.live';
@@ -23,6 +23,20 @@ interface Subscription {
 // Header Component
 const Header = ({ user, onLogout }: { user: UserProfile | null; onLogout: () => void }) => {
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
+  const dropdownTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleMouseEnter = () => {
+    if (dropdownTimeoutRef.current) {
+      clearTimeout(dropdownTimeoutRef.current);
+    }
+    setShowProfileDropdown(true);
+  };
+
+  const handleMouseLeave = () => {
+    dropdownTimeoutRef.current = setTimeout(() => {
+      setShowProfileDropdown(false);
+    }, 150); // 150ms delay before closing
+  };
 
   return (
     <header style={{
@@ -94,8 +108,8 @@ const Header = ({ user, onLogout }: { user: UserProfile | null; onLogout: () => 
               backgroundColor: 'transparent',
               cursor: 'pointer'
             }}
-            onMouseEnter={() => setShowProfileDropdown(true)}
-            onMouseLeave={() => setShowProfileDropdown(false)}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
             onClick={() => setShowProfileDropdown(!showProfileDropdown)}
           >
             <div style={{
@@ -155,8 +169,8 @@ const Header = ({ user, onLogout }: { user: UserProfile | null; onLogout: () => 
                 padding: '0.5rem 0',
                 zIndex: 50
               }}
-              onMouseEnter={() => setShowProfileDropdown(true)}
-              onMouseLeave={() => setShowProfileDropdown(false)}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
             >
               <button
                 style={{

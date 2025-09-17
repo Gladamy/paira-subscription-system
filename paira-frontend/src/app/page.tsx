@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'https://api.paira.live';
@@ -14,6 +14,7 @@ export default function Home() {
   const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
+  const dropdownTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const token = localStorage.getItem('paira_auth_token');
@@ -56,6 +57,19 @@ export default function Home() {
     localStorage.removeItem('paira_auth_token');
     setIsLoggedIn(false);
     router.push('/');
+  };
+
+  const handleMouseEnter = () => {
+    if (dropdownTimeoutRef.current) {
+      clearTimeout(dropdownTimeoutRef.current);
+    }
+    setShowProfileDropdown(true);
+  };
+
+  const handleMouseLeave = () => {
+    dropdownTimeoutRef.current = setTimeout(() => {
+      setShowProfileDropdown(false);
+    }, 150); // 150ms delay before closing
   };
 
   return (
@@ -197,8 +211,8 @@ export default function Home() {
                       backgroundColor: 'transparent',
                       cursor: 'pointer'
                     }}
-                    onMouseEnter={() => setShowProfileDropdown(true)}
-                    onMouseLeave={() => setShowProfileDropdown(false)}
+                    onMouseEnter={handleMouseEnter}
+                    onMouseLeave={handleMouseLeave}
                     onClick={() => setShowProfileDropdown(!showProfileDropdown)}
                   >
                     <div style={{
@@ -258,8 +272,8 @@ export default function Home() {
                         padding: '0.5rem 0',
                         zIndex: 50
                       }}
-                      onMouseEnter={() => setShowProfileDropdown(true)}
-                      onMouseLeave={() => setShowProfileDropdown(false)}
+                      onMouseEnter={handleMouseEnter}
+                      onMouseLeave={handleMouseLeave}
                     >
                       <button
                         style={{

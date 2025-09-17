@@ -13,6 +13,7 @@ const STRIPE_PRICES = {
 export default function Home() {
   const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showProfileDropdown, setShowProfileDropdown] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('paira_auth_token');
@@ -49,6 +50,12 @@ export default function Home() {
       console.error('Checkout error:', error);
       alert('Network error. Please try again.');
     }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('paira_auth_token');
+    setIsLoggedIn(false);
+    router.push('/');
   };
 
   return (
@@ -174,32 +181,146 @@ export default function Home() {
               >
                 Pricing
               </a>
-              <button
-                onClick={isLoggedIn ? () => router.push('/dashboard') : () => router.push('/auth/signin')}
-                style={{
-                  background: 'linear-gradient(135deg, #9CA3AF 0%, #6B7280 100%)',
-                  color: '#FFFFFF',
-                  border: 'none',
-                  padding: '0.75rem 1.5rem',
-                  fontSize: '0.875rem',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  transition: 'all 0.2s',
-                  borderRadius: '0.75rem',
-                  boxShadow: '0 4px 6px rgba(156, 163, 175, 0.2)',
-                  letterSpacing: '0.025em'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-1px)';
-                  e.currentTarget.style.boxShadow = '0 6px 12px rgba(156, 163, 175, 0.3)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = '0 4px 6px rgba(156, 163, 175, 0.2)';
-                }}
-              >
-                {isLoggedIn ? 'Dashboard' : 'Get Started'}
-              </button>
+
+              {/* Profile Dropdown or Get Started Button */}
+              {isLoggedIn ? (
+                <div style={{ position: 'relative' }}>
+                  <button
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.75rem',
+                      padding: '0.5rem',
+                      borderRadius: '0.75rem',
+                      transition: 'all 0.2s',
+                      border: 'none',
+                      backgroundColor: 'transparent',
+                      cursor: 'pointer'
+                    }}
+                    onMouseEnter={() => setShowProfileDropdown(true)}
+                    onMouseLeave={() => setShowProfileDropdown(false)}
+                    onClick={() => setShowProfileDropdown(!showProfileDropdown)}
+                  >
+                    <div style={{
+                      width: '2rem',
+                      height: '2rem',
+                      backgroundColor: 'rgba(243, 244, 246, 0.8)',
+                      borderRadius: '50%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      border: '1px solid rgba(229, 231, 235, 0.5)'
+                    }}>
+                      <span style={{
+                        fontSize: '0.875rem',
+                        color: '#6B7280',
+                        fontWeight: 'bold'
+                      }}>U</span>
+                    </div>
+                    <span style={{
+                      fontSize: '0.75rem',
+                      color: '#9CA3AF',
+                      transition: 'transform 0.2s'
+                    }}>▼</span>
+                  </button>
+
+                  {showProfileDropdown && (
+                    <div
+                      style={{
+                        position: 'absolute',
+                        right: 0,
+                        top: '100%',
+                        marginTop: '0.75rem',
+                        width: '14rem',
+                        backgroundColor: '#FFFFFF',
+                        borderRadius: '1rem',
+                        boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)',
+                        border: '1px solid rgba(229, 231, 235, 0.6)',
+                        padding: '0.75rem 0',
+                        zIndex: 50
+                      }}
+                      onMouseEnter={() => setShowProfileDropdown(true)}
+                      onMouseLeave={() => setShowProfileDropdown(false)}
+                    >
+                      <button
+                        style={{
+                          width: '100%',
+                          display: 'flex',
+                          alignItems: 'center',
+                          padding: '0.75rem 1.25rem',
+                          fontSize: '0.875rem',
+                          color: '#374151',
+                          backgroundColor: 'transparent',
+                          border: 'none',
+                          cursor: 'pointer',
+                          transition: 'background-color 0.2s'
+                        }}
+                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#F9FAFB'}
+                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                        onClick={() => router.push('/dashboard')}
+                      >
+                        <span style={{
+                          marginRight: '0.75rem',
+                          fontSize: '1rem',
+                          color: '#6B7280'
+                        }}>📊</span>
+                        Dashboard
+                      </button>
+                      <button
+                        onClick={handleLogout}
+                        style={{
+                          width: '100%',
+                          display: 'flex',
+                          alignItems: 'center',
+                          padding: '0.75rem 1.25rem',
+                          fontSize: '0.875rem',
+                          color: '#DC2626',
+                          backgroundColor: 'transparent',
+                          border: 'none',
+                          cursor: 'pointer',
+                          transition: 'background-color 0.2s'
+                        }}
+                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#FEF2F2'}
+                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                      >
+                        <span style={{
+                          marginRight: '0.75rem',
+                          fontSize: '1rem',
+                          color: '#DC2626'
+                        }}>→</span>
+                        Sign Out
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <button
+                  onClick={() => router.push('/auth/signin')}
+                  style={{
+                    background: 'linear-gradient(135deg, #9CA3AF 0%, #6B7280 100%)',
+                    color: '#FFFFFF',
+                    border: 'none',
+                    padding: '0.75rem 1.5rem',
+                    fontSize: '0.875rem',
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                    transition: 'all 0.2s',
+                    borderRadius: '0.75rem',
+                    boxShadow: '0 4px 6px rgba(156, 163, 175, 0.2)',
+                    letterSpacing: '0.025em'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-1px)';
+                    e.currentTarget.style.boxShadow = '0 6px 12px rgba(156, 163, 175, 0.3)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = '0 4px 6px rgba(156, 163, 175, 0.2)';
+                  }}
+                >
+                  Get Started
+                </button>
+              )}
             </nav>
           </div>
         </div>

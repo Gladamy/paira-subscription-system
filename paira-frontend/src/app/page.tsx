@@ -88,12 +88,12 @@ export default function Home() {
               <div style={{
                 width: '2.5rem',
                 height: '2.5rem',
-                background: 'linear-gradient(135deg, #7C3AED 0%, #374151 100%)',
+                background: 'linear-gradient(135deg, #9CA3AF 0%, #6B7280 100%)',
                 borderRadius: '0.75rem',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                boxShadow: '0 4px 6px rgba(124, 58, 237, 0.2)'
+                boxShadow: '0 4px 6px rgba(156, 163, 175, 0.2)'
               }}>
                 <span style={{
                   fontSize: '1.125rem',
@@ -104,18 +104,13 @@ export default function Home() {
               <div>
                 <h1 style={{
                   fontSize: '1.75rem',
-                  fontWeight: 800,
-                  color: '#111827',
+                  fontWeight: 400,
+                  color: '#9CA3AF',
                   letterSpacing: '-0.025em',
                   margin: 0,
-                  lineHeight: '1.2'
-                }}>Paira</h1>
-                <span style={{
-                  fontSize: '0.875rem',
-                  color: '#6B7280',
-                  fontWeight: 600,
-                  letterSpacing: '0.025em'
-                }}>PROFESSIONAL BOT</span>
+                  lineHeight: '1.2',
+                  fontFamily: "'Inter', 'SF Pro Text', system-ui, sans-serif"
+                }}>paira</h1>
               </div>
             </div>
 
@@ -166,7 +161,7 @@ export default function Home() {
               <button
                 onClick={isLoggedIn ? () => router.push('/dashboard') : () => router.push('/auth/signin')}
                 style={{
-                  background: 'linear-gradient(135deg, #7C3AED 0%, #374151 100%)',
+                  background: 'linear-gradient(135deg, #9CA3AF 0%, #6B7280 100%)',
                   color: '#FFFFFF',
                   border: 'none',
                   padding: '0.75rem 1.5rem',
@@ -175,16 +170,16 @@ export default function Home() {
                   cursor: 'pointer',
                   transition: 'all 0.2s',
                   borderRadius: '0.75rem',
-                  boxShadow: '0 4px 6px rgba(124, 58, 237, 0.2)',
+                  boxShadow: '0 4px 6px rgba(156, 163, 175, 0.2)',
                   letterSpacing: '0.025em'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = 'translateY(-1px)';
-                  e.currentTarget.style.boxShadow = '0 6px 12px rgba(124, 58, 237, 0.3)';
+                  e.currentTarget.style.boxShadow = '0 6px 12px rgba(156, 163, 175, 0.3)';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = '0 4px 6px rgba(124, 58, 237, 0.2)';
+                  e.currentTarget.style.boxShadow = '0 4px 6px rgba(156, 163, 175, 0.2)';
                 }}
               >
                 {isLoggedIn ? 'Dashboard' : 'Get Started'}
@@ -229,7 +224,7 @@ export default function Home() {
           <button
             onClick={isLoggedIn ? () => router.push('/dashboard') : () => router.push('/auth/signup')}
             style={{
-              backgroundColor: '#7C3AED',
+              backgroundColor: '#6B7280',
               color: '#FFFFFF',
               border: 'none',
               padding: '1rem 2rem',
@@ -242,12 +237,12 @@ export default function Home() {
               letterSpacing: '0.025em'
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#6D28D9';
+              e.currentTarget.style.backgroundColor = '#4B5563';
               e.currentTarget.style.transform = 'translateY(-1px)';
-              e.currentTarget.style.boxShadow = '0 10px 25px rgba(124, 58, 237, 0.3)';
+              e.currentTarget.style.boxShadow = '0 10px 25px rgba(107, 114, 128, 0.3)';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = '#7C3AED';
+              e.currentTarget.style.backgroundColor = '#6B7280';
               e.currentTarget.style.transform = 'translateY(0)';
               e.currentTarget.style.boxShadow = 'none';
             }}
@@ -454,7 +449,7 @@ export default function Home() {
                       alignItems: 'center',
                       gap: '0.5rem',
                       padding: '0.75rem',
-                      backgroundColor: '#374151',
+                      backgroundColor: '#6B7280',
                       color: '#FFFFFF',
                       border: 'none',
                       borderRadius: '12px',
@@ -632,7 +627,7 @@ export default function Home() {
                     marginBottom: '1.5rem'
                   }}>
                     <button style={{
-                      backgroundColor: '#374151',
+                      backgroundColor: '#6B7280',
                       color: '#FFFFFF',
                       border: 'none',
                       padding: '0.75rem 1.5rem',
@@ -699,7 +694,7 @@ export default function Home() {
               <button
                 onClick={isLoggedIn ? () => router.push('/dashboard') : () => router.push('/auth/signup')}
                 style={{
-                  backgroundColor: '#374151',
+                  backgroundColor: '#6B7280',
                   color: '#FFFFFF',
                   border: 'none',
                   padding: '1rem 2rem',

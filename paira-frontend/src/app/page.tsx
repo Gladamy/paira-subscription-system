@@ -60,10 +60,13 @@ export default function Home() {
     }}>
       {/* Header */}
       <header style={{
-        backgroundColor: '#F6F7F9',
+        background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(246, 247, 249, 0.95) 100%)',
+        backdropFilter: 'blur(20px)',
+        borderBottom: '1px solid rgba(229, 231, 235, 0.3)',
         position: 'sticky',
         top: 0,
-        zIndex: 50
+        zIndex: 50,
+        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)'
       }}>
         <div style={{
           maxWidth: '1200px',
@@ -74,46 +77,119 @@ export default function Home() {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            height: '4rem'
+            height: '5rem'
           }}>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <h1 style={{
-                fontSize: '1.5rem',
-                fontWeight: 700,
-                color: '#111827',
-                letterSpacing: '-0.025em'
-              }}>Paira</h1>
-              <span style={{
-                marginLeft: '0.5rem',
-                fontSize: '0.875rem',
-                color: '#6B7280',
-                fontWeight: 500
-              }}>Bot</span>
+            {/* Logo Section */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.75rem'
+            }}>
+              <div style={{
+                width: '2.5rem',
+                height: '2.5rem',
+                background: 'linear-gradient(135deg, #7C3AED 0%, #374151 100%)',
+                borderRadius: '0.75rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: '0 4px 6px rgba(124, 58, 237, 0.2)'
+              }}>
+                <span style={{
+                  fontSize: '1.125rem',
+                  fontWeight: '700',
+                  color: '#FFFFFF'
+                }}>P</span>
+              </div>
+              <div>
+                <h1 style={{
+                  fontSize: '1.75rem',
+                  fontWeight: 800,
+                  color: '#111827',
+                  letterSpacing: '-0.025em',
+                  margin: 0,
+                  lineHeight: '1.2'
+                }}>Paira</h1>
+                <span style={{
+                  fontSize: '0.875rem',
+                  color: '#6B7280',
+                  fontWeight: 600,
+                  letterSpacing: '0.025em'
+                }}>PROFESSIONAL BOT</span>
+              </div>
             </div>
-            <button
-              onClick={isLoggedIn ? () => router.push('/dashboard') : () => router.push('/auth/signin')}
-              style={{
-                backgroundColor: 'transparent',
-                border: '1px solid rgba(15, 23, 42, 0.2)',
-                color: '#111827',
-                padding: '0.5rem 1rem',
-                fontSize: '0.875rem',
-                fontWeight: 500,
-                cursor: 'pointer',
-                transition: 'all 0.2s',
-                borderRadius: '0.375rem'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = 'rgba(15, 23, 42, 0.05)';
-                e.currentTarget.style.borderColor = 'rgba(15, 23, 42, 0.3)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'transparent';
-                e.currentTarget.style.borderColor = 'rgba(15, 23, 42, 0.2)';
-              }}
-            >
-              {isLoggedIn ? 'Dashboard' : 'Get Started'}
-            </button>
+
+            {/* Navigation */}
+            <nav style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '2rem'
+            }}>
+              <a
+                href="#features"
+                style={{
+                  color: '#6B7280',
+                  textDecoration: 'none',
+                  fontSize: '0.875rem',
+                  fontWeight: '600',
+                  transition: 'color 0.2s',
+                  padding: '0.5rem 0'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = '#111827';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = '#6B7280';
+                }}
+              >
+                Features
+              </a>
+              <a
+                href="#pricing"
+                style={{
+                  color: '#6B7280',
+                  textDecoration: 'none',
+                  fontSize: '0.875rem',
+                  fontWeight: '600',
+                  transition: 'color 0.2s',
+                  padding: '0.5rem 0'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = '#111827';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = '#6B7280';
+                }}
+              >
+                Pricing
+              </a>
+              <button
+                onClick={isLoggedIn ? () => router.push('/dashboard') : () => router.push('/auth/signin')}
+                style={{
+                  background: 'linear-gradient(135deg, #7C3AED 0%, #374151 100%)',
+                  color: '#FFFFFF',
+                  border: 'none',
+                  padding: '0.75rem 1.5rem',
+                  fontSize: '0.875rem',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  transition: 'all 0.2s',
+                  borderRadius: '0.75rem',
+                  boxShadow: '0 4px 6px rgba(124, 58, 237, 0.2)',
+                  letterSpacing: '0.025em'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-1px)';
+                  e.currentTarget.style.boxShadow = '0 6px 12px rgba(124, 58, 237, 0.3)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 4px 6px rgba(124, 58, 237, 0.2)';
+                }}
+              >
+                {isLoggedIn ? 'Dashboard' : 'Get Started'}
+              </button>
+            </nav>
           </div>
         </div>
       </header>
